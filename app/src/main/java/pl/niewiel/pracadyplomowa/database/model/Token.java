@@ -4,7 +4,7 @@ import com.orm.dsl.Table;
 
 import java.util.Date;
 
-
+@Table
 public class Token {
     private String access_token;
     private String expires_in;
