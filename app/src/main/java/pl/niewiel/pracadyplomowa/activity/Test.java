@@ -25,6 +25,7 @@ public class Test extends AppCompatActivity {
             if (tokens.size() > 1) {
                 final ListView listView = (ListView) findViewById(R.id.test_list);
                 TokenAdapter tokenAdapter = new TokenAdapter(this, R.layout.row, tokens);
+                listView.setAdapter(tokenAdapter);
             }
         }else {
             Toast.makeText(this,"No results",Toast.LENGTH_LONG).show();

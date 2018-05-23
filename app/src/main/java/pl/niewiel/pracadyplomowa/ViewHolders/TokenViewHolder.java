@@ -7,5 +7,4 @@ public class TokenViewHolder {
     public TextView expires_in;
     public TextView token_type;
     public TextView refresh_token;
-    public TextView dupa;
 }
