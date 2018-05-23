@@ -24,7 +24,7 @@ public class User {
     private String email;
     @NotNull
     @Column(name = "is_logged_in")
-    private boolean isLoggedIn;
+    private int isLoggedIn = 0;
 
 
     public User() {
@@ -32,25 +32,24 @@ public class User {
 
     public User(String name, String password, String email) {
         this.dateAdd=new Date();
-        this.dateEdit=new Date();
         this.name = name;
         this.password = password;
         this.email = email;
-        this.isLoggedIn=false;
     }
 
     @Override
     public String toString() {
         return "\nUser{" +
                 "\ndateAdd=" + dateAdd +
-                ", \ndateEdit=" + dateEdit +
-                ", \nbsId=" + bsId +
-                ", \nname='" + name + '\'' +
+                ",\ndateEdit=" + dateEdit +
+                ",\nbsId=" + bsId +
+                ",\nname='" + name + '\'' +
                 ",\npassword='" + password + '\'' +
-                ", \nmemail='" + email + '\'' +
-                ", \nisLoggedIn=" + isLoggedIn +"\n"+
+                ",\nemail='" + email + '\'' +
+                ",\nisLoggedIn=" + isLoggedIn +
                 '}';
     }
+
 
     public Date getDateAdd() {
         return dateAdd;
@@ -92,11 +91,11 @@ public class User {
         this.password = password;
     }
 
-    public boolean isLoggedIn() {
+    public int isLoggedIn() {
         return isLoggedIn;
     }
 
-    public void setLoggedIn(boolean loggedIn) {
+    public void setLoggedIn(int loggedIn) {
         isLoggedIn = loggedIn;
     }
 

@@ -2,15 +2,12 @@ package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Table;
 
-import java.util.Date;
-
 @Table
 public class Token {
     private String access_token;
     private String expires_in;
     private String token_type;
     private String refresh_token;
-    private Date acces_date;
 
     public Token() {
     }
@@ -19,7 +16,6 @@ public class Token {
         this.access_token = access_token;
         this.expires_in = expires_in;
         this.token_type = token_type;
-        this.acces_date=new Date();
         // this.refresh_token = refresh_token;
     }
 
@@ -29,8 +25,7 @@ public class Token {
                 "\naccess_token='" + access_token + '\'' +
                 ",\nexpires_in='" + expires_in + '\'' +
                 ",\ntoken_type='" + token_type + '\'' +
-                ",\nrefresh_token='" + refresh_token + '\'' +
-                ",\nacces_date=" + acces_date +
+                ",\nrefresh_token='" + refresh_token + "\n" +
                 '}';
     }
 
@@ -64,9 +59,5 @@ public class Token {
 
     public void setRefresh_token(String refresh_token) {
         this.refresh_token = refresh_token;
-    }
-
-    public Date getAcces_date() {
-        return acces_date;
     }
 }

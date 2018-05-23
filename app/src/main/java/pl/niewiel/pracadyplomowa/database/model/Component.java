@@ -6,9 +6,9 @@ import com.orm.dsl.Table;
 import java.sql.Date;
 
 @Table(name = "component")
-public class Komponent {
+public class Component {
 
-    private Budynek budynek;
+    private Building budynek;
     @Column(name = "date_add")
     private Date dateAdd;
     @Column(name = "date_edit")
@@ -17,10 +17,10 @@ public class Komponent {
     private int status;
     private String name;
 
-    public Komponent() {
+    public Component() {
     }
 
-    public Komponent(Budynek budynek, Date dateAdd, Date dateEdit, int status, String name) {
+    public Component(Building budynek, Date dateAdd, Date dateEdit, int status, String name) {
         this.budynek = budynek;
         this.dateAdd = dateAdd;
         this.dateEdit = dateEdit;
@@ -39,11 +39,11 @@ public class Komponent {
                 '}';
     }
 
-    public Budynek getBudynek() {
+    public Building getBudynek() {
         return budynek;
     }
 
-    public void setBudynek(Budynek budynek) {
+    public void setBudynek(Building budynek) {
         this.budynek = budynek;
     }
 
