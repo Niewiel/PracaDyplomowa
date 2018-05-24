@@ -12,9 +12,10 @@ import android.widget.Toast;
 import com.orm.SugarRecord;
 
 import pl.niewiel.pracadyplomowa.R;
-import pl.niewiel.pracadyplomowa.View.token.TokenView;
 import pl.niewiel.pracadyplomowa.database.model.User;
 import pl.niewiel.pracadyplomowa.database.service.BuildService;
+import pl.niewiel.pracadyplomowa.view.builds.BuildsView;
+import pl.niewiel.pracadyplomowa.view.token.TokenView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,8 +30,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), TokenView.class));
+
+            }
+        });
+        Button builds = findViewById(R.id.builds);
+        builds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 BuildService buildService = new BuildService();
                 Log.e("Build", String.valueOf(buildService.getById(1)));
+                startActivity(new Intent(getApplicationContext(), BuildsView.class));
+
             }
         });
 

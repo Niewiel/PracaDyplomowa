@@ -14,7 +14,6 @@ import com.orm.SugarDb;
 
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.Utility;
-import pl.niewiel.pracadyplomowa.httpclient.ApiClient;
 import pl.niewiel.pracadyplomowa.httpclient.TokenClient;
 
 public class Splash extends AppCompatActivity {
@@ -32,7 +31,7 @@ public class Splash extends AppCompatActivity {
             Log.e("Internet", "connected " + Utility.isOnline(getApplicationContext()));
             Toast.makeText(getApplicationContext(), "connected to system", Toast.LENGTH_LONG);
 //            dropBase();
-//            getToken();
+            getToken();
         } else {
             Log.e("Internet", "connected " + Utility.isOnline(getApplicationContext()));
             Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG);

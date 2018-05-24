@@ -7,6 +7,9 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_register">Register</string>
+    <string name="title_activity_builds">Builds</string>
+    <string name="title_activity_build">Build</string>
+    <string name="title_activity_tokens">Tokens</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -24,4 +27,8 @@
     <string name="error_not_unique_username">not uniue username</string>
     <string name="error_not_unique_email">not unique email</string>
     <string name="show_all_tokens">show all tokens</string>
+    <string name="show_all_builds">show all builds</string>
+
+    <!--utils-->
+    <string name="never_edited">Never edited</string>
 </resources>

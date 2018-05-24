@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.View.token;
+package pl.niewiel.pracadyplomowa.view.token;
 
 import android.widget.TextView;
 

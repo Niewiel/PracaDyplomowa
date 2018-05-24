@@ -10,7 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ public class BuildService {
     }
 
     public ArrayList<Build> getAll() {
-        Build build;
         ArrayList<Build> builds = new ArrayList<>();
         try {
             HttpResponse<String> response = apiClient.get("build");
@@ -50,7 +48,7 @@ public class BuildService {
             Log.e("body", status);
             if (status.equals("OK")) {
                 for (int i = 0; i < array.length(); i++) {
-                    build = new Build();
+                    Build build = new Build();
                     JSONObject item = array.getJSONObject(i);
                     build.setDateAdd(parse(item.getString("dateAdd")));
                     build.setName(item.getString("name"));
@@ -66,11 +64,13 @@ public class BuildService {
     }
 
     public Build getById(int id) {
-        Build build = null;
+        Build build;
         try {
             build = SugarRecord.find(Build.class, "bs_id=?", String.valueOf(id)).get(0);
+            Log.e("wczytany", build.toString());
         } catch (NullPointerException | IndexOutOfBoundsException e) {
             build = new Build();
+            build.setBsId(id);
         }
         if (!build.isSync()) {
             try {
@@ -93,6 +93,7 @@ public class BuildService {
             } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
             }
+            Log.e("record", String.valueOf(SugarRecord.findWithQuery(Build.class, "SELECT * FROM build WHERE bs_id=?", String.valueOf(1))));
         }
         return build;
     }

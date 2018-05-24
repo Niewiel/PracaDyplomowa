@@ -54,7 +54,15 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:label="@string/title_activity_register" />
-        <activity android:name=".View.token.TokenView" />
+        <activity
+            android:name=".view.token.TokenView"
+            android:label="@string/title_activity_tokens" />
+        <activity
+            android:name=".view.builds.BuildsView"
+            android:label="@string/title_activity_builds" />
+        <activity
+            android:name=".view.build.BuildView"
+            android:label="@string/title_activity_build" />
     </application>
 
 </manifest>

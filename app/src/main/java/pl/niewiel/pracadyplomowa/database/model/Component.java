@@ -3,7 +3,6 @@ package pl.niewiel.pracadyplomowa.database.model;
 import com.orm.dsl.Column;
 import com.orm.dsl.Table;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Table(name = "component")
@@ -16,6 +15,7 @@ public class Component {
     private Timestamp dateAdd;
     @Column(name = "date_edit")
     private Timestamp dateEdit;
+
 
     private int status;
     private String name;

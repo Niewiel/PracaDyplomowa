@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.View.token;
+package pl.niewiel.pracadyplomowa.view.token;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -25,7 +25,7 @@ public class TokenAdapter extends ArrayAdapter<Token> {
         final Token token = getItem(position);
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(R.layout.row, parent, false);
+            convertView = layoutInflater.inflate(R.layout.token_row, parent, false);
             viewHolder = new TokenViewHolder();
             viewHolder.access_token = convertView.findViewById(R.id.row_access_token);
             viewHolder.expires_in = convertView.findViewById(R.id.row_expires_in);
