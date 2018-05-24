@@ -3,23 +3,26 @@ package pl.niewiel.pracadyplomowa.database.model;
 import com.orm.dsl.Column;
 import com.orm.dsl.Table;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Table(name = "build")
 public class Build {
 
+    @Column(name="bs_id")
+    private long bsId;
     @Column(name = "date_add")
-    private Date dateAdd;
+    private Timestamp dateAdd;
     @Column(name = "date_edit")
-    private Date dateEdit;
+    private Timestamp dateEdit;
     private String name;
     private String latitude;
     private String longitude;
+    private boolean sync=false;
 
     public Build() {
     }
 
-    public Build(Date dateAdd, Date dateEdit, String name, String latitude, String longitude) {
+    public Build(Timestamp dateAdd, Timestamp dateEdit, String name, String latitude, String longitude) {
         this.dateAdd = dateAdd;
         this.dateEdit = dateEdit;
         this.name = name;
@@ -29,28 +32,38 @@ public class Build {
 
     @Override
     public String toString() {
-        return "Budowa{" +
-                "dateAdd=" + dateAdd +
+        return "Build{" +
+                "bsId=" + bsId +
+                ", dateAdd=" + dateAdd +
                 ", dateEdit=" + dateEdit +
                 ", name='" + name + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
+                ", sync=" + sync +
                 '}';
     }
 
-    public Date getDateAdd() {
+    public long getBsId() {
+        return bsId;
+    }
+
+    public void setBsId(long bsId) {
+        this.bsId = bsId;
+    }
+
+    public Timestamp getDateAdd() {
         return dateAdd;
     }
 
-    public void setDateAdd(Date dateAdd) {
+    public void setDateAdd(Timestamp dateAdd) {
         this.dateAdd = dateAdd;
     }
 
-    public Date getDateEdit() {
+    public Timestamp getDateEdit() {
         return dateEdit;
     }
 
-    public void setDateEdit(Date dateEdit) {
+    public void setDateEdit(Timestamp dateEdit) {
         this.dateEdit = dateEdit;
     }
 
@@ -76,5 +89,13 @@ public class Build {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public boolean isSync() {
+        return sync;
+    }
+
+    public void setSync(boolean sync) {
+        this.sync = sync;
     }
 }

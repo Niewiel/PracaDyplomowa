@@ -4,15 +4,18 @@ import com.orm.dsl.Column;
 import com.orm.dsl.Table;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Table(name = "component")
 public class Component {
 
+    @Column(name="bs_id")
+    private long bsId;
     private Building budynek;
     @Column(name = "date_add")
-    private Date dateAdd;
+    private Timestamp dateAdd;
     @Column(name = "date_edit")
-    private Date dateEdit;
+    private Timestamp dateEdit;
 
     private int status;
     private String name;
@@ -20,7 +23,7 @@ public class Component {
     public Component() {
     }
 
-    public Component(Building budynek, Date dateAdd, Date dateEdit, int status, String name) {
+    public Component(Building budynek, Timestamp dateAdd, Timestamp dateEdit, int status, String name) {
         this.budynek = budynek;
         this.dateAdd = dateAdd;
         this.dateEdit = dateEdit;
@@ -30,13 +33,22 @@ public class Component {
 
     @Override
     public String toString() {
-        return "Komponent{" +
-                "budynek=" + budynek +
+        return "Component{" +
+                "bsId=" + bsId +
+                ", budynek=" + budynek +
                 ", dateAdd=" + dateAdd +
                 ", dateEdit=" + dateEdit +
                 ", status=" + status +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public long getBsId() {
+        return bsId;
+    }
+
+    public void setBsId(long bsId) {
+        this.bsId = bsId;
     }
 
     public Building getBudynek() {
@@ -47,19 +59,19 @@ public class Component {
         this.budynek = budynek;
     }
 
-    public Date getDateAdd() {
+    public Timestamp getDateAdd() {
         return dateAdd;
     }
 
-    public void setDateAdd(Date dateAdd) {
+    public void setDateAdd(Timestamp dateAdd) {
         this.dateAdd = dateAdd;
     }
 
-    public Date getDateEdit() {
+    public Timestamp getDateEdit() {
         return dateEdit;
     }
 
-    public void setDateEdit(Date dateEdit) {
+    public void setDateEdit(Timestamp dateEdit) {
         this.dateEdit = dateEdit;
     }
 

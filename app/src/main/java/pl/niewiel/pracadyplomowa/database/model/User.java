@@ -5,18 +5,20 @@ import com.orm.dsl.NotNull;
 import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Timestamp;
+
 
 
 @Table
 public class User {
 
-    @Column(name = "date_add")
-    private Date dateAdd;
-    @Column(name = "date_edit")
-    private Date dateEdit;
     @Column(name = "bs_id")
     private int bsId;
+    @Column(name = "date_add")
+    private Timestamp dateAdd;
+    @Column(name = "date_edit")
+    private Timestamp dateEdit;
     @Unique
     private String name;
     private String password;
@@ -31,7 +33,7 @@ public class User {
     }
 
     public User(String name, String password, String email) {
-        this.dateAdd=new Date();
+        this.dateAdd=new Timestamp(System.currentTimeMillis());
         this.name = name;
         this.password = password;
         this.email = email;
@@ -39,32 +41,31 @@ public class User {
 
     @Override
     public String toString() {
-        return "\nUser{" +
-                "\ndateAdd=" + dateAdd +
-                ",\ndateEdit=" + dateEdit +
-                ",\nbsId=" + bsId +
-                ",\nname='" + name + '\'' +
-                ",\npassword='" + password + '\'' +
-                ",\nemail='" + email + '\'' +
-                ",\nisLoggedIn=" + isLoggedIn +
+        return "User{" +
+                "bsId=" + bsId +
+                ", dateAdd=" + dateAdd +
+                ", dateEdit=" + dateEdit +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", isLoggedIn=" + isLoggedIn +
                 '}';
     }
 
-
-    public Date getDateAdd() {
+    public Timestamp getDateAdd() {
         return dateAdd;
     }
 
-    public void setDateAdd(Date dateAdd) {
+    public void setDateAdd(Timestamp dateAdd) {
         this.dateAdd = dateAdd;
     }
 
-    public Date getDateEdit() {
+    public Timestamp getDateEdit() {
         return dateEdit;
     }
 
     public void setDateEdit() {
-        this.dateEdit = new Date();
+        this.dateEdit = new Timestamp(System.currentTimeMillis());
     }
 
     public int getBsId() {

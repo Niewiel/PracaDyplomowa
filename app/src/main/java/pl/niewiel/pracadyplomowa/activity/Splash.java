@@ -32,7 +32,7 @@ public class Splash extends AppCompatActivity {
             Log.e("Internet", "connected " + Utility.isOnline(getApplicationContext()));
             Toast.makeText(getApplicationContext(), "connected to system", Toast.LENGTH_LONG);
 //            dropBase();
-            getToken();
+//            getToken();
         } else {
             Log.e("Internet", "connected " + Utility.isOnline(getApplicationContext()));
             Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG);
@@ -57,7 +57,7 @@ public class Splash extends AppCompatActivity {
         final Runnable r = new Runnable() {
             public void run() {
                 new TokenClient().execute();
-                handler.postDelayed(this, 6*6*1000);
+                handler.postDelayed(this, 6*6*10000);
             }
         };
         handler.postDelayed(r, 1);

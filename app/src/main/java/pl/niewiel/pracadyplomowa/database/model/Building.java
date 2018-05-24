@@ -4,19 +4,22 @@ import com.orm.dsl.Column;
 import com.orm.dsl.Table;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Table(name = "building")
 public class Building {
 
+    @Column(name="bs_id")
+    private long bsId;
     private Build budowa;
     @Column(name = "date_add")
-    private Date dateAdd;
+    private Timestamp dateAdd;
     @Column(name = "date_edit")
-    private Date dateEdit;
+    private Timestamp dateEdit;
     @Column(name = "date_start")
-    private Date dateStart;
+    private Timestamp dateStart;
     @Column(name = "date_end")
-    private Date dateEnd;
+    private Timestamp dateEnd;
     @Column(name = "name")
     private String name;
     @Column(name = "latitude")
@@ -27,7 +30,7 @@ public class Building {
     public Building() {
     }
 
-    public Building(Build budowa, Date dateAdd, Date dateEdit, Date dateStart, Date dateEnd, String name, String latitude, String longitude) {
+    public Building(Build budowa, Timestamp dateAdd, Timestamp dateEdit, Timestamp dateStart, Timestamp dateEnd, String name, String latitude, String longitude) {
         this.budowa = budowa;
         this.dateAdd = dateAdd;
         this.dateEdit = dateEdit;
@@ -40,8 +43,9 @@ public class Building {
 
     @Override
     public String toString() {
-        return "Budynek{" +
-                "budowa=" + budowa +
+        return "Building{" +
+                "bsId=" + bsId +
+                ", budowa=" + budowa +
                 ", dateAdd=" + dateAdd +
                 ", dateEdit=" + dateEdit +
                 ", dateStart=" + dateStart +
@@ -52,6 +56,14 @@ public class Building {
                 '}';
     }
 
+    public long getBsId() {
+        return bsId;
+    }
+
+    public void setBsId(long bsId) {
+        this.bsId = bsId;
+    }
+
     public Build getBudowa() {
         return budowa;
     }
@@ -60,35 +72,35 @@ public class Building {
         this.budowa = budowa;
     }
 
-    public Date getDateAdd() {
+    public Timestamp getDateAdd() {
         return dateAdd;
     }
 
-    public void setDateAdd(Date dateAdd) {
+    public void setDateAdd(Timestamp dateAdd) {
         this.dateAdd = dateAdd;
     }
 
-    public Date getDateEdit() {
+    public Timestamp getDateEdit() {
         return dateEdit;
     }
 
-    public void setDateEdit(Date dateEdit) {
+    public void setDateEdit(Timestamp dateEdit) {
         this.dateEdit = dateEdit;
     }
 
-    public Date getDateStart() {
+    public Timestamp getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(Date dateStart) {
+    public void setDateStart(Timestamp dateStart) {
         this.dateStart = dateStart;
     }
 
-    public Date getDateEnd() {
+    public Timestamp getDateEnd() {
         return dateEnd;
     }
 
-    public void setDateEnd(Date dateEnd) {
+    public void setDateEnd(Timestamp dateEnd) {
         this.dateEnd = dateEnd;
     }
 

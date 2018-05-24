@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.ViewHolders;
+package pl.niewiel.pracadyplomowa.View.token;
 
 import android.widget.TextView;
 

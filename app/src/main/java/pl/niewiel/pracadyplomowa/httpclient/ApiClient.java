@@ -2,6 +2,7 @@ package pl.niewiel.pracadyplomowa.httpclient;
 
 
 import android.os.StrictMode;
+import android.util.Log;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -15,11 +16,12 @@ import java.util.Map;
 import pl.niewiel.pracadyplomowa.database.model.Token;
 
 public class ApiClient {
-    private static String API_URL = "https://devdyplom.nuc-mleczko-pawel.pl/api/";
+    private static String API_URL = "http://devdyplom.nuc-mleczko-pawel.pl/api/v1/";
 
     public ApiClient() {
         List<Token> tokens = SugarRecord.listAll(Token.class);
-        String token = tokens.get(tokens.size()).getAccess_token();
+        String token = tokens.get(tokens.size()-1).getAccess_token();
+        Log.e("token", token);
         Unirest.setDefaultHeader("Authorization", "Bearer " + token);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);

@@ -33,7 +33,7 @@
 
         <meta-data
             android:name="VERSION"
-            android:value="5" />
+            android:value="6" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -54,7 +54,7 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:label="@string/title_activity_register" />
-        <activity android:name=".activity.Test"></activity>
+        <activity android:name=".View.token.TokenView" />
     </application>
 
 </manifest>

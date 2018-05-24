@@ -12,11 +12,10 @@ public class Token {
     public Token() {
     }
 
-    public Token(String access_token, String expires_in, String token_type/*, String refresh_token*/) {
+    public Token(String access_token, String expires_in, String token_type) {
         this.access_token = access_token;
         this.expires_in = expires_in;
         this.token_type = token_type;
-        // this.refresh_token = refresh_token;
     }
 
     @Override
