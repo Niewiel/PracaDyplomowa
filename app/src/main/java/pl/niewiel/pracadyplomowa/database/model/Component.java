@@ -4,11 +4,14 @@ import com.orm.dsl.Column;
 import com.orm.dsl.Table;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Table(name = "component")
 public class Component {
 
-    @Column(name="bs_id")
+    @Column(name = "mid")
+    private long mId;
+    @Column(name = "bs_id")
     private long bsId;
     private Building budynek;
     @Column(name = "date_add")
@@ -18,29 +21,43 @@ public class Component {
     private int status;
     private String name;
     private boolean sync = false;
+    private List<ComponentType> componentTypeList;
 
     public Component() {
     }
 
-    public Component(Building budynek, Timestamp dateAdd, Timestamp dateEdit, int status, String name) {
+    public Component(long mId, Building budynek, Timestamp dateAdd, Timestamp dateEdit, int status, String name, boolean sync, List<ComponentType> componentTypeList) {
+        this.mId = mId;
         this.budynek = budynek;
         this.dateAdd = dateAdd;
         this.dateEdit = dateEdit;
         this.status = status;
         this.name = name;
+        this.sync = sync;
+        this.componentTypeList = componentTypeList;
     }
 
     @Override
     public String toString() {
         return "Component{" +
-                "bsId=" + bsId +
+                "mId=" + mId +
+                ", bsId=" + bsId +
                 ", budynek=" + budynek +
                 ", dateAdd=" + dateAdd +
                 ", dateEdit=" + dateEdit +
                 ", status=" + status +
                 ", name='" + name + '\'' +
                 ", sync=" + sync +
+                ", componentTypeList=" + componentTypeList +
                 '}';
+    }
+
+    public long getmId() {
+        return mId;
+    }
+
+    public void setmId(long mId) {
+        this.mId = mId;
     }
 
     public long getBsId() {
@@ -97,5 +114,13 @@ public class Component {
 
     public void setSync(boolean sync) {
         this.sync = sync;
+    }
+
+    public List<ComponentType> getComponentTypeList() {
+        return componentTypeList;
+    }
+
+    public void setComponentTypeList(List<ComponentType> componentTypeList) {
+        this.componentTypeList = componentTypeList;
     }
 }

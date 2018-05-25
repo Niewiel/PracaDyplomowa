@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -13,8 +12,8 @@ import com.orm.SugarRecord;
 
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.User;
-import pl.niewiel.pracadyplomowa.database.service.BuildService;
-import pl.niewiel.pracadyplomowa.view.builds.BuildsView;
+import pl.niewiel.pracadyplomowa.view.buildList.BuildListView;
+import pl.niewiel.pracadyplomowa.view.componentTypeList.ComponentTypeListView;
 import pl.niewiel.pracadyplomowa.view.token.TokenView;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,9 +36,16 @@ public class MainActivity extends AppCompatActivity {
         builds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BuildService buildService = new BuildService();
-                Log.e("Build", String.valueOf(buildService.getById(1)));
-                startActivity(new Intent(getApplicationContext(), BuildsView.class));
+                startActivity(new Intent(getApplicationContext(), BuildListView.class));
+
+
+            }
+        });
+        Button componentTypes = findViewById(R.id.component_types);
+        componentTypes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ComponentTypeListView.class));
 
 
             }

@@ -1,8 +1,8 @@
-package pl.niewiel.pracadyplomowa.view.build;
+package pl.niewiel.pracadyplomowa.view.componentType;
 
 import android.widget.TextView;
 
-public class BuildViewHolder {
+public class ComponentTypeViewHolder {
     TextView mId;
     TextView name;
     TextView dateAdd;

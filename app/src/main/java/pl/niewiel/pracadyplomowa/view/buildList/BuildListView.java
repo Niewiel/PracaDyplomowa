@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.view.builds;
+package pl.niewiel.pracadyplomowa.view.buildList;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,18 +14,22 @@ import java.util.Objects;
 
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.Build;
+import pl.niewiel.pracadyplomowa.database.service.BuildService;
 
-public class BuildsView extends AppCompatActivity {
+public class BuildListView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.list);
+        BuildService buildService = new BuildService();
+
         List<Build> builds = SugarRecord.listAll(Build.class, "mid");
+        builds.addAll(buildService.getAll());
         if (!builds.isEmpty()) {
             final ListView listView = findViewById(R.id.list);
-            BuildsAdapter buildAdapter = new BuildsAdapter(this, R.layout.build_row, builds);
+            BuildListAdapter buildAdapter = new BuildListAdapter(this, R.layout.build_list_row, builds);
             listView.setAdapter(buildAdapter);
         } else {
             Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();

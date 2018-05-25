@@ -36,10 +36,12 @@ public class BuildService {
                 for (int i = 0; i < array.length(); i++) {
                     Build build = new Build();
                     JSONObject item = array.getJSONObject(i);
+                    build.setBsId(i + 1);
                     build.setDateAdd(Utils.parseDate(item.getString("dateAdd")));
                     build.setName(item.getString("name"));
                     build.setSync("true".equals(item.getString("synchronized")));
                     builds.add(build);
+
                 }
             }
         } catch (JSONException e) {
@@ -74,7 +76,7 @@ public class BuildService {
                     build.setLatitude(reader.getString("Latitude"));
                     build.setLongitude(reader.getString("Longitude"));
                     build.setSync(true);
-                    build.setMid(SugarRecord.save(build));
+                    build.setmId(SugarRecord.save(build));
                     SugarRecord.save(build);
                 }
             } catch (JSONException | NullPointerException e) {

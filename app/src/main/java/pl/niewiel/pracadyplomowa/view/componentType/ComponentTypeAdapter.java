@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.view.build;
+package pl.niewiel.pracadyplomowa.view.componentType;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -14,21 +14,21 @@ import java.util.List;
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.Build;
 
-public class BuildAdapter extends ArrayAdapter<Build> {
-    public BuildAdapter(@NonNull Context context, int resource, @NonNull List<Build> objects) {
+public class ComponentTypeAdapter extends ArrayAdapter<Build> {
+    public ComponentTypeAdapter(@NonNull Context context, int resource, @NonNull List<Build> objects) {
         super(context, resource, objects);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final BuildViewHolder viewHolder;
+        final ComponentTypeViewHolder viewHolder;
         final Build build = getItem(position);
 
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             convertView = layoutInflater.inflate(R.layout.build_list_row, parent, false);
-            viewHolder = new BuildViewHolder();
+            viewHolder = new ComponentTypeViewHolder();
             viewHolder.mId = convertView.findViewById(R.id.row_bsId);
             viewHolder.name = convertView.findViewById(R.id.row_name);
             viewHolder.dateAdd = convertView.findViewById(R.id.row_date_add);
@@ -52,7 +52,7 @@ public class BuildAdapter extends ArrayAdapter<Build> {
             }
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (BuildViewHolder) convertView.getTag();
+            viewHolder = (ComponentTypeViewHolder) convertView.getTag();
             viewHolder.mId.setText(String.valueOf(build.getmId()));
             viewHolder.name.setText((build.getName()));
             viewHolder.dateAdd.setText(String.valueOf(build.getDateAdd()));

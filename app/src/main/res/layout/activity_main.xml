@@ -26,4 +26,12 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tokens"
         android:text="@string/show_all_builds" />
+
+    <Button
+        android:id="@+id/component_types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/builds"
+        android:text="@string/show_all_component_types" />
 </RelativeLayout>

@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import pl.niewiel.pracadyplomowa.database.model.Build;
+import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 import pl.niewiel.pracadyplomowa.httpclient.TokenClient;
 
 public class Utils {
@@ -47,13 +48,16 @@ public class Utils {
     public static void fillDatabase() {
         Build build = new Build();
         build.setName("aaa");
-        build.setMid(SugarRecord.save(build));
+        build.setmId(SugarRecord.save(build));
         SugarRecord.save(build);
         build = new Build();
         build.setName("bbb");
-        build.setMid(SugarRecord.save(build));
+        build.setmId(SugarRecord.save(build));
         SugarRecord.save(build);
         Log.e("new Build", String.valueOf(SugarRecord.listAll(Build.class)));
+        ComponentType componentType = new ComponentType(1, "dach", false);
+        componentType.setmId(SugarRecord.save(componentType));
+        SugarRecord.save(componentType);
     }
 
     public static void dropBase(Context context) {
@@ -71,12 +75,10 @@ public class Utils {
         final Runnable r = new Runnable() {
             public void run() {
                 new TokenClient().execute();
-                handler.postDelayed(this, 6 * 6 * 10000);
+                handler.postDelayed(this, 60 * 60 * 10000);
             }
         };
         handler.postDelayed(r, 1);
 
     }
-
-
 }

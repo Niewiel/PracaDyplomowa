@@ -1,22 +1,28 @@
 package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Column;
+import com.orm.dsl.Table;
 
 import java.sql.Timestamp;
 
+@Table(name = "component_type")
 public class ComponentType {
 
+    @Column(name = "mid")
+    private long mId;
     @Column(name="bs_id")
     private long bsId;
     private String name;
     @Column(name="date_add")
     private Timestamp dateAdd;
+    @Column(name = "date_edit")
+    private Timestamp dateEdit;
     private boolean sync=false;
 
     public ComponentType() {
     }
 
-    public ComponentType(long bsId, String name, Timestamp dateAdd, boolean sync) {
+    public ComponentType(long bsId, String name, boolean sync) {
         this.bsId = bsId;
         this.name = name;
         this.dateAdd = dateAdd;
@@ -25,12 +31,21 @@ public class ComponentType {
 
     @Override
     public String toString() {
-        return "ComponentType{" +
-                "bsId=" + bsId +
+        return "\nComponentType{" +
+                "mId=" + mId +
+                ", bsId=" + bsId +
                 ", name='" + name + '\'' +
                 ", dateAdd=" + dateAdd +
                 ", sync=" + sync +
                 '}';
+    }
+
+    public long getmId() {
+        return mId;
+    }
+
+    public void setmId(long mId) {
+        this.mId = mId;
     }
 
     public long getBsId() {
@@ -55,6 +70,14 @@ public class ComponentType {
 
     public void setDateAdd(Timestamp dateAdd) {
         this.dateAdd = dateAdd;
+    }
+
+    public Timestamp getDateEdit() {
+        return dateEdit;
+    }
+
+    public void setDateEdit(Timestamp dateEdit) {
+        this.dateEdit = dateEdit;
     }
 
     public boolean isSync() {

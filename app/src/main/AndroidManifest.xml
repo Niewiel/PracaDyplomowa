@@ -33,7 +33,7 @@
 
         <meta-data
             android:name="VERSION"
-            android:value="7" />
+            android:value="8" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -58,10 +58,16 @@
             android:name=".view.token.TokenView"
             android:label="@string/title_activity_tokens" />
         <activity
-            android:name=".view.builds.BuildsView"
+            android:name=".view.buildList.BuildListView"
             android:label="@string/title_activity_builds" />
         <activity
             android:name=".view.build.BuildView"
+            android:label="@string/title_activity_build" />
+        <activity
+            android:name=".view.componentTypeList.ComponentTypeListView"
+            android:label="@string/title_activity_build" />
+        <activity
+            android:name=".view.componentType.ComponentTypeView"
             android:label="@string/title_activity_build" />
     </application>
 

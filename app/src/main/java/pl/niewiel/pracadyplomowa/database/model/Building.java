@@ -3,15 +3,18 @@ package pl.niewiel.pracadyplomowa.database.model;
 import com.orm.dsl.Column;
 import com.orm.dsl.Table;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Table(name = "building")
 public class Building {
 
+    @Column(name = "mid")
+    private long mId;
     @Column(name="bs_id")
     private long bsId;
     private Build budowa;
+    private List<Component> componentList;
     @Column(name = "date_add")
     private Timestamp dateAdd;
     @Column(name = "date_edit")
@@ -26,6 +29,7 @@ public class Building {
     private String latitude;
     @Column(name = "longitude")
     private String longitude;
+
 
     public Building() {
     }

@@ -9,6 +9,8 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_builds">Builds</string>
     <string name="title_activity_build">Build</string>
+    <string name="title_activity_component_type_list">Component types</string>
+    <string name="title_activity_component_type">Component type</string>
     <string name="title_activity_tokens">Tokens</string>
 
     <!-- Strings related to login -->
@@ -28,6 +30,7 @@
     <string name="error_not_unique_email">not unique email</string>
     <string name="show_all_tokens">show all tokens</string>
     <string name="show_all_builds">show all builds</string>
+    <string name="show_all_component_types">show all component types</string>
 
     <!--utils-->
     <string name="never_edited">Never edited</string>

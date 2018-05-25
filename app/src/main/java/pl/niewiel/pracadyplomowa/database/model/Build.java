@@ -7,8 +7,10 @@ import java.sql.Timestamp;
 
 @Table(name = "build")
 public class Build {
-    private long mid;
-    @Column(name="bs_id")
+
+    @Column(name = "mid")
+    private long mId;
+    @Column(name = "bs_id")
     private long bsId;
     @Column(name = "date_add")
     private Timestamp dateAdd;
@@ -17,7 +19,7 @@ public class Build {
     private String name;
     private String latitude;
     private String longitude;
-    private boolean sync=false;
+    private boolean sync = false;
 
     public Build() {
     }
@@ -26,7 +28,7 @@ public class Build {
     @Override
     public String toString() {
         return "\nBuild{" +
-                "id=" + mid +
+                "id=" + mId +
                 ", bsId=" + bsId +
                 ", dateAdd=" + dateAdd +
                 ", dateEdit=" + dateEdit +
@@ -37,12 +39,12 @@ public class Build {
                 '}';
     }
 
-    public long getMid() {
-        return mid;
+    public long getmId() {
+        return mId;
     }
 
-    public void setMid(long mid) {
-        this.mid = mid;
+    public void setmId(long mId) {
+        this.mId = mId;
     }
 
     public long getBsId() {
