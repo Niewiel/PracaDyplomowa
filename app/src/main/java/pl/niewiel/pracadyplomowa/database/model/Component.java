@@ -15,10 +15,9 @@ public class Component {
     private Timestamp dateAdd;
     @Column(name = "date_edit")
     private Timestamp dateEdit;
-
-
     private int status;
     private String name;
+    private boolean sync = false;
 
     public Component() {
     }
@@ -40,6 +39,7 @@ public class Component {
                 ", dateEdit=" + dateEdit +
                 ", status=" + status +
                 ", name='" + name + '\'' +
+                ", sync=" + sync +
                 '}';
     }
 
@@ -89,5 +89,13 @@ public class Component {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isSync() {
+        return sync;
+    }
+
+    public void setSync(boolean sync) {
+        this.sync = sync;
     }
 }

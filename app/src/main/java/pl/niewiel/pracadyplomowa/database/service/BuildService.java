@@ -1,6 +1,5 @@
 package pl.niewiel.pracadyplomowa.database.service;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -10,11 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
+import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.httpclient.ApiClient;
 
@@ -24,18 +21,7 @@ public class BuildService {
     public BuildService() {
     }
 
-    public Timestamp parse(String date) {
-        Timestamp timestamp = null;
-        try {
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-            Date parsedDate = dateFormat.parse(date);
-            timestamp = new java.sql.Timestamp(parsedDate.getTime());
-        } catch (Exception e) { //this generic but you can control another types of exception
-            // look the origin of excption
-        }
-        return timestamp;
-    }
+
 
     public ArrayList<Build> getAll() {
         ArrayList<Build> builds = new ArrayList<>();
@@ -50,7 +36,7 @@ public class BuildService {
                 for (int i = 0; i < array.length(); i++) {
                     Build build = new Build();
                     JSONObject item = array.getJSONObject(i);
-                    build.setDateAdd(parse(item.getString("dateAdd")));
+                    build.setDateAdd(Utils.parseDate(item.getString("dateAdd")));
                     build.setName(item.getString("name"));
                     build.setSync("true".equals(item.getString("synchronized")));
                     builds.add(build);
@@ -81,13 +67,14 @@ public class BuildService {
                 if (status.equals("OK")) {
                     Log.e("Json","start");
                     JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("Build");
-                    build.setDateAdd(parse(reader.getJSONObject("DateAdd").getString("date")));
-                    build.setDateEdit(parse(reader.getString("DateEdit")));
+                    build.setDateAdd(Utils.parseDate(reader.getJSONObject("DateAdd").getString("date")));
+                    build.setDateEdit(Utils.parseDate(reader.getString("DateEdit")));
                     build.setName(reader.getString("Name"));
                     Log.e("name", reader.getString("Name"));
                     build.setLatitude(reader.getString("Latitude"));
                     build.setLongitude(reader.getString("Longitude"));
                     build.setSync(true);
+                    build.setMid(SugarRecord.save(build));
                     SugarRecord.save(build);
                 }
             } catch (JSONException | NullPointerException e) {

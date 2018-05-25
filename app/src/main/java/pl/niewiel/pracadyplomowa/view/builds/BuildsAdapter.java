@@ -37,7 +37,7 @@ public class BuildsAdapter extends ArrayAdapter<Build> {
             viewHolder.sync = convertView.findViewById(R.id.row_sync);
 
 
-            viewHolder.bsId.setText(String.valueOf(build.getBsId()));
+            viewHolder.bsId.setText(String.valueOf(build.getMid()));
             viewHolder.name.setText((build.getName()));
             viewHolder.dateAdd.setText(String.valueOf(build.getDateAdd()));
             viewHolder.sync.setText(String.valueOf(build.isSync()));
@@ -47,7 +47,7 @@ public class BuildsAdapter extends ArrayAdapter<Build> {
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (BuildsViewHolder) convertView.getTag();
-            viewHolder.bsId.setText(String.valueOf(build.getBsId()));
+            viewHolder.bsId.setText(String.valueOf(build.getMid()));
             viewHolder.name.setText((build.getName()));
             viewHolder.dateAdd.setText(String.valueOf(build.getDateAdd()));
             viewHolder.sync.setText(String.valueOf(build.isSync()));
@@ -56,7 +56,9 @@ public class BuildsAdapter extends ArrayAdapter<Build> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), BuildView.class);
-                intent.putExtra("id", build.getBsId());
+                if (build.getBsId() != 0)
+                    intent.putExtra("bsId", build.getBsId());
+                intent.putExtra("id", build.getMid());
                 getContext().startActivity(intent);
             }
         });

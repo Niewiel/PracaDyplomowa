@@ -22,7 +22,7 @@ public class BuildsView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.list);
-        List<Build> builds = SugarRecord.listAll(Build.class);
+        List<Build> builds = SugarRecord.listAll(Build.class, "mid");
         if (!builds.isEmpty()) {
             final ListView listView = findViewById(R.id.list);
             BuildsAdapter buildAdapter = new BuildsAdapter(this, R.layout.build_row, builds);

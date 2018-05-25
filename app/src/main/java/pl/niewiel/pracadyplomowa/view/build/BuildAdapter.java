@@ -38,13 +38,12 @@ public class BuildAdapter extends ArrayAdapter<Build> {
             viewHolder.sync = convertView.findViewById(R.id.row_sync);
 
 
-            viewHolder.bsId.setText(String.valueOf(build.getBsId()));
+            viewHolder.bsId.setText(String.valueOf(build.getMid()));
             viewHolder.name.setText((build.getName()));
             viewHolder.dateAdd.setText(String.valueOf(build.getDateAdd()));
-            if (build.getDateEdit() != null)
+            if (build.getDateEdit() != null) {
                 viewHolder.dateEdit.setText(String.valueOf(build.getDateEdit()));
-            else
-                viewHolder.dateEdit.setText("Never edited");
+            }
             viewHolder.latitude.setText((build.getLatitude()));
             viewHolder.longitude.setText((build.getLongitude()));
             viewHolder.sync.setText(String.valueOf(build.isSync()));
@@ -54,13 +53,12 @@ public class BuildAdapter extends ArrayAdapter<Build> {
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (BuildViewHolder) convertView.getTag();
-            viewHolder.bsId.setText(String.valueOf(build.getBsId()));
+            viewHolder.bsId.setText(String.valueOf(build.getMid()));
             viewHolder.name.setText((build.getName()));
             viewHolder.dateAdd.setText(String.valueOf(build.getDateAdd()));
             if (build.getDateEdit() != null)
                 viewHolder.dateEdit.setText(String.valueOf(build.getDateEdit()));
-            else
-                viewHolder.dateEdit.setText(String.valueOf(R.string.never_edited));
+
             viewHolder.latitude.setText((build.getLatitude()));
             viewHolder.longitude.setText((build.getLongitude()));
             viewHolder.sync.setText(String.valueOf(build.isSync()));

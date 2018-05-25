@@ -23,7 +23,8 @@
     <TextView
         android:id="@+id/row_date_edit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="@string/never_edited" />
 
     <TextView
         android:id="@+id/row_latitude"

@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private User user;
 
-    @SuppressLint("SetTextI18n")
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -41,12 +41,14 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("Build", String.valueOf(buildService.getById(1)));
                 startActivity(new Intent(getApplicationContext(), BuildsView.class));
 
+
             }
         });
 
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onPostResume() {
         super.onPostResume();
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     goToLogin();
                 }
             });
+
     }
 
     private void goToLogin() {
