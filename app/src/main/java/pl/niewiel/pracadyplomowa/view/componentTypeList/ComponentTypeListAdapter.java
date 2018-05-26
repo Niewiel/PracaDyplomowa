@@ -17,7 +17,7 @@ import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 import pl.niewiel.pracadyplomowa.view.componentType.ComponentTypeView;
 
 public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
-    public ComponentTypeListAdapter(@NonNull Context context, int resource, @NonNull List<ComponentType> objects) {
+    ComponentTypeListAdapter(@NonNull Context context, int resource, @NonNull List<ComponentType> objects) {
         super(context, resource, objects);
     }
 
@@ -29,7 +29,7 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
 
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(R.layout.build_list_row, parent, false);
+            convertView = layoutInflater.inflate(R.layout.component_type_list_row, parent, false);
             viewHolder = new ComponentTypeListViewHolder();
             viewHolder.mId = convertView.findViewById(R.id.row_bsId);
             viewHolder.name = convertView.findViewById(R.id.row_name);
@@ -42,7 +42,7 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
             viewHolder.dateAdd.setText(String.valueOf(componentType.getDateAdd()));
             viewHolder.sync.setText(String.valueOf(componentType.isSync()));
             if (componentType.isSync()) {
-                viewHolder.sync.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
+                convertView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
             }
             convertView.setTag(viewHolder);
         } else {
@@ -57,8 +57,8 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ComponentTypeView.class);
                 if (componentType.getBsId() != 0)
-                    intent.putExtra("mId", componentType.getBsId());
-                intent.putExtra("id", componentType.getmId());
+                    intent.putExtra("id", componentType.getBsId());
+                intent.putExtra("mId", componentType.getmId());
                 getContext().startActivity(intent);
             }
         });

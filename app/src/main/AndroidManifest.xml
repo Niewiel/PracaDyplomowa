@@ -65,10 +65,13 @@
             android:label="@string/title_activity_build" />
         <activity
             android:name=".view.componentTypeList.ComponentTypeListView"
-            android:label="@string/title_activity_build" />
+            android:label="@string/title_activity_component_type_list" />
         <activity
             android:name=".view.componentType.ComponentTypeView"
-            android:label="@string/title_activity_build" />
+            android:label="@string/title_activity_component_type" />
+        <activity
+            android:name=".view.buildingList.BuildingListView"
+            android:label="@string/title_activity_building_list" />
     </application>
 
 </manifest>

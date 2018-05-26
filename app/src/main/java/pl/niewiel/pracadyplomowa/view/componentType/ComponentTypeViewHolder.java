@@ -7,7 +7,5 @@ public class ComponentTypeViewHolder {
     TextView name;
     TextView dateAdd;
     TextView dateEdit;
-    TextView latitude;
-    TextView longitude;
     TextView sync;
 }

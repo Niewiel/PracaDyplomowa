@@ -9,55 +9,56 @@ import android.widget.Toast;
 
 import com.orm.SugarRecord;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 import pl.niewiel.pracadyplomowa.R;
-import pl.niewiel.pracadyplomowa.database.model.Build;
-import pl.niewiel.pracadyplomowa.database.service.BuildService;
+import pl.niewiel.pracadyplomowa.database.model.ComponentType;
+import pl.niewiel.pracadyplomowa.database.service.ComponentTypeService;
 
 public class ComponentTypeView extends AppCompatActivity {
-
+    final List<ComponentType> componentTypes = new LinkedList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.list);
-        if (getIntent().hasExtra("mId")) {
-            BuildService buildService = new BuildService();
-            Log.e("check", String.valueOf(buildService.getById((int) getIntent().getExtras().getLong("mId"))));
-            final List<Build> builds = SugarRecord.find(Build.class, "bs_id=?", String.valueOf(getIntent().getExtras().getLong("mId")));
-            if (!builds.isEmpty()) {
-                final ListView listView = findViewById(R.id.list);
-                ComponentTypeAdapter buildAdapter = new ComponentTypeAdapter(this, R.layout.build_list_row, builds);
+        if (getIntent().hasExtra("id")) {
+            ComponentTypeService componentTypeService = new ComponentTypeService(getApplicationContext());
+
+            componentTypes.add(componentTypeService.getById((int) getIntent().getExtras().getLong("id")));
+            if (!componentTypes.isEmpty()) {
+                ListView listView = findViewById(R.id.list);
+                ComponentTypeAdapter buildAdapter = new ComponentTypeAdapter(this, R.layout.component_type_row, componentTypes);
                 listView.setAdapter(buildAdapter);
             } else {
                 Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
-                Log.e("Builds", "no results");
+                Log.e("Component type", "no results");
                 finish();
             }
-        } else if (getIntent().hasExtra("id")) {
+        } else if (getIntent().hasExtra("mId")) {
 
-            final List<Build> builds = new ArrayList<>();
-            builds.add(SugarRecord.findById(Build.class, getIntent().getExtras().getLong("id")));
-            if (!builds.isEmpty()) {
-                Log.e("check", String.valueOf(builds));
 
-                final ListView listView = findViewById(R.id.list);
-                ComponentTypeAdapter buildAdapter = new ComponentTypeAdapter(this, R.layout.build_list_row, builds);
+            componentTypes.add(SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("mId")));
+            if (!componentTypes.isEmpty()) {
+                Log.e("check", String.valueOf(componentTypes));
+
+                ListView listView = findViewById(R.id.list);
+                ComponentTypeAdapter buildAdapter = new ComponentTypeAdapter(this, R.layout.component_type_row, componentTypes);
                 listView.setAdapter(buildAdapter);
             } else {
                 Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
-                Log.e("Builds", "no results");
+                Log.e("Component type", "no results");
                 finish();
             }
         } else {
             Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
-            Log.e("Builds", "no results");
+            Log.e("Component type", "no results");
             finish();
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

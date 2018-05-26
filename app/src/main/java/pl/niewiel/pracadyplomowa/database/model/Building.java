@@ -2,6 +2,7 @@ package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Column;
 import com.orm.dsl.Table;
+import com.orm.dsl.Unique;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -10,10 +11,12 @@ import java.util.List;
 public class Building {
 
     @Column(name = "mid")
+    @Unique
     private long mId;
-    @Column(name="bs_id")
+    @Column(name = "bs_id")
+    @Unique
     private long bsId;
-    private Build budowa;
+    private Build build;
     private List<Component> componentList;
     @Column(name = "date_add")
     private Timestamp dateAdd;
@@ -29,14 +32,23 @@ public class Building {
     private String latitude;
     @Column(name = "longitude")
     private String longitude;
+    private boolean sync = false;
 
 
     public Building() {
     }
 
-    public Building(Build budowa, Timestamp dateAdd, Timestamp dateEdit, Timestamp dateStart, Timestamp dateEnd, String name, String latitude, String longitude) {
-        this.budowa = budowa;
-        this.dateAdd = dateAdd;
+    public Building(long bsId, Build build, String name, boolean sync) {
+        this.bsId = bsId;
+        this.build = build;
+        this.dateAdd = new Timestamp(System.currentTimeMillis());
+        this.name = name;
+        this.sync = sync;
+    }
+
+    public Building(Build budowa, Timestamp dateEdit, Timestamp dateStart, Timestamp dateEnd, String name, String latitude, String longitude) {
+        this.build = budowa;
+        this.dateAdd = new Timestamp(System.currentTimeMillis());
         this.dateEdit = dateEdit;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
@@ -49,7 +61,7 @@ public class Building {
     public String toString() {
         return "Building{" +
                 "bsId=" + bsId +
-                ", budowa=" + budowa +
+                ", budowa=" + build +
                 ", dateAdd=" + dateAdd +
                 ", dateEdit=" + dateEdit +
                 ", dateStart=" + dateStart +
@@ -60,6 +72,15 @@ public class Building {
                 '}';
     }
 
+    public long getmId() {
+        return mId;
+    }
+
+    public void setmId(long mId) {
+        this.mId = mId;
+    }
+
+
     public long getBsId() {
         return bsId;
     }
@@ -68,12 +89,12 @@ public class Building {
         this.bsId = bsId;
     }
 
-    public Build getBudowa() {
-        return budowa;
+    public Build getBuild() {
+        return build;
     }
 
-    public void setBudowa(Build budowa) {
-        this.budowa = budowa;
+    public void setBuild(Build build) {
+        this.build = build;
     }
 
     public Timestamp getDateAdd() {
@@ -130,5 +151,21 @@ public class Building {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public boolean isSync() {
+        return sync;
+    }
+
+    public void setSync(boolean sync) {
+        this.sync = sync;
+    }
+
+    public List<Component> getComponentList() {
+        return componentList;
+    }
+
+    public void setComponentList(List<Component> componentList) {
+        this.componentList = componentList;
     }
 }

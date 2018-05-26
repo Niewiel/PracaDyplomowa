@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.view.build;
+package pl.niewiel.pracadyplomowa.view.building;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +17,7 @@ import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.database.service.BuildService;
 
-public class BuildView extends AppCompatActivity {
+public class BuildingView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class BuildView extends AppCompatActivity {
             builds.add(buildService.getById((int) getIntent().getExtras().getLong("mId")));
             if (!builds.isEmpty()) {
                 final ListView listView = findViewById(R.id.list);
-                BuildAdapter buildAdapter = new BuildAdapter(this, R.layout.build_row, builds);
+                BuildingAdapter buildAdapter = new BuildingAdapter(this, R.layout.build_row, builds);
                 listView.setAdapter(buildAdapter);
             } else {
                 Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
@@ -43,7 +43,7 @@ public class BuildView extends AppCompatActivity {
                 Log.e("check", String.valueOf(builds));
 
                 final ListView listView = findViewById(R.id.list);
-                BuildAdapter buildAdapter = new BuildAdapter(this, R.layout.build_row, builds);
+                BuildingAdapter buildAdapter = new BuildingAdapter(this, R.layout.build_row, builds);
                 listView.setAdapter(buildAdapter);
             } else {
                 Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();

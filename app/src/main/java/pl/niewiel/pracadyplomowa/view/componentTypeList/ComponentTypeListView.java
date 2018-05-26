@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.orm.SugarRecord;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,11 +24,13 @@ public class ComponentTypeListView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.list);
-        ComponentTypeService componentTypeService = new ComponentTypeService();
-        List<ComponentType> componentTypes = SugarRecord.listAll(ComponentType.class, "mid");
-        componentTypes.addAll(componentTypeService.getAll());
+        ComponentTypeService componentTypeService = new ComponentTypeService(getApplicationContext());
+        componentTypeService.getAll();
+        List<ComponentType> componentTypes = new LinkedList<>();
+        componentTypes.addAll(SugarRecord.listAll(ComponentType.class));
         if (!componentTypes.isEmpty()) {
-            final ListView listView = findViewById(R.id.list);
+            Log.e("ComponentTypeListView", String.valueOf(componentTypes));
+            ListView listView = findViewById(R.id.list);
             ComponentTypeListAdapter buildAdapter = new ComponentTypeListAdapter(this, R.layout.component_type_list_row, componentTypes);
             listView.setAdapter(buildAdapter);
         } else {
@@ -35,6 +38,12 @@ public class ComponentTypeListView extends AppCompatActivity {
             Log.e("Builds", "no results");
             finish();
         }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
     }
 
     @Override

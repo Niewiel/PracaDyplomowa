@@ -9,26 +9,38 @@
     <TextView
         android:id="@+id/row_bsId"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/row_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/row_date_add"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/row_date_edit"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp" />
+        android:text="@string/never_edited" />
+
+    <TextView
+        android:id="@+id/row_latitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/row_longitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/row_sync"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_red_light"
-        android:textSize="18sp" />
+        android:background="@android:color/holo_red_light" />
 
 </LinearLayout>

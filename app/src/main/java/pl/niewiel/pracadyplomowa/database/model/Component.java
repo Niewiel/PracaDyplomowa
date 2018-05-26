@@ -2,6 +2,7 @@ package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Column;
 import com.orm.dsl.Table;
+import com.orm.dsl.Unique;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -10,8 +11,10 @@ import java.util.List;
 public class Component {
 
     @Column(name = "mid")
+    @Unique
     private long mId;
     @Column(name = "bs_id")
+    @Unique
     private long bsId;
     private Building budynek;
     @Column(name = "date_add")

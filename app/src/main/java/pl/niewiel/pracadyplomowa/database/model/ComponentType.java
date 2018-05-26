@@ -9,8 +9,10 @@ import java.sql.Timestamp;
 public class ComponentType {
 
     @Column(name = "mid")
+
     private long mId;
     @Column(name="bs_id")
+
     private long bsId;
     private String name;
     @Column(name="date_add")
@@ -25,7 +27,6 @@ public class ComponentType {
     public ComponentType(long bsId, String name, boolean sync) {
         this.bsId = bsId;
         this.name = name;
-        this.dateAdd = dateAdd;
         this.sync = sync;
     }
 

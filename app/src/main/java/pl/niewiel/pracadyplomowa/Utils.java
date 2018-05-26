@@ -23,13 +23,17 @@ import pl.niewiel.pracadyplomowa.httpclient.TokenClient;
 
 public class Utils {
     public static boolean isOnline(Context context) {
+
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         assert cm != null;
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null &&
+        boolean result = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
+        if (!result)
+            Toast.makeText(context, "No internet connection", Toast.LENGTH_LONG).show();
+        return result;
     }
 
     public static Timestamp parseDate(String date) {
@@ -48,14 +52,19 @@ public class Utils {
     public static void fillDatabase() {
         Build build = new Build();
         build.setName("aaa");
+        build.setBsId(1);
         build.setmId(SugarRecord.save(build));
         SugarRecord.save(build);
         build = new Build();
         build.setName("bbb");
+        build.setBsId(2);
         build.setmId(SugarRecord.save(build));
         SugarRecord.save(build);
         Log.e("new Build", String.valueOf(SugarRecord.listAll(Build.class)));
-        ComponentType componentType = new ComponentType(1, "dach", false);
+        ComponentType componentType = new ComponentType(0, "ściana", false);
+        componentType.setmId(SugarRecord.save(componentType));
+        SugarRecord.save(componentType);
+        componentType = new ComponentType(1, "ściana", false);
         componentType.setmId(SugarRecord.save(componentType));
         SugarRecord.save(componentType);
     }

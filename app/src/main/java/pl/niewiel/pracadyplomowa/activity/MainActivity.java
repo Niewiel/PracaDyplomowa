@@ -13,6 +13,7 @@ import com.orm.SugarRecord;
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.User;
 import pl.niewiel.pracadyplomowa.view.buildList.BuildListView;
+import pl.niewiel.pracadyplomowa.view.buildingList.BuildingListView;
 import pl.niewiel.pracadyplomowa.view.componentTypeList.ComponentTypeListView;
 import pl.niewiel.pracadyplomowa.view.token.TokenView;
 
@@ -37,6 +38,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), BuildListView.class));
+
+
+            }
+        });
+        Button buildings = findViewById(R.id.building_list);
+        buildings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), BuildingListView.class));
 
 
             }

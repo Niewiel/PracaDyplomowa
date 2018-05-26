@@ -5,7 +5,6 @@ import com.orm.dsl.NotNull;
 import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 
@@ -14,6 +13,7 @@ import java.sql.Timestamp;
 public class User {
 
     @Column(name = "bs_id")
+    @Unique
     private int bsId;
     @Column(name = "date_add")
     private Timestamp dateAdd;

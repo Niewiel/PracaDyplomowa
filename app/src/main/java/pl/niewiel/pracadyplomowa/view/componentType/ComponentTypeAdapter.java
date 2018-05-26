@@ -12,10 +12,10 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 
 import pl.niewiel.pracadyplomowa.R;
-import pl.niewiel.pracadyplomowa.database.model.Build;
+import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 
-public class ComponentTypeAdapter extends ArrayAdapter<Build> {
-    public ComponentTypeAdapter(@NonNull Context context, int resource, @NonNull List<Build> objects) {
+public class ComponentTypeAdapter extends ArrayAdapter<ComponentType> {
+    ComponentTypeAdapter(@NonNull Context context, int resource, @NonNull List<ComponentType> objects) {
         super(context, resource, objects);
     }
 
@@ -23,45 +23,35 @@ public class ComponentTypeAdapter extends ArrayAdapter<Build> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final ComponentTypeViewHolder viewHolder;
-        final Build build = getItem(position);
+        final ComponentType componentType = getItem(position);
 
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(R.layout.build_list_row, parent, false);
+            convertView = layoutInflater.inflate(R.layout.build_row, parent, false);
             viewHolder = new ComponentTypeViewHolder();
             viewHolder.mId = convertView.findViewById(R.id.row_bsId);
             viewHolder.name = convertView.findViewById(R.id.row_name);
             viewHolder.dateAdd = convertView.findViewById(R.id.row_date_add);
             viewHolder.dateEdit = convertView.findViewById(R.id.row_date_edit);
-            viewHolder.latitude = convertView.findViewById(R.id.row_latitude);
-            viewHolder.longitude = convertView.findViewById(R.id.row_longitude);
             viewHolder.sync = convertView.findViewById(R.id.row_sync);
 
 
-            viewHolder.mId.setText(String.valueOf(build.getmId()));
-            viewHolder.name.setText((build.getName()));
-            viewHolder.dateAdd.setText(String.valueOf(build.getDateAdd()));
-            if (build.getDateEdit() != null) {
-                viewHolder.dateEdit.setText(String.valueOf(build.getDateEdit()));
-            }
-            viewHolder.latitude.setText((build.getLatitude()));
-            viewHolder.longitude.setText((build.getLongitude()));
-            viewHolder.sync.setText(String.valueOf(build.isSync()));
-            if (build.isSync()) {
+            viewHolder.mId.setText(String.valueOf(componentType.getmId()));
+            viewHolder.name.setText((componentType.getName()));
+            viewHolder.dateAdd.setText(String.valueOf(componentType.getDateAdd()));
+            viewHolder.dateEdit.setText(String.valueOf(componentType.getDateEdit()));
+            viewHolder.sync.setText(String.valueOf(componentType.isSync()));
+            if (componentType.isSync()) {
                 viewHolder.sync.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
             }
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ComponentTypeViewHolder) convertView.getTag();
-            viewHolder.mId.setText(String.valueOf(build.getmId()));
-            viewHolder.name.setText((build.getName()));
-            viewHolder.dateAdd.setText(String.valueOf(build.getDateAdd()));
-            if (build.getDateEdit() != null)
-                viewHolder.dateEdit.setText(String.valueOf(build.getDateEdit()));
-
-            viewHolder.latitude.setText((build.getLatitude()));
-            viewHolder.longitude.setText((build.getLongitude()));
-            viewHolder.sync.setText(String.valueOf(build.isSync()));
+            viewHolder.mId.setText(String.valueOf(componentType.getmId()));
+            viewHolder.name.setText((componentType.getName()));
+            viewHolder.dateAdd.setText(String.valueOf(componentType.getDateAdd()));
+            viewHolder.dateEdit.setText(String.valueOf(componentType.getDateEdit()));
+            viewHolder.sync.setText(String.valueOf(componentType.isSync()));
         }
         return convertView;
     }

@@ -32,7 +32,6 @@ public class TokenClient extends AsyncTask<String, Void, HttpResponse<String>> {
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .header("Authorization", "Basic " + encrypt())
                     .header("Cache-Control", "no-cache")
-                    .header("Postman-Token", "a220f296-72e2-44fe-b00e-8c00f5218b1c")
                     .body("grant_type=password&username=user123&password=user123")
                     .asString();
             Unirest.shutdown();

@@ -18,7 +18,7 @@ import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.view.build.BuildView;
 
 public class BuildListAdapter extends ArrayAdapter<Build> {
-    public BuildListAdapter(@NonNull Context context, int resource, @NonNull List<Build> objects) {
+    BuildListAdapter(@NonNull Context context, int resource, @NonNull List<Build> objects) {
         super(context, resource, objects);
     }
 
@@ -30,7 +30,7 @@ public class BuildListAdapter extends ArrayAdapter<Build> {
 
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(R.layout.build_list_row, parent, false);
+            convertView = layoutInflater.inflate(R.layout.build_row, parent, false);
             viewHolder = new BuildListViewHolder();
             viewHolder.mId = convertView.findViewById(R.id.row_bsId);
             viewHolder.name = convertView.findViewById(R.id.row_name);
@@ -45,7 +45,7 @@ public class BuildListAdapter extends ArrayAdapter<Build> {
             if (build.isSync()) {
                 viewHolder.sync.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
             }
-            Log.e("Build row", build.toString());
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (BuildListViewHolder) convertView.getTag();
@@ -57,6 +57,7 @@ public class BuildListAdapter extends ArrayAdapter<Build> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("Build row", build.toString());
                 Intent intent = new Intent(getContext(), BuildView.class);
                 if (build.getBsId() != 0)
                     intent.putExtra("mId", build.getBsId());

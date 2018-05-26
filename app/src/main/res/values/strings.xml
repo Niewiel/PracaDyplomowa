@@ -9,6 +9,7 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_builds">Builds</string>
     <string name="title_activity_build">Build</string>
+    <string name="title_activity_building_list">Buildings</string>
     <string name="title_activity_component_type_list">Component types</string>
     <string name="title_activity_component_type">Component type</string>
     <string name="title_activity_tokens">Tokens</string>
@@ -34,4 +35,5 @@
 
     <!--utils-->
     <string name="never_edited">Never edited</string>
+    <string name="show_all_buildings">show all buildings</string>
 </resources>

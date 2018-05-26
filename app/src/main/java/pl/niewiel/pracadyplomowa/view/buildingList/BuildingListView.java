@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.view.buildList;
+package pl.niewiel.pracadyplomowa.view.buildingList;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,22 +12,22 @@ import java.util.List;
 import java.util.Objects;
 
 import pl.niewiel.pracadyplomowa.R;
-import pl.niewiel.pracadyplomowa.database.model.Build;
-import pl.niewiel.pracadyplomowa.database.service.BuildService;
+import pl.niewiel.pracadyplomowa.database.model.Building;
+import pl.niewiel.pracadyplomowa.database.service.BuildingService;
 
-public class BuildListView extends AppCompatActivity {
+public class BuildingListView extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.list);
-        BuildService buildService = new BuildService(getApplicationContext());
-        List<Build> builds = new LinkedList<>();
-        builds.addAll(buildService.getAll());
-        if (!builds.isEmpty()) {
+        BuildingService buildingService = new BuildingService(getApplicationContext());
+        List<Building> buildings = new LinkedList<>();
+        buildings.addAll(buildingService.getAll());
+        if (!buildings.isEmpty()) {
             ListView listView = findViewById(R.id.list);
-            BuildListAdapter buildAdapter = new BuildListAdapter(this, R.layout.build_list_row, builds);
+            BuildingListAdapter buildAdapter = new BuildingListAdapter(this, R.layout.building_list_row, buildings);
             listView.setAdapter(buildAdapter);
         } else {
             Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();

@@ -1,5 +1,6 @@
 package pl.niewiel.pracadyplomowa.database.service;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -16,32 +17,36 @@ import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.httpclient.ApiClient;
 
 public class ComponentService {
-    ApiClient apiClient = new ApiClient();
+    private ApiClient apiClient = new ApiClient();
+    private Context context;
 
-    public ComponentService() {
+    public ComponentService(Context context) {
+        this.context = context;
     }
 
     public ArrayList<Component> getAll() {
         ArrayList<Component> builds = new ArrayList<>();
-        try {
-            HttpResponse<String> response = apiClient.get("component");
-            JSONObject object = new JSONObject(response.getBody());
+        if (Utils.isOnline(context)) {
+            try {
+                HttpResponse<String> response = apiClient.get("component");
+                JSONObject object = new JSONObject(response.getBody());
 
-            JSONArray array = object.getJSONObject("result").getJSONObject("content").getJSONArray("Components");
-            String status = object.getString("status");
-            Log.e("body", status);
-            if (status.equals("OK")) {
-                for (int i = 0; i < array.length(); i++) {
-                    Component component = new Component();
-                    JSONObject item = array.getJSONObject(i);
-                    component.setDateAdd(Utils.parseDate(item.getString("dateAdd")));
-                    component.setName(item.getString("name"));
-                    component.setSync("true".equals(item.getString("synchronized")));
-                    builds.add(component);
+                JSONArray array = object.getJSONObject("result").getJSONObject("content").getJSONArray("Components");
+                String status = object.getString("status");
+                Log.e("body", status);
+                if (status.equals("OK")) {
+                    for (int i = 0; i < array.length(); i++) {
+                        Component component = new Component();
+                        JSONObject item = array.getJSONObject(i);
+                        component.setDateAdd(Utils.parseDate(item.getString("dateAdd")));
+                        component.setName(item.getString("name"));
+                        component.setSync("true".equals(item.getString("synchronized")));
+                        builds.add(component);
+                    }
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
         return builds;
@@ -56,7 +61,7 @@ public class ComponentService {
             component = new Component();
             component.setBsId(id);
         }
-        if (!component.isSync()) {
+        if (!component.isSync() && Utils.isOnline(context)) {
             try {
                 HttpResponse<String> response = apiClient.get("build/" + id);
                 JSONObject object = new JSONObject(response.getBody());

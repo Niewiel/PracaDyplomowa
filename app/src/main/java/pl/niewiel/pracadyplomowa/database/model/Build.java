@@ -2,14 +2,18 @@ package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Column;
 import com.orm.dsl.Table;
+import com.orm.dsl.Unique;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Table(name = "build")
 public class Build {
 
     @Column(name = "mid")
+    @Unique
     private long mId;
+    @Unique
     @Column(name = "bs_id")
     private long bsId;
     @Column(name = "date_add")
@@ -20,6 +24,7 @@ public class Build {
     private String latitude;
     private String longitude;
     private boolean sync = false;
+    private List<Building> buildings;
 
     public Build() {
     }
@@ -101,5 +106,13 @@ public class Build {
 
     public void setSync(boolean sync) {
         this.sync = sync;
+    }
+
+    public List<Building> getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(List<Building> buildings) {
+        this.buildings = buildings;
     }
 }
