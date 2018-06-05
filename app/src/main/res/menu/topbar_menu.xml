@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <!--"Mark Favorite", should appear as action button if possible -->
+    <item
+        android:id="@+id/synchronize"
+        android:icon="@drawable/round_refresh_24"
+        android:title="@string/synchronize"
+        app:showAsAction="ifRoom" />
+
+    <!-- Settings, should always be in the overflow -->
+    <item
+        android:id="@+id/add_item"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/add"
+        app:showAsAction="always" />
+
+</menu>

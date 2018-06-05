@@ -27,21 +27,13 @@ public class Build {
     private List<Building> buildings;
 
     public Build() {
+        this.dateAdd = new Timestamp(System.currentTimeMillis());
     }
 
 
     @Override
     public String toString() {
-        return "\nBuild{" +
-                "id=" + mId +
-                ", bsId=" + bsId +
-                ", dateAdd=" + dateAdd +
-                ", dateEdit=" + dateEdit +
-                ", name='" + name + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", longitude='" + longitude + '\'' +
-                ", sync=" + sync +
-                '}';
+        return name;
     }
 
     public long getmId() {
@@ -74,6 +66,10 @@ public class Build {
 
     public void setDateEdit(Timestamp dateEdit) {
         this.dateEdit = dateEdit;
+    }
+
+    public void setDateEdit() {
+        this.dateEdit = new Timestamp(System.currentTimeMillis());
     }
 
     public String getName() {

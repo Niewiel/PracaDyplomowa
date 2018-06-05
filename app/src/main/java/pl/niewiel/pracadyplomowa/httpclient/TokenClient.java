@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.database.model.Token;
 
 public class TokenClient extends AsyncTask<String, Void, HttpResponse<String>> {
@@ -25,19 +26,22 @@ public class TokenClient extends AsyncTask<String, Void, HttpResponse<String>> {
 
     @Override
     protected HttpResponse<String> doInBackground(String... strings) {
-        Unirest.clearDefaultHeaders();
-        HttpResponse<String> response=null;
-        try {
-            response = Unirest.post("http://devdyplom.nuc-mleczko-pawel.pl/oauth/getToken")
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .header("Authorization", "Basic " + encrypt())
-                    .header("Cache-Control", "no-cache")
-                    .body("grant_type=password&username=user123&password=user123")
-                    .asString();
-            Unirest.shutdown();
-        } catch (UnirestException | IOException e) {
-            e.printStackTrace();
 
+        Unirest.clearDefaultHeaders();
+        HttpResponse<String> response = null;
+        if (Utils.IS_ONLINE) {
+            try {
+                response = Unirest.post("http://devdyplom.nuc-mleczko-pawel.pl/oauth/getToken")
+                        .header("Content-Type", "application/x-www-form-urlencoded")
+                        .header("Authorization", "Basic " + encrypt())
+                        .header("Cache-Control", "no-cache")
+                        .body("grant_type=password&username=user123&password=user123")
+                        .asString();
+                Unirest.shutdown();
+            } catch (UnirestException | IOException e) {
+                e.printStackTrace();
+
+            }
         }
         return response;
     }
@@ -45,7 +49,7 @@ public class TokenClient extends AsyncTask<String, Void, HttpResponse<String>> {
     @Override
     protected void onPostExecute(HttpResponse<String> response) {
         if (response.getCode() == 200) {
-            JSONObject reader = null;
+            JSONObject reader;
             try {
                 reader = new JSONObject(response.getBody());
                 Token token = new Token(
@@ -54,7 +58,7 @@ public class TokenClient extends AsyncTask<String, Void, HttpResponse<String>> {
                         reader.getString("token_type"));
                 token.setRefresh_token(reader.getString("refresh_token"));
                 SugarRecord.save(token);
-                Log.e("Token",token.toString());
+                Log.e("Token", token.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

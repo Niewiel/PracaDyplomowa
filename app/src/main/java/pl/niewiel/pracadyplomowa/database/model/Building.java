@@ -59,17 +59,7 @@ public class Building {
 
     @Override
     public String toString() {
-        return "Building{" +
-                "bsId=" + bsId +
-                ", budowa=" + build +
-                ", dateAdd=" + dateAdd +
-                ", dateEdit=" + dateEdit +
-                ", dateStart=" + dateStart +
-                ", dateEnd=" + dateEnd +
-                ", name='" + name + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", longitude='" + longitude + '\'' +
-                '}';
+        return name;
     }
 
     public long getmId() {

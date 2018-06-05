@@ -41,15 +41,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "bsId=" + bsId +
-                ", dateAdd=" + dateAdd +
-                ", dateEdit=" + dateEdit +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", isLoggedIn=" + isLoggedIn +
-                '}';
+        return name;
     }
 
     public Timestamp getDateAdd() {

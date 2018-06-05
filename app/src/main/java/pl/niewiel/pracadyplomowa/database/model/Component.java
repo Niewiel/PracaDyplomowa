@@ -1,6 +1,7 @@
 package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Column;
+import com.orm.dsl.Ignore;
 import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 
@@ -24,9 +25,12 @@ public class Component {
     private int status;
     private String name;
     private boolean sync = false;
+    @Ignore
     private List<ComponentType> componentTypeList;
 
+
     public Component() {
+        this.dateAdd = new Timestamp(System.currentTimeMillis());
     }
 
     public Component(long mId, Building budynek, Timestamp dateAdd, Timestamp dateEdit, int status, String name, boolean sync, List<ComponentType> componentTypeList) {
@@ -40,19 +44,10 @@ public class Component {
         this.componentTypeList = componentTypeList;
     }
 
+
     @Override
     public String toString() {
-        return "Component{" +
-                "mId=" + mId +
-                ", bsId=" + bsId +
-                ", budynek=" + budynek +
-                ", dateAdd=" + dateAdd +
-                ", dateEdit=" + dateEdit +
-                ", status=" + status +
-                ", name='" + name + '\'' +
-                ", sync=" + sync +
-                ", componentTypeList=" + componentTypeList +
-                '}';
+        return name;
     }
 
     public long getmId() {
@@ -119,11 +114,5 @@ public class Component {
         this.sync = sync;
     }
 
-    public List<ComponentType> getComponentTypeList() {
-        return componentTypeList;
-    }
 
-    public void setComponentTypeList(List<ComponentType> componentTypeList) {
-        this.componentTypeList = componentTypeList;
-    }
 }

@@ -1,7 +1,6 @@
 package pl.niewiel.pracadyplomowa.httpclient;
 
 
-import android.os.StrictMode;
 import android.util.Log;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -12,18 +11,25 @@ import com.orm.SugarRecord;
 import java.io.IOException;
 import java.util.Map;
 
+import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.database.model.Token;
 
 public class ApiClient {
     private static String API_URL = "http://devdyplom.nuc-mleczko-pawel.pl/api/v1/";
 
     public ApiClient() {
-        String token = SugarRecord.last(Token.class).getAccess_token();
-        Log.e("token", token);
-        Unirest.setDefaultHeader("Authorization", "Bearer " + token);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        if (Utils.IS_ONLINE) {
+            if (!SugarRecord.listAll(Token.class).isEmpty()) {
+                String token = SugarRecord.last(Token.class).getAccess_token();
+                Log.e("token", token);
+                Unirest.setDefaultHeader("Authorization", "Bearer " + token);
+            } else
+                new TokenClient().execute();
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+        }
     }
+
 
     public HttpResponse<String> get(String path) {
 
@@ -40,7 +46,7 @@ public class ApiClient {
         return response;
     }
 
-    public HttpResponse<String> post(Map<String, Object> fields, String path) {
+    public HttpResponse<String> post(String path, Map<String, Object> fields) {
         HttpResponse<String> response = null;
 
         try {
@@ -55,12 +61,11 @@ public class ApiClient {
         return response;
     }
 
-    public HttpResponse<String> delete(Map<String, Object> fields, String path) {
+    public HttpResponse<String> delete(String path) {
         HttpResponse<String> response = null;
 
         try {
             response = Unirest.delete(API_URL + path)
-                    .fields(fields)
                     .asString();
             Unirest.shutdown();
         } catch (UnirestException | IOException e) {

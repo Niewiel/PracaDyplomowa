@@ -11,22 +11,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.database.model.Building;
+import pl.niewiel.pracadyplomowa.database.model.Component;
+import pl.niewiel.pracadyplomowa.database.model.middleTables.ComponentToBuilding;
 import pl.niewiel.pracadyplomowa.httpclient.ApiClient;
 
-public class BuildingService {
+public class BuildingService implements Service<Building> {
     private static ApiClient apiClient = new ApiClient();
     private Context context;
+    private ComponentService componentService;
 
     public BuildingService(Context context) {
         this.context = context;
+        componentService = new ComponentService(context);
     }
 
     public ArrayList<Building> getAll() {
         ArrayList<Building> buildings = new ArrayList<>();
-        if (Utils.isOnline(context)) {
+        if (Utils.IS_ONLINE) {
             try {
                 HttpResponse<String> response = apiClient.get("building");
                 JSONObject object = new JSONObject(response.getBody());
@@ -39,10 +45,7 @@ public class BuildingService {
                         Building building = new Building();
                         JSONObject item = array.getJSONObject(i);
                         building.setBsId(item.getInt("id"));
-                        building = getById(building.getBsId());
-//                    build.setDateAdd(Utils.parseDate(item.getString("dateAdd")));
-//                    build.setName(item.getString("name"));
-//                    build.setSync(false);//"true".equals(item.getString("synchronized")));
+                        building = getById((int) building.getBsId());
                         buildings.add(building);
 
                     }
@@ -55,14 +58,14 @@ public class BuildingService {
         return buildings;
     }
 
-    public Building getById(long id) {
+    public Building getById(int id) {
         Building building;
         try {
             building = SugarRecord.find(Building.class, "bs_id=?", String.valueOf(id)).get(0);
         } catch (NullPointerException | IndexOutOfBoundsException e) {
             building = new Building();
         }
-        if (!building.isSync() && Utils.isOnline(context)) {
+        if (!building.isSync() && Utils.IS_ONLINE) {
             try {
                 HttpResponse<String> response = apiClient.get("building/" + id);
                 JSONObject object = new JSONObject(response.getBody());
@@ -72,7 +75,10 @@ public class BuildingService {
                     Log.e("Json", "start");
                     JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("Building");
                     building.setDateAdd(Utils.parseDate(reader.getJSONObject("DateAdd").getString("date")));
-                    building.setDateEdit(Utils.parseDate(reader.getString("DateEdit")));
+                    building.setDateStart(Utils.parseDate(reader.getJSONObject("DateStart").getString("date")));
+                    building.setDateEnd(Utils.parseDate(reader.getJSONObject("DateEnd").getString("date")));
+                    if (!reader.getString("DateEdit").equals("null"))
+                        building.setDateEdit(Utils.parseDate(reader.getJSONObject("DateEdit").getString("date")));
                     building.setName(reader.getString("Name"));
                     Log.e("budynek", reader.getString("Name"));
                     building.setLatitude(reader.getString("Latitude"));
@@ -81,14 +87,56 @@ public class BuildingService {
                     building.setmId(SugarRecord.save(building));
                     SugarRecord.save(building);
                     Log.e("saved", String.valueOf(SugarRecord.save(building)));
+                    //components to build
+                    List<Component> componentTypes = new LinkedList<>();
+                    JSONArray array = object.getJSONObject("result").getJSONObject("content").getJSONArray("components");
+                    ComponentToBuilding components;
+                    for (int i = 0; i < array.length(); i++) {
+                        Log.e("type id", String.valueOf(array.getJSONObject(i).getInt("id")));
+                        componentTypes.add(componentService.getById(array.getJSONObject(i).getInt("id")));
+                    }
+                    for (Component component : componentTypes) {
+                        components = new ComponentToBuilding(component, building);
+                        SugarRecord.save(components);
 
+                    }
 
                 }
             } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
             }
-            Log.e("record", String.valueOf(SugarRecord.findWithQuery(Building.class, "SELECT * FROM building WHERE bs_id=?", String.valueOf(1))));
         }
         return building;
     }
+
+    @Override
+    public boolean add(Building item) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(Building item) {
+        return false;
+    }
+
+    @Override
+    public boolean update(Building item) {
+        return false;
+    }
+
+    @Override
+    public void synchronize() {
+        List<Building> toSynchronize = SugarRecord.find(Building.class, "SYNC=?", String.valueOf(0));
+
+        if (Utils.IS_ONLINE) {
+            if (!toSynchronize.isEmpty()) {
+                for (Building bi :
+                        toSynchronize) {
+                    add(bi);
+                }
+            }
+            getAll();
+        }
+    }
+
 }

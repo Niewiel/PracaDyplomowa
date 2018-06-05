@@ -1,7 +1,6 @@
 package pl.niewiel.pracadyplomowa.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,31 +17,30 @@ public class Splash extends AppCompatActivity {
     @SuppressLint("ShowToast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         SugarContext.init(getApplicationContext());
-//        Log.e("Internet", "connected " + Utility.isOnline(getApplicationContext()));
-
-        if (Utils.isOnline(getApplicationContext())) {
+        Utils.startOnlineCheckerService(getApplicationContext());
+        Utils.dropBase(getApplicationContext());
+        Utils.fillDatabase();
+        if (Utils.IS_ONLINE) {
             Log.e("Internet", "connected " + Utils.isOnline(getApplicationContext()));
             Toast.makeText(getApplicationContext(), "connected to system", Toast.LENGTH_LONG);
-            Utils.dropBase(getApplicationContext());
-            Utils.fillDatabase();
-            Utils.getToken();
+            Utils.startTokenService(this);
         } else {
             Log.e("Internet", "connected " + Utils.isOnline(getApplicationContext()));
             Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG);
         }
+        Toast.makeText(getApplicationContext(), "Zaczynam splash", Toast.LENGTH_LONG).show();
+        finish();
 
-//        Toast.makeText(getApplicationContext(), "Zaczynam splash", Toast.LENGTH_LONG).show();
-        goToMain();
     }
 
-
-
-    private void goToMain() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("Stop", getLocalClassName());
     }
 
 

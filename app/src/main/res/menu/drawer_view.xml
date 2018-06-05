@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_login"
+            android:title="@string/login" />
+        <item
+            android:id="@+id/menu_components_list"
+            android:title="@string/show_all_components" />
+        <item
+            android:id="@+id/menu_builds_list"
+            android:title="@string/show_all_builds" />
+        <item
+            android:id="@+id/menu_component_types_list"
+            android:title="@string/show_all_component_types" />
+        <item
+            android:id="@+id/menu_building_list"
+            android:title="@string/show_all_buildings" />
+        <item
+            android:id="@+id/menu_tokens_list"
+            android:title="@string/show_all_tokens" />
+
+    </group>
+
+</menu>

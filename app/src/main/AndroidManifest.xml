@@ -21,8 +21,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".activity.Splash">
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,7 +35,7 @@
 
         <meta-data
             android:name="VERSION"
-            android:value="8" />
+            android:value="10" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -45,33 +47,44 @@
             android:value=".activity.MainActivity" />
 
         <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.Design.Light.NoActionBar" />
+            android:name=".activity.Splash"
+            android:label="@string/title_activity_main" />
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".activity.RegisterActivity"
             android:label="@string/title_activity_register" />
+
         <activity
-            android:name=".view.token.TokenView"
-            android:label="@string/title_activity_tokens" />
-        <activity
-            android:name=".view.buildList.BuildListView"
-            android:label="@string/title_activity_builds" />
-        <activity
-            android:name=".view.build.BuildView"
+            android:name=".fragments.lists.BuildView"
             android:label="@string/title_activity_build" />
         <activity
-            android:name=".view.componentTypeList.ComponentTypeListView"
-            android:label="@string/title_activity_component_type_list" />
+            android:name=".fragments.lists.ComponentView"
+            android:label="@string/title_activity_component"
+            android:theme="@style/AppTheme" />
+
         <activity
-            android:name=".view.componentType.ComponentTypeView"
-            android:label="@string/title_activity_component_type" />
+            android:name=".activity.ComponentTypeActivity"
+            android:label="@string/title_activity_component_type"
+            android:theme="@style/Theme.AppCompat" />
+
         <activity
-            android:name=".view.buildingList.BuildingListView"
-            android:label="@string/title_activity_building_list" />
+            android:name=".fragments.lists.BuildingView"
+            android:label="@string/title_activity_building" />
+
+        <activity
+            android:name=".fragments.add_edit.AddOrEditComponentType"
+            android:label="@string/title_activity_add" />
+
+        <service
+            android:name=".services.TokenService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".services.OnlineChecker"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
