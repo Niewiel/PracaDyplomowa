@@ -89,7 +89,8 @@ public class ComponentService implements Service<Component> {
                         component.setDateEdit(Utils.parseDate(reader.getJSONObject("DateEdit").getString("date")));
                     component.setName(reader.getString("Name"));
                     Log.e("name", reader.getString("Name"));
-                    component.setStatus(reader.getInt("Status"));
+                    if (!reader.getString("Status").equals("null"))
+                        component.setStatus(reader.getInt("Status"));
                     component.setSync(true);
                     component.setmId(SugarRecord.save(component));
                     SugarRecord.save(component);

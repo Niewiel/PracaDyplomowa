@@ -8,6 +8,9 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.orm.SugarRecord;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -25,11 +28,33 @@ public class ApiClient {
                 Unirest.setDefaultHeader("Authorization", "Bearer " + token);
             } else
                 new TokenClient().execute();
-//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//            StrictMode.setThreadPolicy(policy);
+            try {
+                HttpResponse<String> response = test();
+                JSONObject object = new JSONObject(response.getBody());
+                String status = object.getString("status");
+                if (!status.equals("OK"))
+                    new TokenClient().execute();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    public HttpResponse<String> test() {
+
+        HttpResponse<String> response = null;
+
+        try {
+            response = Unirest.get("http://devdyplom.nuc-mleczko-pawel.pl/api/test")
+                    .asString();
+            Unirest.shutdown();
+        } catch (UnirestException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
 
     public HttpResponse<String> get(String path) {
 

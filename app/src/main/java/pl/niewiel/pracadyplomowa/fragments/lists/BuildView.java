@@ -27,6 +27,7 @@ public class BuildView extends AppCompatActivity {
     LinearLayout progressBar;
     List<Build> list;
     BuildAdapter adapter;
+    Service<Build> service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,22 +38,15 @@ public class BuildView extends AppCompatActivity {
         listView = findViewById(R.id.list);
         progressBar = findViewById(R.id.progressbar_view);
         adapter = new BuildAdapter(this, R.layout.build_row, list);
-        new Task().execute();
+        service = new BuildService(getApplicationContext());
+
         if (getIntent().hasExtra("mId")) {
-            BuildService buildService = new BuildService(getApplicationContext());
-            list.add(buildService.getById((int) getIntent().getExtras().getLong("mId")));
-            if (!list.isEmpty()) {
                 listView.setAdapter(adapter);
-            }
-        } else if (getIntent().hasExtra("id")) {
-            list.add(SugarRecord.findById(Build.class, getIntent().getExtras().getLong("id")));
-            if (!list.isEmpty()) {
-                Log.e("check", String.valueOf(list));
-                listView.setAdapter(adapter);
-            }
+            new Task().execute();
+
         } else {
             Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
-            Log.e("Builds", "no results");
+            Log.e(DEBUG_TAG, "no results");
             finish();
         }
     }
@@ -68,20 +62,21 @@ public class BuildView extends AppCompatActivity {
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
+            list.clear();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
+            list.add(SugarRecord.findById(Build.class, getIntent().getExtras().getLong("mId")));
             adapter.notifyDataSetChanged();
             super.onPostExecute(aVoid);
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Service service = new BuildService(getApplicationContext());
-            service.getAll();
+            service.getById((int) SugarRecord.findById(Build.class, getIntent().getExtras().getLong("mId")).getBsId());
             return null;
         }
     }

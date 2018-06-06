@@ -15,7 +15,7 @@ import java.util.List;
 
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.Building;
-import pl.niewiel.pracadyplomowa.fragments.lists.ComponentView;
+import pl.niewiel.pracadyplomowa.fragments.lists.BuildingView;
 import pl.niewiel.pracadyplomowa.placeholders.BuildingViewHolder;
 
 public class BuildingAdapter extends ArrayAdapter<Building> {
@@ -76,11 +76,8 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
             @Override
             public void onClick(View v) {
                 Log.e("Build row", building.toString());
-                Intent intent = new Intent(getContext(), ComponentView.class);
-                if (building.getBsId() != 0)
-                    intent.putExtra("mId", building.getBsId());
-                intent.putExtra("id", building.getmId());
-                intent.putExtra("components", building.getBsId());
+                Intent intent = new Intent(getContext(), BuildingView.class);
+                intent.putExtra("mId", building.getmId());
                 getContext().startActivity(intent);
             }
         });

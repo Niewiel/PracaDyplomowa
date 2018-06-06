@@ -20,7 +20,6 @@ import com.orm.SugarRecord;
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.database.model.User;
-import pl.niewiel.pracadyplomowa.database.service.Synchronize;
 import pl.niewiel.pracadyplomowa.fragments.Main;
 import pl.niewiel.pracadyplomowa.fragments.lists.BuildListView;
 import pl.niewiel.pracadyplomowa.fragments.lists.BuildingListView;
@@ -31,6 +30,7 @@ import pl.niewiel.pracadyplomowa.fragments.lists.token.TokenView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String DEBUG_TAG = "MainActivity";
     private static boolean ok = false;
     private User user;
     private DrawerLayout mDrawerLayout;
@@ -57,8 +57,10 @@ public class MainActivity extends AppCompatActivity {
 
         //topbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle(R.string.app_name);
+//        myToolbar.setTitle(R.string.app_name);
         myToolbar.inflateMenu(R.menu.topbar_menu);
+
+        setSupportActionBar(myToolbar);
 
 
         //menu
@@ -135,8 +137,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.synchronize:
-                Utils.IS_SYNCHRONIZED = false;
-                new Synchronize(getApplicationContext()).execute();
+                Log.e(DEBUG_TAG, "synchronizacja");
 
                 return true;
             case R.id.add_item:

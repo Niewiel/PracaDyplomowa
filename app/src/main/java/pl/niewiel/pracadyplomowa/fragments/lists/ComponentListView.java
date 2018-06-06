@@ -62,7 +62,7 @@ public class ComponentListView extends Fragment implements SwipeRefreshLayout.On
     public void onRefresh() {
         new Synchronize(getContext()).execute();
         new Task().execute();
-        swipeRefreshLayout.setRefreshing(false);
+
     }
 
     private class Task extends AsyncTask<Void, Void, Void> {
@@ -79,6 +79,7 @@ public class ComponentListView extends Fragment implements SwipeRefreshLayout.On
             listView.setVisibility(View.VISIBLE);
             list.addAll(Utils.getAllComponents());
             adapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
             super.onPostExecute(aVoid);
         }
 

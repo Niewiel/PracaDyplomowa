@@ -38,55 +38,63 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:gravity="center"
+        android:orientation="vertical">
 
-    </ListView>
+        <LinearLayout
+            android:id="@+id/progressbar_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-    <FrameLayout
-        android:id="@+id/build_placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal" />
 
-    </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:text="@string/loading_data" />
 
-    <FrameLayout
-        android:id="@+id/building_placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        </LinearLayout>
 
-    </FrameLayout>
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
-    <FrameLayout
-        android:id="@+id/component_type_placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        </ListView>
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/build_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+        </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/progressbar_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal|center"
-        android:orientation="horizontal">
+        <FrameLayout
+            android:id="@+id/building_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ProgressBar
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal" />
+        </FrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:text="@string/loading_data" />
+        <FrameLayout
+            android:id="@+id/component_type_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
 
     </LinearLayout>
+
 
 </LinearLayout>

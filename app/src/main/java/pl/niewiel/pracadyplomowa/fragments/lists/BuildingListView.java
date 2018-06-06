@@ -3,6 +3,7 @@ package pl.niewiel.pracadyplomowa.fragments.lists;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,7 +23,7 @@ import pl.niewiel.pracadyplomowa.database.model.Building;
 import pl.niewiel.pracadyplomowa.database.service.BuildingService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
 
-public class BuildingListView extends Fragment {
+public class BuildingListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String DEBUG_TAG = "BuildingListView";
     ListView listView;
     LinearLayout progressBar;
@@ -39,12 +40,9 @@ public class BuildingListView extends Fragment {
         progressBar = rootView.findViewById(R.id.progressbar_view);
         list = new LinkedList<>();
         adapter = new BuildingListAdapter(getContext(), R.layout.list_row, list);
+        listView.setAdapter(adapter);
         new Task().execute();
-        list.addAll(Utils.getAllBuildings());
-        if (!list.isEmpty()) {
-            Log.e(DEBUG_TAG, String.valueOf(list));
-            listView.setAdapter(adapter);
-        } else {
+        if (list.isEmpty()) {
             Toast.makeText(getContext(), "No results", Toast.LENGTH_LONG).show();
             Log.e(DEBUG_TAG, "no results");
         }
@@ -57,6 +55,12 @@ public class BuildingListView extends Fragment {
         return true;
     }
 
+    @Override
+    public void onRefresh() {
+//        new Synchronize(getContext()).execute();
+        new Task().execute();
+
+    }
 
     private class Task extends AsyncTask<Void, Void, Void> {
         @Override
@@ -69,6 +73,7 @@ public class BuildingListView extends Fragment {
         protected void onPostExecute(Void aVoid) {
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
+            list.addAll(Utils.getAllBuildings());
             adapter.notifyDataSetChanged();
             super.onPostExecute(aVoid);
         }

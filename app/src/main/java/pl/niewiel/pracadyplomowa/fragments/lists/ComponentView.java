@@ -88,7 +88,7 @@ public class ComponentView extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             Service service = new ComponentService(getApplicationContext());
-            service.getAll();
+            service.getById((int) SugarRecord.findById(Component.class, getIntent().getExtras().getLong("mId")).getBsId());
             return null;
         }
     }
