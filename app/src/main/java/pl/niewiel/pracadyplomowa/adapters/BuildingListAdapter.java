@@ -59,7 +59,7 @@ public class BuildingListAdapter extends ArrayAdapter<Building> {
             public void onClick(View v) {
                 Log.e("Build row", building.toString());
                 Intent intent = new Intent(getContext(), BuildingView.class);
-                intent.putExtra("mId", building.getmId());
+                intent.putExtra("building", building.getmId());
                 getContext().startActivity(intent);
             }
         });

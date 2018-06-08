@@ -22,8 +22,9 @@ import pl.niewiel.pracadyplomowa.adapters.BuildingListAdapter;
 import pl.niewiel.pracadyplomowa.database.model.Building;
 import pl.niewiel.pracadyplomowa.database.service.BuildingService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
+import pl.niewiel.pracadyplomowa.fragments.MyFragment;
 
-public class BuildingListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class BuildingListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MyFragment {
     private static final String DEBUG_TAG = "BuildingListView";
     ListView listView;
     LinearLayout progressBar;
@@ -60,6 +61,11 @@ public class BuildingListView extends Fragment implements SwipeRefreshLayout.OnR
 //        new Synchronize(getContext()).execute();
         new Task().execute();
 
+    }
+
+    @Override
+    public void refresh() {
+        new Task().execute();
     }
 
     private class Task extends AsyncTask<Void, Void, Void> {

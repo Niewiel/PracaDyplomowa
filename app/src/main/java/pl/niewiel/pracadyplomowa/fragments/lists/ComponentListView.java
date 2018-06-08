@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.orm.SugarRecord;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,17 +22,21 @@ import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.adapters.ComponentListAdapter;
 import pl.niewiel.pracadyplomowa.database.model.Component;
+import pl.niewiel.pracadyplomowa.database.model.middleTables.ComponentToBuilding;
 import pl.niewiel.pracadyplomowa.database.service.ComponentService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
 import pl.niewiel.pracadyplomowa.database.service.Synchronize;
+import pl.niewiel.pracadyplomowa.fragments.MyFragment;
 
-public class ComponentListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ComponentListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MyFragment {
     private static final String DEBUG_TAG = "ComponentListView";
     ListView listView;
     LinearLayout progressBar;
     List<Component> list;
+    List<ComponentToBuilding> ids;
     ComponentListAdapter adapter;
     SwipeRefreshLayout swipeRefreshLayout;
+    Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,6 +48,7 @@ public class ComponentListView extends Fragment implements SwipeRefreshLayout.On
         progressBar = rootView.findViewById(R.id.progressbar_view);
         list = new LinkedList<>();
         adapter = new ComponentListAdapter(getContext(), R.layout.list_row, list);
+        bundle = this.getArguments();
 
         listView.setAdapter(adapter);
         new Task().execute();
@@ -65,6 +72,11 @@ public class ComponentListView extends Fragment implements SwipeRefreshLayout.On
 
     }
 
+    @Override
+    public void refresh() {
+        new Task().execute();
+    }
+
     private class Task extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -77,7 +89,8 @@ public class ComponentListView extends Fragment implements SwipeRefreshLayout.On
         protected void onPostExecute(Void aVoid) {
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
-            list.addAll(Utils.getAllComponents());
+            if (bundle == null)
+                list.addAll(Utils.getAllComponents());
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
             super.onPostExecute(aVoid);
@@ -88,6 +101,15 @@ public class ComponentListView extends Fragment implements SwipeRefreshLayout.On
             if (Utils.IS_ONLINE) {
                 Service service = new ComponentService(getContext());
                 service.getAll();
+                if (bundle != null) {
+                    ids = new LinkedList<>();
+                    if (bundle.getLong("components") != 0)
+                        ids = SugarRecord.find(ComponentToBuilding.class, "building_id=?", String.valueOf(bundle.getLong("components")));
+                    if (!ids.isEmpty())
+                        for (ComponentToBuilding t : ids) {
+                            list.add(SugarRecord.findById(Component.class, t.getComponentId()));
+                        }
+                }
             }
             return null;
         }

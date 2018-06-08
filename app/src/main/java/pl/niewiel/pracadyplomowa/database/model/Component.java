@@ -1,12 +1,10 @@
 package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Column;
-import com.orm.dsl.Ignore;
 import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Table(name = "component")
 public class Component {
@@ -25,15 +23,15 @@ public class Component {
     private int status;
     private String name;
     private boolean sync = false;
-    @Ignore
-    private List<ComponentType> componentTypeList;
+    private Photo currentPhoto;
+
 
 
     public Component() {
         this.dateAdd = new Timestamp(System.currentTimeMillis());
     }
 
-    public Component(long mId, Building budynek, Timestamp dateAdd, Timestamp dateEdit, int status, String name, boolean sync, List<ComponentType> componentTypeList) {
+    public Component(long mId, Building budynek, Timestamp dateAdd, Timestamp dateEdit, int status, String name, boolean sync) {
         this.mId = mId;
         this.budynek = budynek;
         this.dateAdd = dateAdd;
@@ -41,7 +39,7 @@ public class Component {
         this.status = status;
         this.name = name;
         this.sync = sync;
-        this.componentTypeList = componentTypeList;
+
     }
 
 
@@ -114,5 +112,11 @@ public class Component {
         this.sync = sync;
     }
 
+    public Photo getCurrentPhoto() {
+        return currentPhoto;
+    }
 
+    public void setCurrentPhoto(Photo currentPhoto) {
+        this.currentPhoto = currentPhoto;
+    }
 }

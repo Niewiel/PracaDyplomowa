@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.httpclient;
+package pl.niewiel.pracadyplomowa.apiClients;
 
 import android.os.AsyncTask;
 import android.util.Base64;

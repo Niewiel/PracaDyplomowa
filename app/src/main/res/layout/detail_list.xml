@@ -74,21 +74,7 @@
         </ListView>
 
         <FrameLayout
-            android:id="@+id/build_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/building_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/component_type_placeholder"
+            android:id="@+id/subelement_placeholder"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

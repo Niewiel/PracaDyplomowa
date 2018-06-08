@@ -17,4 +17,20 @@ public class ComponentToBuilding {
         this.componentId = component.getmId();
         this.buildingId = building.getmId();
     }
+
+    public long getComponentId() {
+        return componentId;
+    }
+
+    public void setComponentId(long componentId) {
+        this.componentId = componentId;
+    }
+
+    public long getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(long buildingId) {
+        this.buildingId = buildingId;
+    }
 }

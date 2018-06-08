@@ -15,10 +15,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import pl.niewiel.pracadyplomowa.Utils;
+import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
 import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.database.model.Building;
 import pl.niewiel.pracadyplomowa.database.model.middleTables.BuildingToBuild;
-import pl.niewiel.pracadyplomowa.httpclient.ApiClient;
 
 public class BuildService implements Service<Build> {
     private static ApiClient apiClient;
@@ -137,7 +137,7 @@ public class BuildService implements Service<Build> {
                     add(bu);
                 }
             }
-            getAll();
+
         }
     }
 }

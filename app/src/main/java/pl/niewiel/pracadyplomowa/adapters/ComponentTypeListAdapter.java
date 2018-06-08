@@ -57,9 +57,7 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ComponentTypeActivity.class);
-                if (componentType.getBsId() != 0)
-                    intent.putExtra("id", componentType.getBsId());
-                intent.putExtra("mId", componentType.getmId());
+                intent.putExtra("type", componentType.getmId());
                 getContext().startActivity(intent);
             }
         });

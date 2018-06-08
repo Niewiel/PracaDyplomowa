@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import pl.niewiel.pracadyplomowa.Utils;
+import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
 import pl.niewiel.pracadyplomowa.database.model.ComponentType;
-import pl.niewiel.pracadyplomowa.httpclient.ApiClient;
 
 public class ComponentTypeService implements Service<ComponentType> {
     private static final String DEBUG_TAG = "ComponentTypeService";
@@ -140,7 +140,29 @@ public class ComponentTypeService implements Service<ComponentType> {
 
     @Override
     public boolean update(ComponentType componentType) {
-        return false;
+        Map<String, Object> params = new HashMap<>();
+        params.put("Name", componentType.getName());
+        String message = "no message";
+        if (Utils.IS_ONLINE) {
+            try {
+                HttpResponse<String> response = apiClient.put("component-type/" + (int) componentType.getBsId(), params);
+                JSONObject object = new JSONObject(response.getBody());
+                String status = object.getString("status");
+                message = object.getString("status");
+                Log.e("add", String.valueOf(object));
+                if (status.equals("OK")) {
+                    JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("ComponentType");
+                    componentType.setBsId(reader.getInt("id"));
+                    componentType.setSync(true);
+                    SugarRecord.save(componentType);
+                }
+                return true;
+            } catch (JSONException e) {
+                Log.e(DEBUG_TAG, message);
+                return false;
+            }
+        } else
+            return false;
     }
 
     @Override
@@ -154,7 +176,6 @@ public class ComponentTypeService implements Service<ComponentType> {
                     add(ct);
                 }
             }
-            getAll();
         }
     }
 }

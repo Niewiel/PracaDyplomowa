@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.os.IBinder;
 
 import pl.niewiel.pracadyplomowa.Utils;
-import pl.niewiel.pracadyplomowa.httpclient.TokenClient;
+import pl.niewiel.pracadyplomowa.apiClients.TokenClient;
 
 public class TokenService extends Service {
     public TokenService() {

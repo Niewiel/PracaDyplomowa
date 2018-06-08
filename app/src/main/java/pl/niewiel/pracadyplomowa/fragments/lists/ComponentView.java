@@ -41,21 +41,21 @@ public class ComponentView extends AppCompatActivity {
         list = new LinkedList<>();
         adapter = new ComponentAdapter(this, R.layout.component_row, list);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        if (getIntent().hasExtra("mId")) {
+        if (getIntent().hasExtra("component")) {
             listView.setAdapter(adapter);
             new Task().execute();
 
             //fragment
             bundle = new Bundle();
-            bundle.putLong("mId", getIntent().getExtras().getLong("mId"));
+            bundle.putLong("types", getIntent().getExtras().getLong("component"));
             Fragment fragment = new ComponentTypeListView();
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.component_type_placeholder, fragment).commit();
+                    .add(R.id.subelement_placeholder, fragment).commit();
 
         } else {
             Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
-            Log.e("Component type", "no results");
+            Log.e("Component", "no results");
             finish();
         }
 
@@ -80,7 +80,7 @@ public class ComponentView extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
-            list.add(SugarRecord.findById(Component.class, getIntent().getExtras().getLong("mId")));
+            list.add(SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")));
             adapter.notifyDataSetChanged();
             super.onPostExecute(aVoid);
         }
@@ -88,7 +88,7 @@ public class ComponentView extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             Service service = new ComponentService(getApplicationContext());
-            service.getById((int) SugarRecord.findById(Component.class, getIntent().getExtras().getLong("mId")).getBsId());
+            service.getById((int) SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")).getBsId());
             return null;
         }
     }

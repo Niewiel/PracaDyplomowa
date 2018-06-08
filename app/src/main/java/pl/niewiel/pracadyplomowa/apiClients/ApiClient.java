@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.httpclient;
+package pl.niewiel.pracadyplomowa.apiClients;
 
 
 import android.util.Log;
@@ -100,7 +100,7 @@ public class ApiClient {
         return response;
     }
 
-    public HttpResponse<String> put(Map<String, Object> fields, String path) {
+    public HttpResponse<String> put(String path, Map<String, Object> fields) {
         HttpResponse<String> response = null;
 
         try {

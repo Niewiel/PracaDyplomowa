@@ -1,6 +1,7 @@
 package pl.niewiel.pracadyplomowa.fragments.lists;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,8 +27,9 @@ import pl.niewiel.pracadyplomowa.database.model.middleTables.TypesToComponent;
 import pl.niewiel.pracadyplomowa.database.service.ComponentTypeService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
 import pl.niewiel.pracadyplomowa.database.service.Synchronize;
+import pl.niewiel.pracadyplomowa.fragments.MyFragment;
 
-public class ComponentTypeListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ComponentTypeListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MyFragment {
     private static final String DEBUG_TAG = "ComponentTypeListView";
     ListView listView;
     LinearLayout progressBar;
@@ -37,6 +39,10 @@ public class ComponentTypeListView extends Fragment implements SwipeRefreshLayou
     Bundle bundle;
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +50,7 @@ public class ComponentTypeListView extends Fragment implements SwipeRefreshLayou
         View rootView = inflater.inflate(R.layout.list, container, false);
         swipeRefreshLayout = rootView.findViewById(R.id.refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
+
 
 
         bundle = this.getArguments();
@@ -66,7 +73,11 @@ public class ComponentTypeListView extends Fragment implements SwipeRefreshLayou
     public void onRefresh() {
         new Synchronize(getContext()).execute();
         new Task().execute();
+    }
 
+    @Override
+    public void refresh() {
+        new Task().execute();
     }
 
     private class Task extends AsyncTask<Void, Void, Void> {
@@ -93,12 +104,14 @@ public class ComponentTypeListView extends Fragment implements SwipeRefreshLayou
             if (Utils.IS_ONLINE) {
                 Service service = new ComponentTypeService(getContext());
                 service.getAll();
+                ids = new LinkedList<>();
                 if (bundle != null) {
-                    if (bundle.getLong("mId") != 0)
-                        ids = SugarRecord.find(TypesToComponent.class, "component_id=?", String.valueOf(bundle.getLong("mId")));
-                    for (TypesToComponent t : ids) {
-                        list.add(SugarRecord.findById(ComponentType.class, t.getTypeId()));
-                    }
+                    if (bundle.getLong("types") != 0)
+                        ids = SugarRecord.find(TypesToComponent.class, "component_id=?", String.valueOf(bundle.getLong("types")));
+                    if (!ids.isEmpty())
+                        for (TypesToComponent t : ids) {
+                            list.add(SugarRecord.findById(ComponentType.class, t.getTypeId()));
+                        }
                 }
             }
             return null;

@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 import pl.niewiel.pracadyplomowa.Utils;
+import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
 import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 import pl.niewiel.pracadyplomowa.database.model.middleTables.TypesToComponent;
-import pl.niewiel.pracadyplomowa.httpclient.ApiClient;
 
 public class ComponentService implements Service<Component> {
     private static final String DEBUG_TAG = "ComponentService";
@@ -89,8 +89,7 @@ public class ComponentService implements Service<Component> {
                         component.setDateEdit(Utils.parseDate(reader.getJSONObject("DateEdit").getString("date")));
                     component.setName(reader.getString("Name"));
                     Log.e("name", reader.getString("Name"));
-                    if (!reader.getString("Status").equals("null"))
-                        component.setStatus(reader.getInt("Status"));
+                    component.setStatus(reader.getInt("Status"));
                     component.setSync(true);
                     component.setmId(SugarRecord.save(component));
                     SugarRecord.save(component);
@@ -170,7 +169,7 @@ public class ComponentService implements Service<Component> {
                     add(c);
                 }
             }
-            getAll();
+
         }
     }
 }

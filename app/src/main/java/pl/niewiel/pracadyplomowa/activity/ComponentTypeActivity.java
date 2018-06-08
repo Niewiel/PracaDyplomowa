@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -39,10 +40,13 @@ public class ComponentTypeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.detail_list);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
         list = new LinkedList<>();
 
         service = new ComponentTypeService(getApplicationContext());
-        setContentView(R.layout.detail_list);
+
         progressBar = findViewById(R.id.progressbar_view);
         listView = findViewById(R.id.list);
         addButton = findViewById(R.id.add_button);
@@ -52,8 +56,8 @@ public class ComponentTypeActivity extends AppCompatActivity {
 
         //wyświetlanie elementu
         adapter = new ComponentTypeAdapter(getApplicationContext(), R.layout.list_row, list);
-        if (getIntent().hasExtra("mId")) {
-            list.add(SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("mId")));
+        if (getIntent().hasExtra("type")) {
+            list.add(SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type")));
             listView.setAdapter(adapter);
             new Task().execute();
         } else {
@@ -63,14 +67,19 @@ public class ComponentTypeActivity extends AppCompatActivity {
         }
 
         addButton.setOnClickListener(new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View v) {
-                                             startActivity(new Intent(getApplicationContext(), AddOrEditComponentType.class));
-                                         }
-                                     }
-        );
+            @Override
+            public void onClick(View v) {
+                add();
+            }
+        });
 
-        Log.e("element", list.get(0).toString());
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit();
+            }
+        });
+
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +89,16 @@ public class ComponentTypeActivity extends AppCompatActivity {
         });
     }
 
+    private void add() {
+        startActivity(new Intent(getApplicationContext(), AddOrEditComponentType.class));
+    }
+
+    private void edit() {
+        Intent intent = new Intent(getApplicationContext(), AddOrEditComponentType.class);
+        intent.putExtra("toUpdate", SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type")).getmId());
+        getApplicationContext().startActivity(intent);
+    }
+
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do You really want delete this item?")
@@ -87,7 +106,7 @@ public class ComponentTypeActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 service.delete(list.get(0));
-                SugarRecord.executeQuery("DELETE FROM component_type WHERE mid=?", String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getLong("mId")));
+                SugarRecord.executeQuery("DELETE FROM component_type WHERE mid=?", String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getLong("type")));
                 list.clear();
                 finish();
 
@@ -101,6 +120,11 @@ public class ComponentTypeActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
+    }
 
     private class Task extends AsyncTask<Void, Void, Void> {
         @Override

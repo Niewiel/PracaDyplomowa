@@ -3,7 +3,7 @@ package pl.niewiel.pracadyplomowa.database.service;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import pl.niewiel.pracadyplomowa.httpclient.ApiClient;
+import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
 
 public class TestService {
     private ApiClient apiClient=new ApiClient();

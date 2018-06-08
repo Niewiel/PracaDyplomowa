@@ -65,4 +65,6 @@
     <string name="refresh">refresh</string>
     <string name="synchronize">synchronize</string>
     <string name="action_favorite">favorite</string>
+    <string name="myphoto">myPhoto</string>
+    <string name="camera">camera</string>
 </resources>

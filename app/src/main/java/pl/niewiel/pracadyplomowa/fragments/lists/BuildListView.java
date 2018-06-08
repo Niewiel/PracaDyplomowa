@@ -22,8 +22,9 @@ import pl.niewiel.pracadyplomowa.adapters.BuildListAdapter;
 import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.database.service.BuildService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
+import pl.niewiel.pracadyplomowa.fragments.MyFragment;
 
-public class BuildListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class BuildListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MyFragment {
 
     private static final String DEBUG_TAG = "BuildListView";
     ListView listView;
@@ -58,6 +59,11 @@ public class BuildListView extends Fragment implements SwipeRefreshLayout.OnRefr
 //        new Synchronize(getContext()).execute();
         new Task().execute();
 
+    }
+
+    @Override
+    public void refresh() {
+        new Task().execute();
     }
 
     @Override
