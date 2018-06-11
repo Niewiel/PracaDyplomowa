@@ -149,12 +149,11 @@ public class ComponentTypeService implements Service<ComponentType> {
                 JSONObject object = new JSONObject(response.getBody());
                 String status = object.getString("status");
                 message = object.getString("status");
-                Log.e("add", String.valueOf(object));
+                Log.e("updated", String.valueOf(object));
                 if (status.equals("OK")) {
-                    JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("ComponentType");
-                    componentType.setBsId(reader.getInt("id"));
-                    componentType.setSync(true);
-                    SugarRecord.save(componentType);
+                    ComponentType tmp = SugarRecord.findById(ComponentType.class, componentType.getmId());
+                    tmp.setSync(true);
+                    SugarRecord.update(tmp);
                 }
                 return true;
             } catch (JSONException e) {

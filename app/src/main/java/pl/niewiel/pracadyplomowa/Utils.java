@@ -49,7 +49,6 @@ public class Utils {
 
             return true;
         } catch (IOException e) {
-            Toast.makeText(context, "No longer internet connection", Toast.LENGTH_LONG).show();
             return false;
         }
     }

@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     protected void onPostResume() {
         super.onPostResume();
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-            extras.clear();
         currentFragment();
 
         //splash

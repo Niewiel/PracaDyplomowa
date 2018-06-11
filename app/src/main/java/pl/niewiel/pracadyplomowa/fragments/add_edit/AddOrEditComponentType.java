@@ -30,28 +30,6 @@ public class AddOrEditComponentType extends AppCompatActivity {
         setContentView(R.layout.activity_add_or_edit_component_type);
         name = findViewById(R.id.name);
         buttonAdd = findViewById(R.id.add_button);
-
-        if (getIntent().hasExtra("toUpdate")) {
-            componentType = SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("toUpdate"));
-            if (componentType != null) {
-                name.setText(componentType.getName());
-                buttonAdd.setText(R.string.string_update);
-                buttonAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        componentType.setName(name.getText().toString());
-                        componentType.setDateEdit();
-                        SugarRecord.save(componentType);
-                        service.update(componentType);
-                        if (!Utils.IS_ONLINE)
-                            Utils.IS_SYNCHRONIZED = false;
-                        finish();
-                    }
-                });
-            }
-        }
-
-
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +45,33 @@ public class AddOrEditComponentType extends AppCompatActivity {
                 }
             }
         });
+        if (getIntent().hasExtra("toUpdate")) {
+            componentType = SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("toUpdate"));
+            if (componentType != null) {
+                name.setText(componentType.getName());
+                buttonAdd.setText(R.string.string_update);
+                buttonAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        componentType.setSync(false);
+                        if (!Utils.IS_ONLINE) {
+                            Utils.IS_SYNCHRONIZED = false;
+                            componentType.setName(name.getText().toString());
+                            componentType.setDateEdit();
+                            SugarRecord.update(componentType);
+
+                        } else {
+                            componentType.setName(name.getText().toString());
+                            componentType.setDateEdit();
+                            SugarRecord.update(componentType);
+                            service.update(componentType);
+                        }
+                        finish();
+                    }
+                });
+            }
+        }
+
 
     }
 

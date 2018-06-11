@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -26,7 +27,8 @@ import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 import pl.niewiel.pracadyplomowa.database.service.ComponentTypeService;
 import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponentType;
 
-public class ComponentTypeActivity extends AppCompatActivity {
+public class ComponentTypeActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+    private static final String DEBUG_TAG = "Component Type Activity";
     ListView listView;
     LinearLayout progressBar;
     List<ComponentType> list;
@@ -36,6 +38,10 @@ public class ComponentTypeActivity extends AppCompatActivity {
     Button editButton;
     ComponentTypeService service;
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +63,10 @@ public class ComponentTypeActivity extends AppCompatActivity {
         //wyświetlanie elementu
         adapter = new ComponentTypeAdapter(getApplicationContext(), R.layout.list_row, list);
         if (getIntent().hasExtra("type")) {
-            list.add(SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type")));
             listView.setAdapter(adapter);
             new Task().execute();
+
+
         } else {
             Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
             Log.e("Component type", "no results");
@@ -126,27 +133,33 @@ public class ComponentTypeActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onRefresh() {
+        new Task().execute();
+    }
+
     private class Task extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
+            list.clear();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            list.add(SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type")));
+            adapter.notifyDataSetChanged();
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
-            adapter.notifyDataSetChanged();
+            Log.e(DEBUG_TAG, list.toString());
             super.onPostExecute(aVoid);
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-
-
-            service.getAll();
-
+            ComponentType componentType = SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type"));
+            service.getById((int) componentType.getBsId());
             return null;
         }
     }

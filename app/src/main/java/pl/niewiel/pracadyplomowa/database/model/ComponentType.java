@@ -3,11 +3,10 @@ package pl.niewiel.pracadyplomowa.database.model;
 import com.orm.dsl.Column;
 import com.orm.dsl.Table;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Table(name = "component_type")
-public class ComponentType implements Serializable {
+public class ComponentType {
 
     @Column(name = "mid")
 
@@ -38,7 +37,12 @@ public class ComponentType implements Serializable {
 
     @Override
     public String toString() {
-        return name;
+        return "ComponentType{" +
+                "mId=" + mId +
+                ", bsId=" + bsId +
+                ", name='" + name + '\'' +
+                ", sync=" + sync +
+                '}';
     }
 
     public long getmId() {
@@ -92,4 +96,5 @@ public class ComponentType implements Serializable {
     public void setSync(boolean sync) {
         this.sync = sync;
     }
+
 }
