@@ -8,7 +8,6 @@ import com.orm.dsl.Unique;
 import java.sql.Timestamp;
 
 
-
 @Table
 public class User {
 
@@ -33,7 +32,7 @@ public class User {
     }
 
     public User(String name, String password, String email) {
-        this.dateAdd=new Timestamp(System.currentTimeMillis());
+        this.dateAdd = new Timestamp(System.currentTimeMillis());
         this.name = name;
         this.password = password;
         this.email = email;

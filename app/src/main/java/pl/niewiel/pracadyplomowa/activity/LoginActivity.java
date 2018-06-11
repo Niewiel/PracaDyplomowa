@@ -11,9 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.orm.SugarRecord;
-
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.User;
 
@@ -23,12 +21,12 @@ import pl.niewiel.pracadyplomowa.database.model.User;
 public class LoginActivity extends AppCompatActivity {
 
 
+    User user;
     // UI references.
     private TextInputEditText mUsernamelView;
     private TextInputEditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

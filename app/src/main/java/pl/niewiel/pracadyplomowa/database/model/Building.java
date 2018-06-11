@@ -5,7 +5,6 @@ import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Table(name = "building")
 public class Building {
@@ -17,7 +16,6 @@ public class Building {
     @Unique
     private long bsId;
     private Build build;
-    private List<Component> componentList;
     @Column(name = "date_add")
     private Timestamp dateAdd;
     @Column(name = "date_edit")
@@ -151,11 +149,4 @@ public class Building {
         this.sync = sync;
     }
 
-    public List<Component> getComponentList() {
-        return componentList;
-    }
-
-    public void setComponentList(List<Component> componentList) {
-        this.componentList = componentList;
-    }
 }

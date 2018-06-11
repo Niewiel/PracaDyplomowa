@@ -11,15 +11,15 @@ public class ComponentType {
     @Column(name = "mid")
 
     private long mId;
-    @Column(name="bs_id")
+    @Column(name = "bs_id")
 
     private long bsId;
     private String name;
-    @Column(name="date_add")
+    @Column(name = "date_add")
     private Timestamp dateAdd;
     @Column(name = "date_edit")
     private Timestamp dateEdit;
-    private boolean sync=false;
+    private boolean sync = false;
 
     public ComponentType() {
     }

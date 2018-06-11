@@ -1,9 +1,6 @@
-package pl.niewiel.pracadyplomowa.database.model.middleTables;
+package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Table;
-
-import pl.niewiel.pracadyplomowa.database.model.Component;
-import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 
 @Table
 public class TypesToComponent {
@@ -15,15 +12,15 @@ public class TypesToComponent {
         this.typeId = type.getmId();
     }
 
+    public TypesToComponent() {
+    }
+
     @Override
     public String toString() {
         return "TypesToComponent{" +
                 "componentId=" + componentId +
                 ", typeId=" + typeId +
                 '}';
-    }
-
-    public TypesToComponent() {
     }
 
     public long getComponentId() {

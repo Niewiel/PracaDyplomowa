@@ -5,7 +5,6 @@ import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Table(name = "build")
 public class Build {
@@ -24,7 +23,6 @@ public class Build {
     private String latitude;
     private String longitude;
     private boolean sync = false;
-    private List<Building> buildings;
 
     public Build() {
         this.dateAdd = new Timestamp(System.currentTimeMillis());
@@ -104,11 +102,4 @@ public class Build {
         this.sync = sync;
     }
 
-    public List<Building> getBuildings() {
-        return buildings;
-    }
-
-    public void setBuildings(List<Building> buildings) {
-        this.buildings = buildings;
-    }
 }

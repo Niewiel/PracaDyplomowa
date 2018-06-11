@@ -14,19 +14,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.orm.SugarRecord;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.adapters.BuildAdapter;
 import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.database.service.BuildService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
 import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponentType;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 public class BuildView extends AppCompatActivity {
     private static final String DEBUG_TAG = "BuildView";
@@ -58,7 +56,7 @@ public class BuildView extends AppCompatActivity {
 
 
         if (getIntent().hasExtra("build")) {
-                listView.setAdapter(adapter);
+            listView.setAdapter(adapter);
             new Task().execute();
 
             bundle = new Bundle();
@@ -113,8 +111,6 @@ public class BuildView extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-
 
 
     @Override

@@ -3,23 +3,18 @@ package pl.niewiel.pracadyplomowa.activity;
 import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-
 import com.orm.SugarRecord;
-
-import java.util.List;
-import java.util.Objects;
-
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.User;
+
+import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
     String REGEX_PATTERN = "(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$";
@@ -41,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                        register();
+                register();
 
 
             }

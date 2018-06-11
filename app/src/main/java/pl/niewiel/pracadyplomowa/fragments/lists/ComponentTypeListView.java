@@ -13,21 +13,19 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.orm.SugarRecord;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.adapters.ComponentTypeListAdapter;
 import pl.niewiel.pracadyplomowa.database.model.ComponentType;
-import pl.niewiel.pracadyplomowa.database.model.middleTables.TypesToComponent;
+import pl.niewiel.pracadyplomowa.database.model.TypesToComponent;
 import pl.niewiel.pracadyplomowa.database.service.ComponentTypeService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
 import pl.niewiel.pracadyplomowa.database.service.Synchronize;
 import pl.niewiel.pracadyplomowa.fragments.MyFragment;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class ComponentTypeListView extends Fragment implements SwipeRefreshLayout.OnRefreshListener, MyFragment {
     private static final String DEBUG_TAG = "ComponentTypeListView";
@@ -50,7 +48,6 @@ public class ComponentTypeListView extends Fragment implements SwipeRefreshLayou
         View rootView = inflater.inflate(R.layout.list, container, false);
         swipeRefreshLayout = rootView.findViewById(R.id.refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
-
 
 
         bundle = this.getArguments();

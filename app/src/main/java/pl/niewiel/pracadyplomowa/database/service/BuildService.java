@@ -2,23 +2,20 @@ package pl.niewiel.pracadyplomowa.database.service;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.mashape.unirest.http.HttpResponse;
 import com.orm.SugarRecord;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
 import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.database.model.Building;
-import pl.niewiel.pracadyplomowa.database.model.middleTables.BuildingToBuild;
+import pl.niewiel.pracadyplomowa.database.model.BuildingToBuild;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class BuildService implements Service<Build> {
     private static ApiClient apiClient;

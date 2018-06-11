@@ -18,11 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-
 import com.orm.SugarRecord;
-
-import java.util.List;
-
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.database.model.User;
@@ -35,14 +31,16 @@ import pl.niewiel.pracadyplomowa.fragments.lists.ComponentListView;
 import pl.niewiel.pracadyplomowa.fragments.lists.ComponentTypeListView;
 import pl.niewiel.pracadyplomowa.fragments.lists.token.TokenView;
 
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final String DEBUG_TAG = "MainActivity";
     private static final int STORAGE = 2;
     private static final int STORAGE_R = 3;
-    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
     private static boolean ok = false;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
     private User user;
     private DrawerLayout mDrawerLayout;
     private MyFragment currentFragment;

@@ -26,7 +26,6 @@ public class Component {
     private Photo currentPhoto;
 
 
-
     public Component() {
         this.dateAdd = new Timestamp(System.currentTimeMillis());
     }

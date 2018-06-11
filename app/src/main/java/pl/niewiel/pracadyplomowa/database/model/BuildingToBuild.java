@@ -1,9 +1,6 @@
-package pl.niewiel.pracadyplomowa.database.model.middleTables;
+package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Table;
-
-import pl.niewiel.pracadyplomowa.database.model.Build;
-import pl.niewiel.pracadyplomowa.database.model.Building;
 
 @Table
 public class BuildingToBuild {
