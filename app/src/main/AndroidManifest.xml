@@ -69,18 +69,21 @@
             android:label="@string/title_activity_main" />
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".activity.RegisterActivity"
-            android:label="@string/title_activity_register" />
+            android:label="@string/title_activity_register"
+            android:theme="@style/Theme.AppCompat" />
 
         <activity
-            android:name=".fragments.lists.BuildView"
-            android:label="@string/title_activity_build" />
+            android:name=".activity.BuildActivity"
+            android:label="@string/title_activity_build"
+            android:theme="@style/Theme.AppCompat" />
         <activity
-            android:name=".fragments.lists.ComponentView"
+            android:name=".activity.ComponentActivity"
             android:label="@string/title_activity_component"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/Theme.AppCompat" />
 
         <activity
             android:name=".activity.ComponentTypeActivity"
@@ -88,13 +91,16 @@
             android:theme="@style/Theme.AppCompat" />
 
         <activity
-            android:name=".fragments.lists.BuildingView"
-            android:label="@string/title_activity_building" />
+            android:name=".activity.BuildingActivity"
+            android:label="@string/title_activity_building"
+            android:theme="@style/Theme.AppCompat" />
 
         <activity
             android:name=".fragments.add_edit.AddOrEditComponentType"
             android:label="@string/title_activity_add" />
-        <activity android:name=".activity.CameraActivity" />
+        <activity
+            android:name=".activity.CameraActivity"
+            android:theme="@style/Theme.AppCompat" />
 
         <service
             android:name=".services.TokenService"

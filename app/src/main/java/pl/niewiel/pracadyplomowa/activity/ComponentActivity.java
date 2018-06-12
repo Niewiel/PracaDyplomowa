@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.fragments.lists;
+package pl.niewiel.pracadyplomowa.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,31 +22,42 @@ import java.util.List;
 import java.util.Objects;
 
 import pl.niewiel.pracadyplomowa.R;
-import pl.niewiel.pracadyplomowa.adapters.BuildingAdapter;
-import pl.niewiel.pracadyplomowa.database.model.Building;
-import pl.niewiel.pracadyplomowa.database.model.ComponentType;
-import pl.niewiel.pracadyplomowa.database.service.BuildingService;
+import pl.niewiel.pracadyplomowa.adapters.ComponentAdapter;
+import pl.niewiel.pracadyplomowa.database.model.Component;
+import pl.niewiel.pracadyplomowa.database.service.ComponentService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
 import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponentType;
+import pl.niewiel.pracadyplomowa.fragments.lists.ComponentTypeListFragment;
 
-public class BuildingView extends AppCompatActivity {
+public class ComponentActivity extends AppCompatActivity {
+    private static final String DEBUG_TAG = "ComponentView";
+
+    List<Component> list;
+    Service<Component> service;
+    ComponentAdapter adapter;
+    Bundle bundle;
+
     ListView listView;
     LinearLayout progressBar;
-    List<Building> list;
-    BuildingAdapter adapter;
-    Service<Building> service;
-    Bundle bundle;
     Button addButton;
     Button deleteButton;
     Button editButton;
 
     @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        new Task().execute();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_list);
-        list = new LinkedList<>();
-        listView = findViewById(R.id.list);
 
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        list = new LinkedList<>();
+        service = new ComponentService(getApplicationContext());
 
         progressBar = findViewById(R.id.progressbar_view);
         listView = findViewById(R.id.list);
@@ -54,34 +65,25 @@ public class BuildingView extends AppCompatActivity {
         editButton = findViewById(R.id.edit_button);
         deleteButton = findViewById(R.id.delete_button);
 
-
-        adapter = new BuildingAdapter(getApplicationContext(), R.layout.list_row, list);
-        service = new BuildingService(getApplicationContext());
-
-
-        if (getIntent().hasExtra("building")) {
+        adapter = new ComponentAdapter(this, R.layout.component_row, list);
+        if (getIntent().hasExtra("component")) {
             listView.setAdapter(adapter);
-            new Task().execute();
 
+
+            //fragment
             bundle = new Bundle();
-            bundle.putLong("buildings", getIntent().getExtras().getLong("building"));
-            Fragment fragment = new ComponentTypeListView();
+            bundle.putLong("types", getIntent().getExtras().getLong("component"));
+            Fragment fragment = new ComponentTypeListFragment();
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.subelement_placeholder, fragment).commit();
 
         } else {
             Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
-            Log.e("Builds", "no results");
+            Log.e("Component", "no results");
             finish();
+
         }
-
-        Fragment fragment = new ComponentListView();
-        fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.subelement_placeholder, fragment).commit();
-
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +113,7 @@ public class BuildingView extends AppCompatActivity {
 
     private void edit() {
         Intent intent = new Intent(getApplicationContext(), AddOrEditComponentType.class);
-        intent.putExtra("toUpdate", SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type")).getmId());
+        intent.putExtra("toUpdate", SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")).getmId());
         getApplicationContext().startActivity(intent);
     }
 
@@ -122,7 +124,7 @@ public class BuildingView extends AppCompatActivity {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 service.delete(list.get(0));
-                SugarRecord.executeQuery("DELETE FROM component_type WHERE mid=?", String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getLong("type")));
+                SugarRecord.executeQuery("DELETE FROM component WHERE mid=?", String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getLong("component")));
                 list.clear();
                 finish();
 
@@ -135,6 +137,8 @@ public class BuildingView extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -153,14 +157,14 @@ public class BuildingView extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
-            list.add(SugarRecord.findById(Building.class, getIntent().getExtras().getLong("building")));
+            list.add(SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")));
             adapter.notifyDataSetChanged();
             super.onPostExecute(aVoid);
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            service.getById((int) SugarRecord.findById(Building.class, getIntent().getExtras().getLong("building")).getBsId());
+            service.getById((int) SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")).getBsId());
             return null;
         }
     }

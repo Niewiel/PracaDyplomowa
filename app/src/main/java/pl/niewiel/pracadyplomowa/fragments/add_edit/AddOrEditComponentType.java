@@ -30,21 +30,7 @@ public class AddOrEditComponentType extends AppCompatActivity {
         setContentView(R.layout.activity_add_or_edit_component_type);
         name = findViewById(R.id.name);
         buttonAdd = findViewById(R.id.add_button);
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if (isNameValid()) {
-                    componentType = new ComponentType(name.getText().toString());
-                    componentType.setmId(SugarRecord.save(componentType));
-                    SugarRecord.save(componentType);
-                    service.add(componentType);
-                    if (!Utils.IS_ONLINE)
-                        Utils.IS_SYNCHRONIZED = false;
-                    finish();
-                }
-            }
-        });
         if (getIntent().hasExtra("toUpdate")) {
             componentType = SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("toUpdate"));
             if (componentType != null) {
@@ -58,18 +44,34 @@ public class AddOrEditComponentType extends AppCompatActivity {
                             Utils.IS_SYNCHRONIZED = false;
                             componentType.setName(name.getText().toString());
                             componentType.setDateEdit();
-                            SugarRecord.update(componentType);
+                            SugarRecord.save(componentType);
 
                         } else {
                             componentType.setName(name.getText().toString());
                             componentType.setDateEdit();
-                            SugarRecord.update(componentType);
+                            SugarRecord.save(componentType);
                             service.update(componentType);
                         }
                         finish();
                     }
                 });
             }
+        } else {
+            buttonAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (isNameValid()) {
+                        componentType = new ComponentType(name.getText().toString());
+                        componentType.setmId(SugarRecord.save(componentType));
+                        SugarRecord.save(componentType);
+                        service.add(componentType);
+                        if (!Utils.IS_ONLINE)
+                            Utils.IS_SYNCHRONIZED = false;
+                        finish();
+                    }
+                }
+            });
         }
 
 

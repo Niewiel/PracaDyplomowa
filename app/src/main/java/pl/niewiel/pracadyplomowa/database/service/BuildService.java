@@ -2,20 +2,23 @@ package pl.niewiel.pracadyplomowa.database.service;
 
 import android.content.Context;
 import android.util.Log;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.orm.SugarRecord;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
 import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.database.model.Building;
 import pl.niewiel.pracadyplomowa.database.model.BuildingToBuild;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class BuildService implements Service<Build> {
     private static ApiClient apiClient;
@@ -44,7 +47,7 @@ public class BuildService implements Service<Build> {
                         build = getById((int) build.getBsId());
 //                    build.setDateAdd(Utils.parseDate(item.getString("dateAdd")));
 //                    build.setName(item.getString("name"));
-//                    build.setSync(false);//"true".equals(item.getString("synchronized")));
+                        build.setSync("true".equals(item.getString("synchronized")));
                         builds.add(build);
 
                     }
@@ -87,12 +90,12 @@ public class BuildService implements Service<Build> {
                     SugarRecord.save(build);
                     Log.e("saved", String.valueOf(SugarRecord.save(build)));
                     List<Building> componentTypes = new LinkedList<>();
-                    JSONArray array = object.getJSONObject("result").getJSONObject("content").getJSONArray("buildings");
+//                    JSONArray array = object.getJSONObject("result").getJSONObject("content").getJSONArray("buildings");
                     BuildingToBuild buildings;
-                    for (int i = 0; i < array.length(); i++) {
-                        Log.e("type id", String.valueOf(array.getJSONObject(i).getInt("id")));
-                        componentTypes.add(buildingService.getById(array.getJSONObject(i).getInt("id")));
-                    }
+//                    for (int i = 0; i < array.length(); i++) {
+//                        Log.e("type id", String.valueOf(array.getJSONObject(i).getInt("id")));
+                    componentTypes.add(buildingService.getById(object.getJSONObject("result").getJSONObject("content").getJSONObject("buildings").getInt("id")));
+//                    }
                     for (Building building : componentTypes) {
                         buildings = new BuildingToBuild(building, build);
                         SugarRecord.save(buildings);

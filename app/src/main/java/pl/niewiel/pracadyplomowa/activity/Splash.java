@@ -23,7 +23,7 @@ public class Splash extends AppCompatActivity {
         SugarContext.init(getApplicationContext());
         Utils.startOnlineCheckerService(getApplicationContext());
         Utils.dropBase(getApplicationContext());
-        Utils.fillDatabase();
+//        Utils.fillDatabase();
         if (Utils.IS_ONLINE) {
             Log.e("Internet", "connected " + Utils.isOnline(getApplicationContext()));
             Toast.makeText(getApplicationContext(), "connected to system", Toast.LENGTH_LONG);

@@ -18,20 +18,22 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
 import com.orm.SugarRecord;
+
+import java.util.List;
+
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.database.model.User;
 import pl.niewiel.pracadyplomowa.database.service.Synchronize;
 import pl.niewiel.pracadyplomowa.fragments.Main;
 import pl.niewiel.pracadyplomowa.fragments.MyFragment;
-import pl.niewiel.pracadyplomowa.fragments.lists.BuildListView;
-import pl.niewiel.pracadyplomowa.fragments.lists.BuildingListView;
-import pl.niewiel.pracadyplomowa.fragments.lists.ComponentListView;
-import pl.niewiel.pracadyplomowa.fragments.lists.ComponentTypeListView;
+import pl.niewiel.pracadyplomowa.fragments.lists.BuildListFragment;
+import pl.niewiel.pracadyplomowa.fragments.lists.BuildingListFragment;
+import pl.niewiel.pracadyplomowa.fragments.lists.ComponentListFragment;
+import pl.niewiel.pracadyplomowa.fragments.lists.ComponentTypeListFragment;
 import pl.niewiel.pracadyplomowa.fragments.lists.token.TokenView;
-
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        Bundle extras = getIntent().getExtras();
+
         currentFragment();
 
         //splash
@@ -193,12 +195,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        currentFragment();
         permissionsCheck();
         //splash
         if (!ok) {
             ok = true;
             startActivity(new Intent(getApplicationContext(), Splash.class));
         }
+        if (currentFragment != null)
+            currentFragment.refresh();
 
         //topbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -261,25 +266,25 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                         switch (menuItem.getItemId()) {
                             case R.id.menu_component_types_list:
                                 Log.e("Menu", String.valueOf(menuItem.getTitle()));
-                                Fragment types = new ComponentTypeListView();
+                                Fragment types = new ComponentTypeListFragment();
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.fragment_container, types, "TYPES").commit();
                                 break;
                             case R.id.menu_components_list:
                                 Log.e("Menu", String.valueOf(menuItem.getTitle()));
-                                Fragment components = new ComponentListView();
+                                Fragment components = new ComponentListFragment();
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.fragment_container, components, "COMPONENTS").commit();
                                 break;
                             case R.id.menu_builds_list:
 
                                 Log.e("Menu", String.valueOf(menuItem.getTitle()));
-                                Fragment builds = new BuildListView();
+                                Fragment builds = new BuildListFragment();
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, builds, "BUILDS").commit();
                                 break;
                             case R.id.menu_building_list:
                                 Log.e("Menu", String.valueOf(menuItem.getTitle()));
-                                Fragment buildings = new BuildingListView();
+                                Fragment buildings = new BuildingListFragment();
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, buildings, "BUILDINGS").commit();
                                 break;
                             case R.id.menu_tokens_list:

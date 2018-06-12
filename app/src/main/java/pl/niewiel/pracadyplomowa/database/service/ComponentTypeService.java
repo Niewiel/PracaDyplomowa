@@ -13,8 +13,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
@@ -39,7 +40,6 @@ public class ComponentTypeService implements Service<ComponentType> {
                 Log.e("body", status);
                 if (status.equals("OK")) {
                     JSONArray array = object.getJSONObject("result").getJSONObject("content").getJSONArray("ComponentTypes");
-
                     for (int i = 0; i < array.length(); i++) {
                         ComponentType componentType = new ComponentType();
                         JSONObject item = array.getJSONObject(i);
@@ -78,9 +78,10 @@ public class ComponentTypeService implements Service<ComponentType> {
                         componentType.setDateEdit(Utils.parseDate(reader.getJSONObject("DateEdit").getString("date")));
                     componentType.setName(reader.getString("Name"));
                     componentType.setSync(true);
-                    componentType.setmId(SugarRecord.save(componentType));
-                    componentType.setBsId(id);
-                    SugarRecord.save(componentType);
+                    if (componentType.getmId() == 0) {
+                        componentType.setmId(SugarRecord.save(componentType));
+                        SugarRecord.save(componentType);
+                    }
                 }
             } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();
@@ -153,7 +154,7 @@ public class ComponentTypeService implements Service<ComponentType> {
                 if (status.equals("OK")) {
                     ComponentType tmp = SugarRecord.findById(ComponentType.class, componentType.getmId());
                     tmp.setSync(true);
-                    SugarRecord.update(tmp);
+                    SugarRecord.save(tmp);
                 }
                 return true;
             } catch (JSONException e) {
@@ -166,7 +167,7 @@ public class ComponentTypeService implements Service<ComponentType> {
 
     @Override
     public void synchronize() {
-        List<ComponentType> toSynchronize = SugarRecord.find(ComponentType.class, "SYNC=?", "0");
+        Set<ComponentType> toSynchronize = new HashSet<>(SugarRecord.find(ComponentType.class, "SYNC=?", "0"));
 
         if (Utils.IS_ONLINE) {
             if (!toSynchronize.isEmpty()) {

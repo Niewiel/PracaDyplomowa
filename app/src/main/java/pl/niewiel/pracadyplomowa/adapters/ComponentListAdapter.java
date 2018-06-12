@@ -13,8 +13,8 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 
 import pl.niewiel.pracadyplomowa.R;
+import pl.niewiel.pracadyplomowa.activity.ComponentActivity;
 import pl.niewiel.pracadyplomowa.database.model.Component;
-import pl.niewiel.pracadyplomowa.fragments.lists.ComponentView;
 import pl.niewiel.pracadyplomowa.placeholders.ComponentListViewHolder;
 
 public class ComponentListAdapter extends ArrayAdapter<Component> {
@@ -59,7 +59,7 @@ public class ComponentListAdapter extends ArrayAdapter<Component> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ComponentView.class);
+                Intent intent = new Intent(getContext(), ComponentActivity.class);
                 intent.putExtra("component", component.getmId());
                 getContext().startActivity(intent);
             }

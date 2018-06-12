@@ -2,28 +2,38 @@ package pl.niewiel.pracadyplomowa.database.service;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.orm.SugarRecord;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
 import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 import pl.niewiel.pracadyplomowa.database.model.TypesToComponent;
 
-import java.util.*;
-
 public class ComponentService implements Service<Component> {
     private static final String DEBUG_TAG = "ComponentService";
     private ApiClient apiClient;
     private ComponentTypeService componentTypeService;
+    private Context context;
 
 
     public ComponentService(Context context) {
         componentTypeService = new ComponentTypeService(context);
         apiClient = new ApiClient();
+        this.context = context;
     }
 
     public ArrayList<Component> getAll() {
@@ -84,7 +94,8 @@ public class ComponentService implements Service<Component> {
                     Log.e("name", reader.getString("Name"));
                     component.setStatus(reader.getInt("Status"));
                     component.setSync(true);
-                    component.setmId(SugarRecord.save(component));
+                    if (component.getmId() == 0)
+                        component.setmId(SugarRecord.save(component));
                     SugarRecord.save(component);
                     //types to component
                     List<ComponentType> componentTypes = new LinkedList<>();
@@ -143,7 +154,23 @@ public class ComponentService implements Service<Component> {
 
     @Override
     public boolean delete(Component item) {
-        return false;
+        if (Utils.IS_ONLINE) {
+            try {
+                HttpResponse<String> response = apiClient.delete("component/" + item.getBsId());
+                JSONObject object = new JSONObject(response.getBody());
+                String status = object.getString("status");
+                if (status.equals("OK")) {
+                    JSONObject reader = object.optJSONObject("result").getJSONObject("content");
+                    Toast.makeText(context, reader.getString("message"), Toast.LENGTH_LONG).show();
+                    SugarRecord.delete(item);
+                }
+                return true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else
+            return false;
     }
 
     @Override

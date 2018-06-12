@@ -14,8 +14,8 @@ import android.widget.ArrayAdapter;
 import java.util.List;
 
 import pl.niewiel.pracadyplomowa.R;
+import pl.niewiel.pracadyplomowa.activity.BuildingActivity;
 import pl.niewiel.pracadyplomowa.database.model.Building;
-import pl.niewiel.pracadyplomowa.fragments.lists.BuildingView;
 import pl.niewiel.pracadyplomowa.placeholders.BuildingListViewHolder;
 
 public class BuildingListAdapter extends ArrayAdapter<Building> {
@@ -58,7 +58,7 @@ public class BuildingListAdapter extends ArrayAdapter<Building> {
             @Override
             public void onClick(View v) {
                 Log.e("Build row", building.toString());
-                Intent intent = new Intent(getContext(), BuildingView.class);
+                Intent intent = new Intent(getContext(), BuildingActivity.class);
                 intent.putExtra("building", building.getmId());
                 getContext().startActivity(intent);
             }

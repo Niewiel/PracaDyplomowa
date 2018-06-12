@@ -25,22 +25,28 @@ import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.adapters.ComponentTypeAdapter;
 import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 import pl.niewiel.pracadyplomowa.database.service.ComponentTypeService;
+import pl.niewiel.pracadyplomowa.database.service.Service;
 import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponentType;
 
 public class ComponentTypeActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private static final String DEBUG_TAG = "Component Type Activity";
-    ListView listView;
-    LinearLayout progressBar;
+
     List<ComponentType> list;
     ComponentTypeAdapter adapter;
+    Service<ComponentType> service;
+    ComponentType componentType;
+
+    ListView listView;
+    LinearLayout progressBar;
     Button addButton;
     Button deleteButton;
     Button editButton;
-    ComponentTypeService service;
+
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        new Task().execute();
     }
 
     @Override
@@ -64,9 +70,6 @@ public class ComponentTypeActivity extends AppCompatActivity implements SwipeRef
         adapter = new ComponentTypeAdapter(getApplicationContext(), R.layout.list_row, list);
         if (getIntent().hasExtra("type")) {
             listView.setAdapter(adapter);
-            new Task().execute();
-
-
         } else {
             Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
             Log.e("Component type", "no results");
@@ -152,14 +155,14 @@ public class ComponentTypeActivity extends AppCompatActivity implements SwipeRef
             adapter.notifyDataSetChanged();
             progressBar.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
-            Log.e(DEBUG_TAG, list.toString());
             super.onPostExecute(aVoid);
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            ComponentType componentType = SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type"));
+            componentType = SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type"));
             service.getById((int) componentType.getBsId());
+
             return null;
         }
     }
