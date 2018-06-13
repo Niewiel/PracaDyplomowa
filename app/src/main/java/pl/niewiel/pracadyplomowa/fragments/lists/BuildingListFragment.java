@@ -33,7 +33,6 @@ public class BuildingListFragment extends Fragment implements SwipeRefreshLayout
     SwipeRefreshLayout swipeRefreshLayout;
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -67,4 +67,6 @@
     <string name="action_favorite">favorite</string>
     <string name="myphoto">myPhoto</string>
     <string name="camera">camera</string>
+    <string name="add_photo">add photo</string>
+    <string name="chose_file_from_gallery">chose file from gallery</string>
 </resources>

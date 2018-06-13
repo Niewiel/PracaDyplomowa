@@ -34,4 +34,5 @@ dependencies {
     api 'com.github.satyan:sugar:1.5'
     api 'com.mashape.unirest:unirest-android:1.0.6'
     implementation 'com.android.support:mediarouter-v7:27.1.1'
+    implementation 'com.android.support:gridlayout-v7:27.1.1'
 }

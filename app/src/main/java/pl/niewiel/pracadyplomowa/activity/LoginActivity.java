@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+
 import com.orm.SugarRecord;
+
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.User;
 

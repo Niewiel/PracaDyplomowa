@@ -26,6 +26,7 @@ import pl.niewiel.pracadyplomowa.adapters.ComponentAdapter;
 import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.database.service.ComponentService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
+import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponent;
 import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponentType;
 import pl.niewiel.pracadyplomowa.fragments.lists.ComponentTypeListFragment;
 
@@ -112,8 +113,9 @@ public class ComponentActivity extends AppCompatActivity {
     }
 
     private void edit() {
-        Intent intent = new Intent(getApplicationContext(), AddOrEditComponentType.class);
-        intent.putExtra("toUpdate", SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")).getmId());
+        Intent intent = new Intent(getApplicationContext(), AddOrEditComponent.class);
+//        intent.putExtra("toUpdate", SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")).getmId());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplicationContext().startActivity(intent);
     }
 
@@ -137,7 +139,6 @@ public class ComponentActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 
 
     @Override

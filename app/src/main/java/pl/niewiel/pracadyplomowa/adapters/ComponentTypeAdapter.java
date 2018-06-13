@@ -28,7 +28,7 @@ public class ComponentTypeAdapter extends ArrayAdapter<ComponentType> {
 
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(R.layout.build_row, parent, false);
+            convertView = layoutInflater.inflate(R.layout.component_row, parent, false);
             viewHolder = new ComponentTypeViewHolder();
             viewHolder.mId = convertView.findViewById(R.id.row_bsId);
             viewHolder.name = convertView.findViewById(R.id.row_name);

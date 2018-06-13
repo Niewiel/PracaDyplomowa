@@ -3,7 +3,6 @@ package pl.niewiel.pracadyplomowa;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,10 +11,6 @@ import com.orm.SugarContext;
 import com.orm.SugarDb;
 import com.orm.SugarRecord;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,22 +31,6 @@ public class Utils {
     private static Class<?> serviceMonitor = TokenService.class;
     private static Class<?> onlineChecker = OnlineChecker.class;
 
-    public static boolean isOnline(Context context) {
-        try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-            int timeoutMs = 1500;
-            Socket sock = new Socket();
-            SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
-
-            sock.connect(sockaddr, timeoutMs);
-            sock.close();
-
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-    }
 
     public static Timestamp parseDate(String date) {
         Timestamp timestamp = null;

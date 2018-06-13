@@ -3,9 +3,15 @@ package pl.niewiel.pracadyplomowa.services;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.database.service.Synchronize;
@@ -29,8 +35,9 @@ public class OnlineChecker extends Service {
         final Runnable r = new Runnable() {
             @SuppressLint("ShowToast")
             public void run() {
-                if (Utils.isOnline(getApplicationContext())) {
-                    Utils.IS_ONLINE = true;
+                new CheckOnline().execute();
+                if (Utils.IS_ONLINE) {
+
                     //onlineListener
                     if (previous[0] != Utils.IS_ONLINE)
                         if (Utils.IS_SYNCHRONIZED)
@@ -47,6 +54,30 @@ public class OnlineChecker extends Service {
             }
         };
         handler.postDelayed(r, 1);
+    }
+
+    private class CheckOnline extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            Utils.IS_ONLINE = aBoolean;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                int timeoutMs = 1500;
+                Socket sock = new Socket();
+                SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
+
+                sock.connect(sockaddr, timeoutMs);
+                sock.close();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            }
+        }
     }
 
 

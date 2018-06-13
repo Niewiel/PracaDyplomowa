@@ -106,6 +106,7 @@ public class ComponentTypeActivity extends AppCompatActivity implements SwipeRef
     private void edit() {
         Intent intent = new Intent(getApplicationContext(), AddOrEditComponentType.class);
         intent.putExtra("toUpdate", SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type")).getmId());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplicationContext().startActivity(intent);
     }
 

@@ -1,6 +1,5 @@
 package pl.niewiel.pracadyplomowa.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,12 +16,12 @@ import com.orm.SugarRecord;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.database.model.Photo;
+import pl.niewiel.pracadyplomowa.database.model.PhotoToComponent;
 import pl.niewiel.pracadyplomowa.database.service.PhotoService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
 
@@ -50,7 +49,6 @@ public class CameraActivity extends AppCompatActivity {
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
 
-//            Log.e("PATH", mCurrentPhotoPath);
             mImageView.setImageURI(mCurrentPhotoURI);
             okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -59,11 +57,10 @@ public class CameraActivity extends AppCompatActivity {
                     if (getIntent().hasExtra("component")) {
                         component = (Component) getIntent().getExtras().get("component");
                         service = new PhotoService();
-                        photo = new Photo(imageFileName, mCurrentPhotoURI, component);
+                        photo = new Photo(component.getName() + imageFileName, mCurrentPhotoURI);
                         photo.setmId(SugarRecord.save(photo));
                         SugarRecord.save(photo);
-                        component.setCurrentPhoto(photo);
-                        SugarRecord.save(component);
+                        SugarRecord.save(new PhotoToComponent(component.getmId(), photo.getmId()));
                         service.add(photo);
                     }
                     finish();
@@ -76,9 +73,9 @@ public class CameraActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        @SuppressLint("SimpleDateFormat")
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss_SSS").format(new Date());
-        imageFileName = /*component.getName() +*/"dupa" + timeStamp;
+//        @SuppressLint("SimpleDateFormat")
+//        String timeStamp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss_SSS").format(new Date());
+        imageFileName = new Date().toString();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
         // Save a file: path for use with ACTION_VIEW intents

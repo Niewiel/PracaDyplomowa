@@ -15,7 +15,6 @@ public class Building {
     @Column(name = "bs_id")
     @Unique
     private long bsId;
-    private Build build;
     @Column(name = "date_add")
     private Timestamp dateAdd;
     @Column(name = "date_edit")
@@ -38,14 +37,12 @@ public class Building {
 
     public Building(long bsId, Build build, String name, boolean sync) {
         this.bsId = bsId;
-        this.build = build;
         this.dateAdd = new Timestamp(System.currentTimeMillis());
         this.name = name;
         this.sync = sync;
     }
 
     public Building(Build budowa, Timestamp dateEdit, Timestamp dateStart, Timestamp dateEnd, String name, String latitude, String longitude) {
-        this.build = budowa;
         this.dateAdd = new Timestamp(System.currentTimeMillis());
         this.dateEdit = dateEdit;
         this.dateStart = dateStart;
@@ -75,14 +72,6 @@ public class Building {
 
     public void setBsId(long bsId) {
         this.bsId = bsId;
-    }
-
-    public Build getBuild() {
-        return build;
-    }
-
-    public void setBuild(Build build) {
-        this.build = build;
     }
 
     public Timestamp getDateAdd() {

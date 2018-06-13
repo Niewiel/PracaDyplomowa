@@ -12,12 +12,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
-    <!--features-->
+    <!-- features -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-
 
     <application
         android:name="com.orm.SugarApp"
@@ -37,7 +35,7 @@
             </intent-filter>
         </activity>
 
-        <!--photo provider-->
+        <!-- photo provider -->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="pl.niewiel.pracadyplomowa.activity.CameraActivity"
@@ -47,7 +45,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
 
         <!-- database config -->
 
@@ -75,7 +72,6 @@
             android:name=".activity.RegisterActivity"
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.AppCompat" />
-
         <activity
             android:name=".activity.BuildActivity"
             android:label="@string/title_activity_build"
@@ -84,17 +80,14 @@
             android:name=".activity.ComponentActivity"
             android:label="@string/title_activity_component"
             android:theme="@style/Theme.AppCompat" />
-
         <activity
             android:name=".activity.ComponentTypeActivity"
             android:label="@string/title_activity_component_type"
             android:theme="@style/Theme.AppCompat" />
-
         <activity
             android:name=".activity.BuildingActivity"
             android:label="@string/title_activity_building"
             android:theme="@style/Theme.AppCompat" />
-
         <activity
             android:name=".fragments.add_edit.AddOrEditComponentType"
             android:label="@string/title_activity_add" />
@@ -112,6 +105,8 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.INTERNET" />
+
+        <activity android:name=".fragments.add_edit.AddOrEditComponent"></activity>
     </application>
 
 </manifest>

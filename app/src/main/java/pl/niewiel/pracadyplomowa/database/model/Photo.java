@@ -19,17 +19,15 @@ public class Photo {
     private long bsId;
     private String name;
     private Uri path;
-    private Component component;
     @Column(name = "date_add")
     private Timestamp dateAdd;
 
     public Photo() {
     }
 
-    public Photo(String name, Uri path, Component component) {
+    public Photo(String name, Uri path) {
         this.name = name;
         this.path = path;
-        this.component = component;
         this.dateAdd = new Timestamp(System.currentTimeMillis());
     }
 
@@ -57,14 +55,6 @@ public class Photo {
 
     public void setPath(Uri path) {
         this.path = path;
-    }
-
-    public Component getComponent() {
-        return component;
-    }
-
-    public void setComponent(Component component) {
-        this.component = component;
     }
 
     public Timestamp getDateAdd() {

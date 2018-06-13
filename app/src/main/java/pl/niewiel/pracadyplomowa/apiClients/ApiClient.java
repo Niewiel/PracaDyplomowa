@@ -1,6 +1,8 @@
 package pl.niewiel.pracadyplomowa.apiClients;
 
 
+import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.mashape.unirest.http.HttpResponse;
@@ -21,24 +23,9 @@ public class ApiClient {
     private static String API_URL = "http://devdyplom.nuc-mleczko-pawel.pl/api/v1/";
 
     public ApiClient() {
-        if (Utils.IS_ONLINE) {
-            if (!SugarRecord.listAll(Token.class).isEmpty()) {
-                String token = SugarRecord.last(Token.class).getAccess_token();
-                Log.e("token", token);
-                Unirest.setDefaultHeader("Authorization", "Bearer " + token);
-            } else
-                new TokenClient().execute();
-            try {
-                HttpResponse<String> response = test();
-                JSONObject object = new JSONObject(response.getBody());
-                String status = object.getString("status");
-                if (!status.equals("OK"))
-                    new TokenClient().execute();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        new TryToken().execute();
     }
 
     public HttpResponse<String> test() {
@@ -49,6 +36,9 @@ public class ApiClient {
             response = Unirest.get("http://devdyplom.nuc-mleczko-pawel.pl/api/test")
                     .asString();
             Unirest.shutdown();
+
+            Log.e("Status", String.valueOf(response.getCode()));
+
         } catch (UnirestException | IOException e) {
             e.printStackTrace();
         }
@@ -113,6 +103,32 @@ public class ApiClient {
         }
 
         return response;
+    }
+
+    class TryToken extends AsyncTask<Token, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Token... tokens) {
+            if (Utils.IS_ONLINE) {
+                if (!SugarRecord.listAll(Token.class).isEmpty()) {
+                    String token = SugarRecord.last(Token.class).getAccess_token();
+                    Log.e("token", token);
+                    Unirest.setDefaultHeader("Authorization", "Bearer " + token);
+                } else
+                    new TokenClient().execute();
+                try {
+                    HttpResponse<String> response = test();
+                    JSONObject object = new JSONObject(response.getBody());
+                    String status = object.getString("status");
+                    if (!status.equals("OK"))
+                        new TokenClient().execute();
+
+                } catch (JSONException | NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
     }
 
 }

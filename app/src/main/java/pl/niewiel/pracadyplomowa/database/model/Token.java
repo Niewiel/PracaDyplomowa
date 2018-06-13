@@ -9,13 +9,16 @@ public class Token {
     private String token_type;
     private String refresh_token;
 
+
     public Token() {
+
     }
 
     public Token(String access_token, String expires_in, String token_type) {
         this.access_token = access_token;
         this.expires_in = expires_in;
         this.token_type = token_type;
+
     }
 
     @Override
@@ -59,4 +62,6 @@ public class Token {
     public void setRefresh_token(String refresh_token) {
         this.refresh_token = refresh_token;
     }
+
+
 }

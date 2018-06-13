@@ -87,6 +87,20 @@ public class BuildActivity extends AppCompatActivity {
             }
         });
 
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                add();
+            }
+        });
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edit();
+            }
+        });
+
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +114,13 @@ public class BuildActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), AddOrEditComponentType.class));
     }
 
+    private void edit() {
+        Intent intent = new Intent(getApplicationContext(), AddOrEditComponentType.class);
+        intent.putExtra("toUpdate", SugarRecord.findById(Build.class, getIntent().getExtras().getLong("build")).getmId());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplicationContext().startActivity(intent);
+    }
+
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Do You really want delete this item?")
@@ -107,7 +128,7 @@ public class BuildActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 service.delete(list.get(0));
-                SugarRecord.executeQuery("DELETE FROM build WHERE mid=?", String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getLong("build")));
+                SugarRecord.executeQuery("DELETE FROM building WHERE mid=?", String.valueOf(Objects.requireNonNull(getIntent().getExtras()).getLong("building")));
                 list.clear();
                 finish();
 

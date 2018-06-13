@@ -15,7 +15,6 @@ public class Component {
     @Column(name = "bs_id")
     @Unique
     private long bsId;
-    private Building budynek;
     @Column(name = "date_add")
     private Timestamp dateAdd;
     @Column(name = "date_edit")
@@ -23,16 +22,16 @@ public class Component {
     private int status;
     private String name;
     private boolean sync = false;
-    private Photo currentPhoto;
+
 
 
     public Component() {
         this.dateAdd = new Timestamp(System.currentTimeMillis());
     }
 
-    public Component(long mId, Building budynek, Timestamp dateAdd, Timestamp dateEdit, int status, String name, boolean sync) {
+    public Component(long mId, Timestamp dateAdd, Timestamp dateEdit, int status, String name, boolean sync) {
         this.mId = mId;
-        this.budynek = budynek;
+
         this.dateAdd = dateAdd;
         this.dateEdit = dateEdit;
         this.status = status;
@@ -61,14 +60,6 @@ public class Component {
 
     public void setBsId(long bsId) {
         this.bsId = bsId;
-    }
-
-    public Building getBudynek() {
-        return budynek;
-    }
-
-    public void setBudynek(Building budynek) {
-        this.budynek = budynek;
     }
 
     public Timestamp getDateAdd() {
@@ -111,11 +102,4 @@ public class Component {
         this.sync = sync;
     }
 
-    public Photo getCurrentPhoto() {
-        return currentPhoto;
-    }
-
-    public void setCurrentPhoto(Photo currentPhoto) {
-        this.currentPhoto = currentPhoto;
-    }
 }

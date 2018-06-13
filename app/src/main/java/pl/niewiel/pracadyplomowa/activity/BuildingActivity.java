@@ -120,6 +120,7 @@ public class BuildingActivity extends AppCompatActivity {
     private void edit() {
         Intent intent = new Intent(getApplicationContext(), AddOrEditComponentType.class);
         intent.putExtra("toUpdate", SugarRecord.findById(Building.class, getIntent().getExtras().getLong("building")).getmId());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplicationContext().startActivity(intent);
     }
 

@@ -10,11 +10,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
 import com.orm.SugarRecord;
-import pl.niewiel.pracadyplomowa.R;
-import pl.niewiel.pracadyplomowa.database.model.User;
 
 import java.util.List;
+
+import pl.niewiel.pracadyplomowa.R;
+import pl.niewiel.pracadyplomowa.database.model.User;
 
 public class RegisterActivity extends AppCompatActivity {
     String REGEX_PATTERN = "(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$";
