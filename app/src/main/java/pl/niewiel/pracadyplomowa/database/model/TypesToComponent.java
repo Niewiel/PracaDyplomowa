@@ -2,10 +2,12 @@ package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Table;
 
-@Table
+@Table(name = "types_to_component")
 public class TypesToComponent {
     private long componentId;
     private long typeId;
+
+    private long mid;
 
     public TypesToComponent(Component component, ComponentType type) {
         this.componentId = component.getmId();
@@ -21,6 +23,14 @@ public class TypesToComponent {
                 "componentId=" + componentId +
                 ", typeId=" + typeId +
                 '}';
+    }
+
+    public long getMid() {
+        return mid;
+    }
+
+    public void setMid(long mid) {
+        this.mid = mid;
     }
 
     public long getComponentId() {

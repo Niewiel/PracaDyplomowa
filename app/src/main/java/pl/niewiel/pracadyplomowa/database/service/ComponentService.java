@@ -11,16 +11,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
 import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.database.model.ComponentType;
+import pl.niewiel.pracadyplomowa.database.model.Photo;
+import pl.niewiel.pracadyplomowa.database.model.PhotoToComponent;
 import pl.niewiel.pracadyplomowa.database.model.TypesToComponent;
 
 public class ComponentService implements Service<Component> {
@@ -93,10 +98,22 @@ public class ComponentService implements Service<Component> {
                     component.setName(reader.getString("Name"));
                     Log.e("name", reader.getString("Name"));
                     component.setStatus(reader.getInt("Status"));
+
                     component.setSync(true);
                     if (component.getmId() == 0)
                         component.setmId(SugarRecord.save(component));
                     SugarRecord.save(component);
+
+                    //photo to component
+                    PhotoService ps = new PhotoService(context);
+                    Photo photo;
+                    JSONArray files = object.getJSONObject("result").getJSONObject("content").getJSONArray("files");
+                    for (int i = 0; i < files.length(); i++) {
+                        photo = ps.getById(files.getJSONObject(i).getInt("id"));
+                        Log.d("PHOTO", photo.toString());
+                        SugarRecord.save(new PhotoToComponent(photo, component));
+                    }
+
                     //types to component
                     List<ComponentType> componentTypes = new LinkedList<>();
                     JSONArray array = object.getJSONObject("result").getJSONObject("content").getJSONArray("types");
@@ -107,6 +124,7 @@ public class ComponentService implements Service<Component> {
                     }
                     for (ComponentType type : componentTypes) {
                         types = new TypesToComponent(component, type);
+                        types.setMid(SugarRecord.save(types));
                         SugarRecord.save(types);
 
                     }
@@ -122,13 +140,22 @@ public class ComponentService implements Service<Component> {
     public boolean add(Component item) {
         Map<String, Object> params = new HashMap<>();
         List<TypesToComponent> ids = SugarRecord.find(TypesToComponent.class, "component_id=?", String.valueOf(item.getmId()));
-        List<Integer> list = new LinkedList<>();
+        List<PhotoToComponent> photos = SugarRecord.find(PhotoToComponent.class, "component_id=?", String.valueOf(item.getmId()));
+        //types
+        Set<Integer> list = new HashSet<>();
         for (TypesToComponent t : ids) {
             list.add((int) SugarRecord.findById(ComponentType.class, t.getTypeId()).getBsId());
         }
+//        files
+        Set<File> files = new HashSet<>();
+        for (PhotoToComponent p :
+                photos) {
+            files.add(new File(SugarRecord.findById(Photo.class, p.getPhotoId()).getPath()));
+        }
         params.put("Name", item.getName());
         params.put("Status", item.getStatus());
-        params.put("Types", list);
+        params.put("Types", new LinkedList<>(list));
+        params.put("File", new LinkedList<>(files));
         String message = "no message";
         if (Utils.IS_ONLINE) {
             try {
@@ -141,6 +168,7 @@ public class ComponentService implements Service<Component> {
                     JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("ComponentType");
                     item.setBsId(reader.getInt("id"));
                     item.setSync(true);
+//                    item.setmId(SugarRecord.save(item));
                     SugarRecord.save(item);
                 }
                 return true;
@@ -175,7 +203,45 @@ public class ComponentService implements Service<Component> {
 
     @Override
     public boolean update(Component item) {
-        return false;
+        Map<String, Object> params = new HashMap<>();
+        List<TypesToComponent> ids = SugarRecord.find(TypesToComponent.class, "component_id=?", String.valueOf(item.getmId()));
+        List<PhotoToComponent> photos = SugarRecord.find(PhotoToComponent.class, "component_id=?", String.valueOf(item.getmId()));
+        //types
+        Set<Integer> list = new HashSet<>();
+        for (TypesToComponent t : ids) {
+            list.add((int) SugarRecord.findById(ComponentType.class, t.getTypeId()).getBsId());
+        }
+//        files
+        Set<File> files = new HashSet<>();
+        for (PhotoToComponent p :
+                photos) {
+            files.add(new File(SugarRecord.findById(Photo.class, p.getPhotoId()).getPath()));
+        }
+        Log.d("FILES", files.toString());
+        params.put("Name", item.getName());
+        params.put("Status", item.getStatus());
+        params.put("Types", new LinkedList<>(list));
+        params.put("File", new LinkedList<>(files));
+        String message = "no message";
+        if (Utils.IS_ONLINE) {
+            try {
+                HttpResponse<String> response = apiClient.put("component/" + (int) item.getBsId(), params);
+                JSONObject object = new JSONObject(response.getBody());
+                String status = object.getString("status");
+                message = object.getString("status");
+                Log.i("update", message);
+                if (status.equals("OK")) {
+                    item.setSync(true);
+                    SugarRecord.save(item);
+                    Toast.makeText(context, "Update successful", Toast.LENGTH_LONG).show();
+                }
+                return true;
+            } catch (JSONException e) {
+                Log.e(DEBUG_TAG, message);
+                return false;
+            }
+        } else
+            return false;
     }
 
     @Override
@@ -189,7 +255,6 @@ public class ComponentService implements Service<Component> {
                     add(c);
                 }
             }
-
         }
     }
 }

@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.Objects;
 
 import pl.niewiel.pracadyplomowa.R;
+import pl.niewiel.pracadyplomowa.activity.add_edit.AddOrEditComponent;
 import pl.niewiel.pracadyplomowa.adapters.ComponentAdapter;
 import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.database.service.ComponentService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
-import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponent;
-import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponentType;
-import pl.niewiel.pracadyplomowa.fragments.lists.ComponentTypeListFragment;
+import pl.niewiel.pracadyplomowa.fragments.ComponentTypeListFragment;
+import pl.niewiel.pracadyplomowa.fragments.PhotoGridView;
 
 public class ComponentActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "ComponentView";
@@ -65,19 +65,14 @@ public class ComponentActivity extends AppCompatActivity {
         addButton = findViewById(R.id.add_button);
         editButton = findViewById(R.id.edit_button);
         deleteButton = findViewById(R.id.delete_button);
-
         adapter = new ComponentAdapter(this, R.layout.component_row, list);
         if (getIntent().hasExtra("component")) {
             listView.setAdapter(adapter);
-
-
             //fragment
             bundle = new Bundle();
             bundle.putLong("types", getIntent().getExtras().getLong("component"));
-            Fragment fragment = new ComponentTypeListFragment();
-            fragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.subelement_placeholder, fragment).commit();
+            bundle.putLong("component", getIntent().getExtras().getLong("component"));
+
 
         } else {
             Toast.makeText(this, "No results", Toast.LENGTH_LONG).show();
@@ -109,12 +104,12 @@ public class ComponentActivity extends AppCompatActivity {
     }
 
     private void add() {
-        startActivity(new Intent(getApplicationContext(), AddOrEditComponentType.class));
+        startActivity(new Intent(getApplicationContext(), AddOrEditComponent.class));
     }
 
     private void edit() {
         Intent intent = new Intent(getApplicationContext(), AddOrEditComponent.class);
-//        intent.putExtra("toUpdate", SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")).getmId());
+        intent.putExtra("component", getIntent().getExtras().getLong("component"));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplicationContext().startActivity(intent);
     }
@@ -147,11 +142,18 @@ public class ComponentActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onLowMemory() {
+        recreate();
+    }
+
+
     private class Task extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
             listView.setVisibility(View.GONE);
+            list.clear();
         }
 
         @Override
@@ -166,6 +168,15 @@ public class ComponentActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             service.getById((int) SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")).getBsId());
+            Fragment fragment = new ComponentTypeListFragment();
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.subelement_placeholder, fragment).commit();
+
+            Fragment photofragment = new PhotoGridView();
+            photofragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.photo_placeholder, photofragment).commit();
             return null;
         }
     }

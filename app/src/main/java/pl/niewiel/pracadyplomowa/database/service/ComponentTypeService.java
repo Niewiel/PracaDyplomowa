@@ -78,10 +78,10 @@ public class ComponentTypeService implements Service<ComponentType> {
                         componentType.setDateEdit(Utils.parseDate(reader.getJSONObject("DateEdit").getString("date")));
                     componentType.setName(reader.getString("Name"));
                     componentType.setSync(true);
-                    if (componentType.getmId() == 0) {
-                        componentType.setmId(SugarRecord.save(componentType));
-                        SugarRecord.save(componentType);
-                    }
+
+                    componentType.setmId(SugarRecord.save(componentType));
+                    SugarRecord.save(componentType);
+
                 }
             } catch (JSONException | NullPointerException e) {
                 e.printStackTrace();

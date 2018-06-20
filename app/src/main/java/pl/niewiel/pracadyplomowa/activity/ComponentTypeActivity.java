@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Objects;
 
 import pl.niewiel.pracadyplomowa.R;
+import pl.niewiel.pracadyplomowa.activity.add_edit.AddOrEditComponentType;
 import pl.niewiel.pracadyplomowa.adapters.ComponentTypeAdapter;
 import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 import pl.niewiel.pracadyplomowa.database.service.ComponentTypeService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
-import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponentType;
 
 public class ComponentTypeActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private static final String DEBUG_TAG = "Component Type Activity";
@@ -99,7 +99,7 @@ public class ComponentTypeActivity extends AppCompatActivity implements SwipeRef
         });
     }
 
-    private void add() {
+    public void add() {
         startActivity(new Intent(getApplicationContext(), AddOrEditComponentType.class));
     }
 
@@ -162,7 +162,8 @@ public class ComponentTypeActivity extends AppCompatActivity implements SwipeRef
         @Override
         protected Void doInBackground(Void... voids) {
             componentType = SugarRecord.findById(ComponentType.class, getIntent().getExtras().getLong("type"));
-            service.getById((int) componentType.getBsId());
+            if (componentType != null)
+                service.getById((int) componentType.getBsId());
 
             return null;
         }

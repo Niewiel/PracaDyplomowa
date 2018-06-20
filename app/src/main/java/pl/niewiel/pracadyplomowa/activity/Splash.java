@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.orm.SugarContext;
 
@@ -26,13 +25,13 @@ public class Splash extends AppCompatActivity {
 //        Utils.fillDatabase();
         if (Utils.IS_ONLINE) {
             Log.e("Internet", "connected " + Utils.IS_ONLINE);
-            Toast.makeText(getApplicationContext(), "connected to system", Toast.LENGTH_LONG);
+//            Toast.makeText(getApplicationContext(), "connected to system", Toast.LENGTH_LONG);
             Utils.startTokenService(this);
         } else {
             Log.e("Internet", "connected " + Utils.IS_ONLINE);
-            Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG);
+//            Toast.makeText(getApplicationContext(), "no internet connection", Toast.LENGTH_LONG);
         }
-        Toast.makeText(getApplicationContext(), "Zaczynam splash", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), "Zaczynam splash", Toast.LENGTH_LONG).show();
         finish();
 
     }

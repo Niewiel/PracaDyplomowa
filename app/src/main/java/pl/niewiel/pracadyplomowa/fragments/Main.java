@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import pl.niewiel.pracadyplomowa.R;
-import pl.niewiel.pracadyplomowa.activity.CameraActivity;
+import pl.niewiel.pracadyplomowa.activity.MapsActivity;
 
 
 public class Main extends Fragment implements MyFragment {
@@ -26,7 +26,7 @@ public class Main extends Fragment implements MyFragment {
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(), CameraActivity.class));
+                startActivity(new Intent(getContext(), MapsActivity.class));
             }
         });
         return rootView;
@@ -35,6 +35,11 @@ public class Main extends Fragment implements MyFragment {
 
     @Override
     public void refresh() {
+
+    }
+
+    @Override
+    public void add() {
 
     }
 }

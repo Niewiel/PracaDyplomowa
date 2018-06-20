@@ -1,4 +1,4 @@
-package pl.niewiel.pracadyplomowa.fragments.lists.token;
+package pl.niewiel.pracadyplomowa.fragments.token;
 
 import android.widget.TextView;
 

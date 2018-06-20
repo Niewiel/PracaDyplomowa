@@ -40,11 +40,11 @@ public class ComponentAdapter extends ArrayAdapter<Component> {
             viewHolder.mId.setText(String.valueOf(component.getmId()));
             viewHolder.name.setText((component.getName()));
             viewHolder.dateAdd.setText(String.valueOf(component.getDateAdd()));
-            if (String.valueOf(component.getDateEdit()).equals("null"))
+            if (!String.valueOf(component.getDateEdit()).equals("null"))
                 viewHolder.dateEdit.setText(String.valueOf(component.getDateEdit()));
             else
                 viewHolder.dateEdit.setText(R.string.never_edited);
-            viewHolder.sync.setText(String.valueOf(component.isSync()));
+            viewHolder.sync.setText(String.valueOf(component.getStatus()));
             if (component.isSync()) {
                 convertView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
             }
@@ -54,11 +54,11 @@ public class ComponentAdapter extends ArrayAdapter<Component> {
             viewHolder.mId.setText(String.valueOf(component.getmId()));
             viewHolder.name.setText((component.getName()));
             viewHolder.dateAdd.setText(String.valueOf(component.getDateAdd()));
-            if (String.valueOf(component.getDateEdit()).equals("null"))
+            if (!String.valueOf(component.getDateEdit()).equals("null"))
                 viewHolder.dateEdit.setText(String.valueOf(component.getDateEdit()));
             else
                 viewHolder.dateEdit.setText(R.string.never_edited);
-            viewHolder.sync.setText(String.valueOf(component.isSync()));
+            viewHolder.sync.setText(String.valueOf(component.getStatus() + "%"));
         }
         return convertView;
     }

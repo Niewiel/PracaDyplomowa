@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.add_edit.AddOrEditComponent">
+    tools:context=".activity.add_edit.AddOrEditComponent">
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/name"
@@ -19,23 +20,43 @@
             android:maxLines="1"
             android:singleLine="true" />
 
-        <Button
-            android:id="@+id/chose_file_button"
+        <NumberPicker
+            android:id="@+id/procent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/chose_file_from_gallery" />
+            android:layout_weight="1">
 
-        <Button
-            android:id="@+id/add_photo_button"
+        </NumberPicker>
+
+        <LinearLayout
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/add_photo" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/add_photo_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/add_photo" />
+
+            <Button
+                android:id="@+id/chose_file_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/chose_file_from_gallery" />
+
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/add_button"
-            style="?android:textAppearanceSmall"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -44,13 +65,11 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <GridView
-        android:id="@+id/photo_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#000000"
-        android:gravity="center"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"></GridView>
+    <FrameLayout
+        android:id="@+id/types"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
 
 </LinearLayout>

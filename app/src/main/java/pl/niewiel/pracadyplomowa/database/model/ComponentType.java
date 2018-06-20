@@ -45,6 +45,16 @@ public class ComponentType {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ComponentType)) return false;
+        ComponentType that = (ComponentType) o;
+        return getmId() == that.getmId();
+    }
+
+
+
     public long getmId() {
         return mId;
     }

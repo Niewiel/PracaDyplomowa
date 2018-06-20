@@ -1,6 +1,7 @@
 package pl.niewiel.pracadyplomowa.database.model;
 
 import com.orm.dsl.Column;
+import com.orm.dsl.NotNull;
 import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 
@@ -20,6 +21,7 @@ public class Component {
     @Column(name = "date_edit")
     private Timestamp dateEdit;
     private int status;
+    @NotNull
     private String name;
     private boolean sync = false;
 
@@ -27,6 +29,10 @@ public class Component {
 
     public Component() {
         this.dateAdd = new Timestamp(System.currentTimeMillis());
+    }
+
+    public Component(String name) {
+        this.name = name;
     }
 
     public Component(long mId, Timestamp dateAdd, Timestamp dateEdit, int status, String name, boolean sync) {
@@ -40,6 +46,17 @@ public class Component {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Component)) return false;
+
+        Component component = (Component) o;
+
+        if (getmId() != component.getmId()) return false;
+        if (!getDateAdd().equals(component.getDateAdd())) return false;
+        return getName().equals(component.getName());
+    }
 
     @Override
     public String toString() {
@@ -76,6 +93,10 @@ public class Component {
 
     public void setDateEdit(Timestamp dateEdit) {
         this.dateEdit = dateEdit;
+    }
+
+    public void setDateEdit() {
+        this.dateEdit = new Timestamp(System.currentTimeMillis());
     }
 
     public int getStatus() {

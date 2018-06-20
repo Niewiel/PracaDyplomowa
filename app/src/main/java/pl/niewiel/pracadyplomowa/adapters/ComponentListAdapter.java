@@ -18,8 +18,11 @@ import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.placeholders.ComponentListViewHolder;
 
 public class ComponentListAdapter extends ArrayAdapter<Component> {
-    public ComponentListAdapter(@NonNull Context context, int resource, @NonNull List<Component> objects) {
+    private boolean selectable;
+
+    public ComponentListAdapter(@NonNull Context context, int resource, @NonNull List<Component> objects, boolean selectable) {
         super(context, resource, objects);
+        this.selectable = selectable;
     }
 
     @NonNull
@@ -36,6 +39,10 @@ public class ComponentListAdapter extends ArrayAdapter<Component> {
             viewHolder.name = convertView.findViewById(R.id.row_name);
             viewHolder.dateAdd = convertView.findViewById(R.id.row_date_add);
             viewHolder.sync = convertView.findViewById(R.id.row_sync);
+            if (selectable) {
+                viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
+                viewHolder.checkBox.setVisibility(View.VISIBLE);
+            }
 
 
             viewHolder.mId.setText(String.valueOf(component.getmId()));

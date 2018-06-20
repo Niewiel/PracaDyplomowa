@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="pl.niewiel.pracadyplomowa">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission
-        android:name="android.permission.ACCOUNT_MANAGER"
-        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <!-- features -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
+
 
     <application
         android:name="com.orm.SugarApp"
@@ -45,6 +44,18 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+        <!-- google-maps config -->
+        <!--<meta-data-->
+        <!--android:name="com.google.android.geo.API_KEY"-->
+        <!--android:value="R.string.google_api_key" />-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
 
         <!-- database config -->
 
@@ -66,34 +77,44 @@
             android:label="@string/title_activity_main" />
         <activity
             android:name=".activity.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".activity.RegisterActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".activity.BuildActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_build"
             android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".activity.ComponentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_component"
             android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".activity.ComponentTypeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_component_type"
             android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".activity.BuildingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_building"
             android:theme="@style/Theme.AppCompat" />
         <activity
-            android:name=".fragments.add_edit.AddOrEditComponentType"
+            android:name=".activity.add_edit.AddOrEditComponentType"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_add" />
         <activity
             android:name=".activity.CameraActivity"
             android:theme="@style/Theme.AppCompat" />
+        <activity
+            android:name=".activity.add_edit.AddOrEditComponent"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
 
         <service
             android:name=".services.TokenService"
@@ -106,7 +127,10 @@
             android:exported="true"
             android:permission="android.permission.INTERNET" />
 
-        <activity android:name=".fragments.add_edit.AddOrEditComponent"></activity>
+        <activity
+            android:name=".activity.MapsActivity"
+            android:label="@string/title_activity_maps" />
+        <activity android:name=".activity.add_edit.AddOrEditBuilding" />
     </application>
 
 </manifest>

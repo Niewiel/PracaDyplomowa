@@ -21,14 +21,15 @@ import pl.niewiel.pracadyplomowa.database.model.Token;
 
 public class ApiClient {
     private static String API_URL = "http://devdyplom.nuc-mleczko-pawel.pl/api/v1/";
-
     public ApiClient() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         new TryToken().execute();
+
     }
 
-    public HttpResponse<String> test() {
+
+    private static HttpResponse<String> test() {
 
         HttpResponse<String> response = null;
 
@@ -105,11 +106,14 @@ public class ApiClient {
         return response;
     }
 
-    class TryToken extends AsyncTask<Token, Void, Void> {
+    static class TryToken extends AsyncTask<Token, Void, Boolean> {
 
         @Override
-        protected Void doInBackground(Token... tokens) {
+        protected Boolean doInBackground(Token... tokens) {
+            String status = "";
             if (Utils.IS_ONLINE) {
+
+
                 if (!SugarRecord.listAll(Token.class).isEmpty()) {
                     String token = SugarRecord.last(Token.class).getAccess_token();
                     Log.e("token", token);
@@ -119,16 +123,23 @@ public class ApiClient {
                 try {
                     HttpResponse<String> response = test();
                     JSONObject object = new JSONObject(response.getBody());
-                    String status = object.getString("status");
+                    status = object.getString("status");
                     if (!status.equals("OK"))
                         new TokenClient().execute();
-
                 } catch (JSONException | NullPointerException e) {
                     e.printStackTrace();
                 }
+//                 if(tokenClient.getStatus()!=Status.FINISHED) {
+//                     try {
+//                         wait(1000);
+//                     } catch (InterruptedException e) {
+//                         e.printStackTrace();
+//                     }
+//                 }
             }
             return null;
         }
+
     }
 
 }

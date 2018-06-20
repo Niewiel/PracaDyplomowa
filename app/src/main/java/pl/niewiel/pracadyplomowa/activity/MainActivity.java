@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -21,19 +22,17 @@ import android.widget.Toast;
 
 import com.orm.SugarRecord;
 
-import java.util.List;
-
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.database.model.User;
 import pl.niewiel.pracadyplomowa.database.service.Synchronize;
+import pl.niewiel.pracadyplomowa.fragments.BuildListFragment;
+import pl.niewiel.pracadyplomowa.fragments.BuildingListFragment;
+import pl.niewiel.pracadyplomowa.fragments.ComponentListFragment;
+import pl.niewiel.pracadyplomowa.fragments.ComponentTypeListFragment;
 import pl.niewiel.pracadyplomowa.fragments.Main;
 import pl.niewiel.pracadyplomowa.fragments.MyFragment;
-import pl.niewiel.pracadyplomowa.fragments.lists.BuildListFragment;
-import pl.niewiel.pracadyplomowa.fragments.lists.BuildingListFragment;
-import pl.niewiel.pracadyplomowa.fragments.lists.ComponentListFragment;
-import pl.niewiel.pracadyplomowa.fragments.lists.ComponentTypeListFragment;
-import pl.niewiel.pracadyplomowa.fragments.lists.token.TokenView;
+import pl.niewiel.pracadyplomowa.fragments.token.TokenView;
 
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     private static final int STORAGE = 2;
     private static final int STORAGE_R = 3;
     private static boolean ok = false;
-    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
     private User user;
     private DrawerLayout mDrawerLayout;
     private MyFragment currentFragment;
@@ -51,159 +49,81 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     protected void onPostResume() {
         super.onPostResume();
-
-        currentFragment();
-
         //splash
         if (!ok) {
             ok = true;
             startActivity(new Intent(getApplicationContext(), Splash.class));
         }
-        if (currentFragment != null)
-            currentFragment.refresh();
+
     }
 
     @Override
     public void onAttachFragment(Fragment fragment) {
-//        super.onAttachFragment(fragment);
-        if (currentFragment == fragment)
-            currentFragment.refresh();
+        currentFragment = (MyFragment) fragment;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CAMERA: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            case STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-            case STORAGE_R:// If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        if (grantResults.length <= 0
+                || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            finish();
         }
     }
 
-    private void permissionsCheck() {
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.CAMERA)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CAMERA},
-                        MY_PERMISSIONS_REQUEST_CAMERA);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        STORAGE);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-        }
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        STORAGE_R);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-        }
-    }
+//    private void permissionsCheck() {
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.CAMERA)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.CAMERA)) {
+//                int MY_PERMISSIONS_REQUEST_CAMERA = 1;
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.CAMERA},
+//                        MY_PERMISSIONS_REQUEST_CAMERA);
+//            }
+//        }
+//
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//
+//            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                        STORAGE);
+//            }
+//        }
+//
+//        if (ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.READ_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                        STORAGE_R);
+//            }
+//        }
+//    }
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        currentFragment();
-        permissionsCheck();
+//        permissionsCheck();
         //splash
         if (!ok) {
             ok = true;
             startActivity(new Intent(getApplicationContext(), Splash.class));
         }
-        if (currentFragment != null)
-            currentFragment.refresh();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+        }
+
 
         //topbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -220,7 +140,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
                         return true;
                     case R.id.add_item:
-                        currentFragment.refresh();
+                        Log.e("Add", currentFragment.toString());
+                        currentFragment.add();
 
 
                     default:
@@ -231,8 +152,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 }
             }
         });
-
-//        setSupportActionBar(myToolbar);
 
 
         //menu
@@ -269,12 +188,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                                 Fragment types = new ComponentTypeListFragment();
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.fragment_container, types, "TYPES").commit();
+                                currentFragment.refresh();
                                 break;
                             case R.id.menu_components_list:
                                 Log.e("Menu", String.valueOf(menuItem.getTitle()));
                                 Fragment components = new ComponentListFragment();
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.fragment_container, components, "COMPONENTS").commit();
+                                currentFragment.refresh();
+
                                 break;
                             case R.id.menu_builds_list:
 
@@ -301,21 +223,12 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 });
     }
 
+
     @Override
     public void onBackPressed() {
         exit();
     }
 
-    private void currentFragment() {
-        MyFragment fragment;
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        for (Fragment f :
-                fragments) {
-            if (f != null && f.isVisible())
-                currentFragment = (MyFragment) f;
-
-        }
-    }
 
     private boolean isLoggedIn() {
         try {

@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.activity.ComponentTypeActivity;
@@ -18,8 +22,21 @@ import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 import pl.niewiel.pracadyplomowa.placeholders.ComponentTypeListViewHolder;
 
 public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
-    public ComponentTypeListAdapter(@NonNull Context context, int resource, @NonNull List<ComponentType> objects) {
+    private boolean selectable;
+    private Set<ComponentType> selected = new HashSet<>();
+
+    public ComponentTypeListAdapter(@NonNull Context context, int resource, @NonNull List<ComponentType> objects, boolean selectable) {
         super(context, resource, objects);
+        this.selectable = selectable;
+    }
+
+    public Set<ComponentType> getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Set<ComponentType> selected) {
+        Log.e("Adapter", selected.toString());
+        this.selected = selected;
     }
 
     @NonNull
@@ -27,6 +44,7 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final ComponentTypeListViewHolder viewHolder;
         final ComponentType componentType = getItem(position);
+        Log.e("Contains", String.valueOf(selected.contains(componentType)) + " " + componentType.toString());
 
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
@@ -36,7 +54,12 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
             viewHolder.name = convertView.findViewById(R.id.row_name);
             viewHolder.dateAdd = convertView.findViewById(R.id.row_date_add);
             viewHolder.sync = convertView.findViewById(R.id.row_sync);
-
+            viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
+            if (selectable) {
+                viewHolder.checkBox.setVisibility(View.VISIBLE);
+                if (equals(componentType))
+                    viewHolder.checkBox.setChecked(true);
+            }
 
             viewHolder.mId.setText(String.valueOf(componentType.getmId()));
             viewHolder.name.setText((componentType.getName()));
@@ -45,6 +68,7 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
             if (componentType.isSync()) {
                 convertView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
             }
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ComponentTypeListViewHolder) convertView.getTag();
@@ -52,16 +76,62 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
             viewHolder.name.setText((componentType.getName()));
             viewHolder.dateAdd.setText(String.valueOf(componentType.getDateAdd()));
             viewHolder.sync.setText(String.valueOf(componentType.isSync()));
-        }
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ComponentTypeActivity.class);
-                intent.putExtra("type", componentType.getmId());
-                getContext().startActivity(intent);
+            if (selectable) {
+                if (equals(componentType))
+                    viewHolder.checkBox.setChecked(true);
             }
-        });
 
+        }
+        if (selectable) {
+            viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        selected.add(componentType);
+                    } else {
+                        selected.remove(componentType);
+                        boolean eq = false;
+                        for (ComponentType c :
+                                selected) {
+                            eq = c.equals(componentType);
+                            if (eq)
+                                selected.remove(c);
+                        }
+
+                        System.err.println(eq + selected.toString());
+                    }
+                }
+            });
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("Click", "");
+                    viewHolder.checkBox.setChecked(!viewHolder.checkBox.isChecked());
+
+                }
+            });
+//        }
+        } else
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), ComponentTypeActivity.class);
+                    intent.putExtra("type", componentType.getmId());
+                    getContext().startActivity(intent);
+                }
+            });
+
+        Log.i("List", selected.toString());
         return convertView;
     }
+
+    private boolean equals(ComponentType componentType) {
+        boolean eq = false;
+        for (ComponentType c :
+                selected) {
+            eq = c.equals(componentType);
+        }
+        return eq;
+    }
+
 }

@@ -19,8 +19,11 @@ import pl.niewiel.pracadyplomowa.database.model.Building;
 import pl.niewiel.pracadyplomowa.placeholders.BuildingListViewHolder;
 
 public class BuildingListAdapter extends ArrayAdapter<Building> {
-    public BuildingListAdapter(@NonNull Context context, int resource, @NonNull List<Building> objects) {
+    boolean selectable;
+
+    public BuildingListAdapter(@NonNull Context context, int resource, @NonNull List<Building> objects, boolean selectable) {
         super(context, resource, objects);
+        this.selectable = selectable;
     }
 
     @NonNull
@@ -37,6 +40,10 @@ public class BuildingListAdapter extends ArrayAdapter<Building> {
             viewHolder.name = convertView.findViewById(R.id.row_name);
             viewHolder.dateAdd = convertView.findViewById(R.id.row_date_add);
             viewHolder.sync = convertView.findViewById(R.id.row_sync);
+            if (selectable) {
+                viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
+                viewHolder.checkBox.setVisibility(View.VISIBLE);
+            }
 
 
             viewHolder.mId.setText(String.valueOf(building.getmId()));

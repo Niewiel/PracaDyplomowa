@@ -1,10 +1,15 @@
 package pl.niewiel.pracadyplomowa.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,13 +21,13 @@ import com.orm.SugarRecord;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.database.model.Photo;
 import pl.niewiel.pracadyplomowa.database.model.PhotoToComponent;
-import pl.niewiel.pracadyplomowa.database.service.PhotoService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
 
 public class CameraActivity extends AppCompatActivity {
@@ -34,13 +39,40 @@ public class CameraActivity extends AppCompatActivity {
     private ImageView mImageView;
     private Component component;
     private Photo photo;
+    private int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CAMERA)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+        }
         setContentView(R.layout.activity_camera);
         okButton = findViewById(R.id.okButton);
         mImageView = findViewById(R.id.mImageView);
         dispatchTakePictureIntent();
+
     }
 
     @Override
@@ -49,20 +81,22 @@ public class CameraActivity extends AppCompatActivity {
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
 
+//            Log.e("PATH", String.valueOf(mCurrentPhotoURI.getPath()));
+
             mImageView.setImageURI(mCurrentPhotoURI);
+
             okButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    photo = new Photo("aaa" + imageFileName, mCurrentPhotoURI);
+                    photo.setmId(SugarRecord.save(photo));
+                    SugarRecord.save(photo);
                     if (getIntent().hasExtra("component")) {
-                        component = (Component) getIntent().getExtras().get("component");
-                        service = new PhotoService();
-                        photo = new Photo(component.getName() + imageFileName, mCurrentPhotoURI);
-                        photo.setmId(SugarRecord.save(photo));
-                        SugarRecord.save(photo);
-                        SugarRecord.save(new PhotoToComponent(component.getmId(), photo.getmId()));
-                        service.add(photo);
-                    }
+                        component = SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component"));
+                        SugarRecord.save(new PhotoToComponent(photo, component));
+                        Log.e("OK", "OK");
+                    } else
+                        Log.e("OK", "NOK");
                     finish();
                 }
             });
@@ -73,9 +107,9 @@ public class CameraActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         // Create an image file name
-//        @SuppressLint("SimpleDateFormat")
-//        String timeStamp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss_SSS").format(new Date());
-        imageFileName = new Date().toString();
+        @SuppressLint("SimpleDateFormat")
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+        imageFileName = timeStamp;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
         // Save a file: path for use with ACTION_VIEW intents
@@ -105,7 +139,8 @@ public class CameraActivity extends AppCompatActivity {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                 if (photoURI != null) {
-                    mCurrentPhotoURI = photoURI;
+                    mCurrentPhotoURI = photoURI.normalizeScheme();
+                    Log.i("CAMERA", mCurrentPhotoURI.toString());
                 }
             }
 

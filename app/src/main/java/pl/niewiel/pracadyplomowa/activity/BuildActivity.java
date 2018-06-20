@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,12 +23,12 @@ import java.util.List;
 import java.util.Objects;
 
 import pl.niewiel.pracadyplomowa.R;
+import pl.niewiel.pracadyplomowa.activity.add_edit.AddOrEditComponentType;
 import pl.niewiel.pracadyplomowa.adapters.BuildAdapter;
 import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.database.service.BuildService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
-import pl.niewiel.pracadyplomowa.fragments.add_edit.AddOrEditComponentType;
-import pl.niewiel.pracadyplomowa.fragments.lists.BuildingListFragment;
+import pl.niewiel.pracadyplomowa.fragments.BuildingListFragment;
 
 public class BuildActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "BuildActivity";
@@ -70,6 +71,9 @@ public class BuildActivity extends AppCompatActivity {
 
             bundle = new Bundle();
             bundle.putLong("buildings", getIntent().getExtras().getLong("build"));
+            FrameLayout frameLayout = findViewById(R.id.subelement_placeholder);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            frameLayout.setLayoutParams(layoutParams);
             Fragment fragment = new BuildingListFragment();
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
@@ -148,6 +152,7 @@ public class BuildActivity extends AppCompatActivity {
         finish();
         return true;
     }
+
 
     private class Task extends AsyncTask<Void, Void, Void> {
         @Override

@@ -18,19 +18,28 @@ public class Photo {
     @Unique
     private long bsId;
     private String name;
-    private Uri path;
+    boolean sync = false;
     @Column(name = "date_add")
     private Timestamp dateAdd;
+    private String path;
 
     public Photo() {
     }
 
     public Photo(String name, Uri path) {
         this.name = name;
-        this.path = path;
+        this.path = "/storage/emulated/0/Android/data/pl.niewiel.pracadyplomowa/files/Pictures/" + path.getLastPathSegment();
         this.dateAdd = new Timestamp(System.currentTimeMillis());
     }
 
+    @Override
+    public String toString() {
+        return "Photo{" +
+                "mId=" + mId +
+                ", name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                '}';
+    }
 
     //geters and setters
     public long getmId() {
@@ -41,6 +50,14 @@ public class Photo {
         this.mId = mId;
     }
 
+    public long getBsId() {
+        return bsId;
+    }
+
+    public void setBsId(long bsId) {
+        this.bsId = bsId;
+    }
+
     public String getName() {
         return name;
     }
@@ -49,12 +66,12 @@ public class Photo {
         this.name = name;
     }
 
-    public Uri getPath() {
+    public String getPath() {
         return path;
     }
 
-    public void setPath(Uri path) {
-        this.path = path;
+    public void setPath(String path) {
+        this.path = "/storage/emulated/0/Android/data/pl.niewiel.pracadyplomowa/files/Pictures/" + path;
     }
 
     public Timestamp getDateAdd() {
@@ -63,5 +80,13 @@ public class Photo {
 
     public void setDateAdd(Timestamp dateAdd) {
         this.dateAdd = dateAdd;
+    }
+
+    public boolean isSync() {
+        return sync;
+    }
+
+    public void setSync(boolean sync) {
+        this.sync = sync;
     }
 }
