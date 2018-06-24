@@ -25,7 +25,10 @@ public class Component {
     private String name;
     private boolean sync = false;
 
-
+    @Override
+    public String toString() {
+        return name + " " + status + "%";
+    }
 
     public Component() {
         this.dateAdd = new Timestamp(System.currentTimeMillis());
@@ -56,11 +59,6 @@ public class Component {
         if (getmId() != component.getmId()) return false;
         if (!getDateAdd().equals(component.getDateAdd())) return false;
         return getName().equals(component.getName());
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 
     public long getmId() {

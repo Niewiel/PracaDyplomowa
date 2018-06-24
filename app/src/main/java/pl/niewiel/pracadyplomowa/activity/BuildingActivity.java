@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 import pl.niewiel.pracadyplomowa.R;
-import pl.niewiel.pracadyplomowa.activity.add_edit.AddOrEditComponentType;
+import pl.niewiel.pracadyplomowa.activity.add_edit.AddOrEditBuilding;
 import pl.niewiel.pracadyplomowa.adapters.BuildingAdapter;
 import pl.niewiel.pracadyplomowa.database.model.Building;
 import pl.niewiel.pracadyplomowa.database.service.BuildingService;
@@ -118,11 +118,11 @@ public class BuildingActivity extends AppCompatActivity {
     }
 
     private void add() {
-        startActivity(new Intent(getApplicationContext(), AddOrEditComponentType.class));
+        startActivity(new Intent(getApplicationContext(), AddOrEditBuilding.class));
     }
 
     private void edit() {
-        Intent intent = new Intent(getApplicationContext(), AddOrEditComponentType.class);
+        Intent intent = new Intent(getApplicationContext(), AddOrEditBuilding.class);
         intent.putExtra("toUpdate", SugarRecord.findById(Building.class, getIntent().getExtras().getLong("building")).getmId());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getApplicationContext().startActivity(intent);

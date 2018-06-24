@@ -11,12 +11,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
+import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.database.model.Building;
+import pl.niewiel.pracadyplomowa.database.model.BuildingToBuild;
 import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.database.model.ComponentToBuilding;
 
@@ -113,7 +117,48 @@ public class BuildingService implements Service<Building> {
 
     @Override
     public boolean add(Building item) {
-        return false;
+        List<BuildingToBuild> buildsIDs = SugarRecord.find(BuildingToBuild.class, "building_id=?", String.valueOf(item.getmId()));
+        List<ComponentToBuilding> componentsIDs = SugarRecord.find(ComponentToBuilding.class, "building_id=?", String.valueOf(item.getmId()));
+        List<Integer> builds = new ArrayList<>();
+        List<Integer> components = new ArrayList<>();
+
+
+        for (BuildingToBuild btb : buildsIDs)
+            builds.add((int) SugarRecord.findById(Build.class, btb.getBuildId()).getBsId());
+
+        for (ComponentToBuilding ctb : componentsIDs)
+            components.add((int) SugarRecord.findById(Component.class, ctb.getComponentId()).getBsId());
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("Name", item.getName());
+        params.put("Latitude", item.getLatitude());
+        params.put("Longitude", item.getLongitude());
+        params.put("DateStart", item.getDateStart());
+        params.put("DateEnd", item.getDateEnd());
+        params.put("Builds", builds);
+        params.put("Components", components);
+        String message = "no message";
+        if (Utils.IS_ONLINE) {
+            try {
+                HttpResponse<String> response = apiClient.post("building", params);
+                JSONObject object = new JSONObject(response.getBody());
+                String status = object.getString("status");
+                message = object.getString("status");
+                Log.e("add", String.valueOf(object));
+                if (status.equals("OK")) {
+                    JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("ComponentType");
+                    item.setBsId(reader.getInt("id"));
+                    item.setSync(true);
+                    SugarRecord.save(item);
+                }
+                return true;
+            } catch (JSONException e) {
+                Log.e("BuildingService", message);
+                return false;
+            }
+        } else
+            return false;
+
     }
 
     @Override

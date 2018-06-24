@@ -82,6 +82,10 @@ public class Building {
         this.dateAdd = dateAdd;
     }
 
+    public void setDateAdd() {
+        this.dateAdd = new Timestamp(System.currentTimeMillis());
+    }
+
     public Timestamp getDateEdit() {
         return dateEdit;
     }

@@ -74,4 +74,6 @@
     <string name="default_info_title">Give permissions</string>
     <string name="default_info_snippet">domyślna podpowiedź</string>
     <string name="pick_place">pick place</string>
+    <string name="date_end">date end</string>
+    <string name="date_start">date start</string>
 </resources>
