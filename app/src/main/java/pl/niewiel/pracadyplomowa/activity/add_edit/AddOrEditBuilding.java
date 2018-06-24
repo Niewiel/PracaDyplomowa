@@ -115,7 +115,7 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
         DialogFragment datePicker = new DatePickerFragment();
         name = findViewById(R.id.name);
         dateStart = findViewById(R.id.date_start);
-        dateStart.setText();
+//        dateStart.setText();
         dateEnd = findViewById(R.id.date_end);
         add = findViewById(R.id.add_button);
         spinner = findViewById(R.id.spinner);
