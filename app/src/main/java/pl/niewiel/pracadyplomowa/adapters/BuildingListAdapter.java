@@ -21,7 +21,8 @@ import pl.niewiel.pracadyplomowa.placeholders.BuildingListViewHolder;
 public class BuildingListAdapter extends ArrayAdapter<Building> {
     boolean selectable;
 
-    public BuildingListAdapter(@NonNull Context context, int resource, @NonNull List<Building> objects, boolean selectable) {
+    public BuildingListAdapter(@NonNull Context context,
+                               int resource, @NonNull List<Building> objects, boolean selectable) {
         super(context, resource, objects);
         this.selectable = selectable;
     }

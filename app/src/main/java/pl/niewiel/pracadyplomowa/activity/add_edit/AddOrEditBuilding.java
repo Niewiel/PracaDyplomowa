@@ -1,17 +1,15 @@
 package pl.niewiel.pracadyplomowa.activity.add_edit;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -50,6 +49,7 @@ import com.google.android.gms.tasks.Task;
 import com.orm.SugarRecord;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -62,7 +62,6 @@ import pl.niewiel.pracadyplomowa.database.model.Building;
 import pl.niewiel.pracadyplomowa.database.model.Component;
 import pl.niewiel.pracadyplomowa.database.model.ComponentToBuilding;
 import pl.niewiel.pracadyplomowa.database.service.BuildingService;
-import pl.niewiel.pracadyplomowa.fragments.DatePickerFragment;
 
 public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -88,7 +87,9 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
     Spinner spinner;
     ListView componentList;
     ArrayAdapter<Component> spinnerAdapter;
+
     ArrayAdapter<Component> listAdapter;
+    Bundle bundle;
     private GoogleMap mMap;
     private Marker marker = null;
     private MarkerOptions markerOptions;
@@ -106,23 +107,54 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
     private String[] mLikelyPlaceAttributions;
     private LatLng[] mLikelyPlaceLatLngs;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_or_edit_building);
         mapFeatures();
-        DialogFragment datePicker = new DatePickerFragment();
         name = findViewById(R.id.name);
         dateStart = findViewById(R.id.date_start);
-//        dateStart.setText();
         dateEnd = findViewById(R.id.date_end);
         add = findViewById(R.id.add_button);
         spinner = findViewById(R.id.spinner);
         componentList = findViewById(R.id.component_list);
         components = SugarRecord.listAll(Component.class);
         selected = new HashSet<>();
-
+        bundle = new Bundle();
+        dateStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    final Calendar c = Calendar.getInstance();
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH);
+                    int day = c.get(Calendar.DAY_OF_MONTH);
+                    new DatePickerDialog(v.getContext(), R.style.Theme_AppCompat_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            dateStart.setText(year + "-" + month + "-" + dayOfMonth);
+                        }
+                    }, year, month, day).show();
+                }
+            }
+        });
+        dateStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    final Calendar c = Calendar.getInstance();
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH);
+                    int day = c.get(Calendar.DAY_OF_MONTH);
+                    new DatePickerDialog(v.getContext(), R.style.Theme_AppCompat_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            dateStart.setText(year + "-" + month + "-" + dayOfMonth);
+                        }
+                    }, year, month, day).show();
+                }
+            }
+        });
 
         spinnerAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.simple_spinner_item);
         spinnerAdapter.addAll(components);
@@ -190,10 +222,6 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
 
     private void mapFeatures() {
         getLocationPermission();
@@ -546,4 +574,6 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
             super.onSaveInstanceState(outState);
         }
     }
+
+
 }

@@ -54,7 +54,6 @@ public class BuildingListFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        Log.e("DUPA", "DUPA");
         new Synchronize(getContext()).execute();
         new Task().execute();
 
