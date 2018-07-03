@@ -65,7 +65,7 @@ public class AddOrEditComponentType extends AppCompatActivity {
                         componentType.setmId(SugarRecord.save(componentType));
                         SugarRecord.save(componentType);
                         if (Utils.IS_ONLINE)
-                            service.add(componentType);
+                            service.create(componentType);
                         else
                             Utils.IS_SYNCHRONIZED = false;
                         finish();

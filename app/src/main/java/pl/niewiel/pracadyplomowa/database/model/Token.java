@@ -9,7 +9,6 @@ public class Token {
     private String token_type;
     private String refresh_token;
 
-
     public Token() {
 
     }

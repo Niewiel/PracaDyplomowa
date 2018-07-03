@@ -81,7 +81,7 @@ public class PhotoService implements Service<Photo> {
     }
 
     @Override
-    public boolean add(Photo item) {
+    public boolean create(Photo item) {
         return false;
     }
 

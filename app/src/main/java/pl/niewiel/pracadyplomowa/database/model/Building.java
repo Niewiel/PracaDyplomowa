@@ -20,9 +20,9 @@ public class Building {
     @Column(name = "date_edit")
     private Timestamp dateEdit;
     @Column(name = "date_start")
-    private Timestamp dateStart;
+    private String dateStart;
     @Column(name = "date_end")
-    private Timestamp dateEnd;
+    private String dateEnd;
     @Column(name = "name")
     private String name;
     @Column(name = "latitude")
@@ -42,7 +42,7 @@ public class Building {
         this.sync = sync;
     }
 
-    public Building(Build budowa, Timestamp dateEdit, Timestamp dateStart, Timestamp dateEnd, String name, String latitude, String longitude) {
+    public Building(Build budowa, Timestamp dateEdit, String dateStart, String dateEnd, String name, String latitude, String longitude) {
         this.dateAdd = new Timestamp(System.currentTimeMillis());
         this.dateEdit = dateEdit;
         this.dateStart = dateStart;
@@ -91,22 +91,22 @@ public class Building {
     }
 
     public void setDateEdit(Timestamp dateEdit) {
-        this.dateEdit = dateEdit;
+        this.dateEdit = new Timestamp(System.currentTimeMillis());
     }
 
-    public Timestamp getDateStart() {
+    public String getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(Timestamp dateStart) {
+    public void setDateStart(String dateStart) {
         this.dateStart = dateStart;
     }
 
-    public Timestamp getDateEnd() {
+    public String getDateEnd() {
         return dateEnd;
     }
 
-    public void setDateEnd(Timestamp dateEnd) {
+    public void setDateEnd(String dateEnd) {
         this.dateEnd = dateEnd;
     }
 

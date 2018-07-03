@@ -112,7 +112,7 @@ public class BuildService implements Service<Build> {
     }
 
     @Override
-    public boolean add(Build item) {
+    public boolean create(Build item) {
         return false;
     }
 
@@ -134,7 +134,7 @@ public class BuildService implements Service<Build> {
             if (!toSynchronize.isEmpty()) {
                 for (Build bu :
                         toSynchronize) {
-                    add(bu);
+                    create(bu);
                 }
             }
 

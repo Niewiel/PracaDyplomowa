@@ -120,11 +120,13 @@ public class AddOrEditComponent extends AppCompatActivity {
                         component = new Component();
                         component.setName(name.getText().toString());
                         component.setStatus(procentPicker.getValue());
+
                         saveTypes(fragment, component);
                         if (Utils.IS_ONLINE)
-                            service.add(component);
+                            service.create(component);
                         else {
                             Utils.IS_SYNCHRONIZED = false;
+                            component.setmId(SugarRecord.save(component));
                             SugarRecord.save(component);
                         }
                         finish();

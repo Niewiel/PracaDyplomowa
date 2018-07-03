@@ -120,41 +120,7 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
         componentList = findViewById(R.id.component_list);
         components = SugarRecord.listAll(Component.class);
         selected = new HashSet<>();
-        bundle = new Bundle();
-        dateStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    final Calendar c = Calendar.getInstance();
-                    int year = c.get(Calendar.YEAR);
-                    int month = c.get(Calendar.MONTH);
-                    int day = c.get(Calendar.DAY_OF_MONTH);
-                    new DatePickerDialog(v.getContext(), R.style.Theme_AppCompat_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            dateStart.setText(year + "-" + month + "-" + dayOfMonth);
-                        }
-                    }, year, month, day).show();
-                }
-            }
-        });
-        dateStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    final Calendar c = Calendar.getInstance();
-                    int year = c.get(Calendar.YEAR);
-                    int month = c.get(Calendar.MONTH);
-                    int day = c.get(Calendar.DAY_OF_MONTH);
-                    new DatePickerDialog(v.getContext(), R.style.Theme_AppCompat_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            dateStart.setText(year + "-" + month + "-" + dayOfMonth);
-                        }
-                    }, year, month, day).show();
-                }
-            }
-        });
+
 
         spinnerAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.simple_spinner_item);
         spinnerAdapter.addAll(components);
@@ -191,37 +157,91 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
-
+        dateStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    final Calendar c = Calendar.getInstance();
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH);
+                    int day = c.get(Calendar.DAY_OF_MONTH);
+                    new DatePickerDialog(v.getContext(), R.style.Theme_AppCompat_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            dateStart.setText(dayOfMonth + "." + month + "." + year);
+                        }
+                    }, year, month, day).show();
+                }
+            }
+        });
+        dateEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    final Calendar c = Calendar.getInstance();
+                    int year = c.get(Calendar.YEAR);
+                    int month = c.get(Calendar.MONTH);
+                    int day = c.get(Calendar.DAY_OF_MONTH);
+                    new DatePickerDialog(v.getContext(), R.style.Theme_AppCompat_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                            dateEnd.setText(dayOfMonth + "." + month + "." + year);
+                        }
+                    }, year, month, day).show();
+                }
+            }
+        });
         building = new Building();
         buildingService = new BuildingService(getApplicationContext());
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                building.setName(name.getText().toString());
-                building.setDateAdd();
-                if (marker != null) {
-                    building.setLatitude(String.valueOf(marker.getPosition().latitude));
-                    building.setLongitude(String.valueOf(marker.getPosition().longitude));
-                } else {
-                    building.setLatitude(String.valueOf(mLastKnownLocation.getLatitude()));
-                    building.setLatitude(String.valueOf(mLastKnownLocation.getLongitude()));
-                }
+                if (validate()) {
+                    building.setName(name.getText().toString());
+                    building.setDateAdd();
+                    building.setDateStart(dateStart.getText().toString());
+                    building.setDateEnd(dateEnd.getText().toString());
+                    System.out.println(dateEnd.getText().toString());
+                    if (marker != null) {
+                        building.setLatitude(String.valueOf(marker.getPosition().latitude));
+                        building.setLongitude(String.valueOf(marker.getPosition().longitude));
+                    } else {
+                        building.setLatitude(String.valueOf(mLastKnownLocation.getLatitude()));
+                        building.setLatitude(String.valueOf(mLastKnownLocation.getLongitude()));
+                    }
 
-                building.setmId(SugarRecord.save(building));
-                SugarRecord.save(building);
-                for (Component c : selected)
-                    SugarRecord.save(new ComponentToBuilding(c, building));
-                System.out.println(selected);
-                if (Utils.IS_ONLINE) {
-                    buildingService.add(building);
-                } else {
-                    Utils.IS_SYNCHRONIZED = false;
-                    SugarRecord.save(building);
+
+                    for (Component c : selected)
+                        SugarRecord.save(new ComponentToBuilding(c, building));
+                    System.out.println(selected);
+                    if (Utils.IS_ONLINE) {
+                        buildingService.create(building);
+                    } else {
+                        Utils.IS_SYNCHRONIZED = false;
+                        building.setmId(SugarRecord.save(building));
+                        SugarRecord.save(building);
+                    }
+                    finish();
                 }
             }
         });
     }
 
+    private boolean validate() {
+        if (name.getText().length() == 0) {
+            name.setError("this field is required");
+            return false;
+        } else if (dateStart.getText().length() == 0) {
+            dateStart.setError("this field is required");
+            return false;
+        }
+        if (dateEnd.getText().length() == 0) {
+            dateEnd.setError("this field is required");
+            return false;
+        }
+        return true;
+    }
 
     private void mapFeatures() {
         getLocationPermission();
@@ -510,7 +530,7 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
                                 // Release the place likelihood buffer, to avoid memory leaks.
                                 likelyPlaces.release();
 
-                                // Show a dialog offering the user the list of likely places, and add a
+                                // Show a dialog offering the user the list of likely places, and create a
                                 // marker at the selected place.
                                 openPlacesDialog();
 

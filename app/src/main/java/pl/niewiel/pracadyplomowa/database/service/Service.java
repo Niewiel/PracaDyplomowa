@@ -7,7 +7,7 @@ public interface Service<T> {
 
     T getById(int id);
 
-    boolean add(T item);
+    boolean create(T item);
 
     boolean delete(T item);
 

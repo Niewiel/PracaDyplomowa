@@ -90,7 +90,7 @@ public class ComponentTypeService implements Service<ComponentType> {
         return componentType;
     }
 
-    public boolean add(ComponentType componentType) {
+    public boolean create(ComponentType componentType) {
         Map<String, Object> params = new HashMap<>();
         params.put("Name", componentType.getName());
         String message = "no message";
@@ -100,7 +100,7 @@ public class ComponentTypeService implements Service<ComponentType> {
                 JSONObject object = new JSONObject(response.getBody());
                 String status = object.getString("status");
                 message = object.getString("status");
-                Log.e("add", String.valueOf(object));
+                Log.e("create", String.valueOf(object));
                 if (status.equals("OK")) {
                     JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("ComponentType");
                     componentType.setBsId(reader.getInt("id"));
@@ -173,7 +173,7 @@ public class ComponentTypeService implements Service<ComponentType> {
             if (!toSynchronize.isEmpty()) {
                 for (ComponentType ct :
                         toSynchronize) {
-                    add(ct);
+                    create(ct);
                 }
             }
         }

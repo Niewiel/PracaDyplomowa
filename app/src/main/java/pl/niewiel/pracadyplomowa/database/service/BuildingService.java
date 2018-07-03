@@ -2,6 +2,7 @@ package pl.niewiel.pracadyplomowa.database.service;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.orm.SugarRecord;
@@ -80,8 +81,8 @@ public class BuildingService implements Service<Building> {
                     Log.e("Json", "start");
                     JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("Building");
                     building.setDateAdd(Utils.parseDate(reader.getJSONObject("DateAdd").getString("date")));
-                    building.setDateStart(Utils.parseDate(reader.getJSONObject("DateStart").getString("date")));
-                    building.setDateEnd(Utils.parseDate(reader.getJSONObject("DateEnd").getString("date")));
+                    building.setDateStart(reader.getJSONObject("DateStart").getString("date"));
+                    building.setDateEnd(reader.getJSONObject("DateEnd").getString("date"));
                     if (!reader.getString("DateEdit").equals("null"))
                         building.setDateEdit(Utils.parseDate(reader.getJSONObject("DateEdit").getString("date")));
                     building.setName(reader.getString("Name"));
@@ -116,7 +117,7 @@ public class BuildingService implements Service<Building> {
     }
 
     @Override
-    public boolean add(Building item) {
+    public boolean create(Building item) {
         List<BuildingToBuild> buildsIDs = SugarRecord.find(BuildingToBuild.class, "building_id=?", String.valueOf(item.getmId()));
         List<ComponentToBuilding> componentsIDs = SugarRecord.find(ComponentToBuilding.class, "building_id=?", String.valueOf(item.getmId()));
         List<Integer> builds = new ArrayList<>();
@@ -135,8 +136,8 @@ public class BuildingService implements Service<Building> {
         params.put("Longitude", item.getLongitude());
         params.put("DateStart", item.getDateStart());
         params.put("DateEnd", item.getDateEnd());
-        params.put("Builds", builds);
-        params.put("Components", components);
+        params.put("Builds", "1");
+        params.put("Components", components.toArray());
         String message = "no message";
         if (Utils.IS_ONLINE) {
             try {
@@ -144,11 +145,12 @@ public class BuildingService implements Service<Building> {
                 JSONObject object = new JSONObject(response.getBody());
                 String status = object.getString("status");
                 message = object.getString("status");
-                Log.e("add", String.valueOf(object));
+                Log.e("create", String.valueOf(object));
                 if (status.equals("OK")) {
                     JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("ComponentType");
                     item.setBsId(reader.getInt("id"));
                     item.setSync(true);
+                    item.setmId(SugarRecord.save(item));
                     SugarRecord.save(item);
                 }
                 return true;
@@ -163,8 +165,25 @@ public class BuildingService implements Service<Building> {
 
     @Override
     public boolean delete(Building item) {
-        return false;
+        if (Utils.IS_ONLINE) {
+            try {
+                HttpResponse<String> response = apiClient.delete("building/" + item.getBsId());
+                JSONObject object = new JSONObject(response.getBody());
+                String status = object.getString("status");
+                if (status.equals("OK")) {
+                    JSONObject reader = object.optJSONObject("result").getJSONObject("content");
+                    Toast.makeText(context, reader.getString("message"), Toast.LENGTH_LONG).show();
+                    SugarRecord.delete(item);
+                }
+                return true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else
+            return false;
     }
+
 
     @Override
     public boolean update(Building item) {
@@ -179,7 +198,7 @@ public class BuildingService implements Service<Building> {
             if (!toSynchronize.isEmpty()) {
                 for (Building bi :
                         toSynchronize) {
-                    add(bi);
+                    create(bi);
                 }
             }
         }

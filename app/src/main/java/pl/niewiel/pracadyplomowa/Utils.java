@@ -42,10 +42,9 @@ public class Utils {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
         return timestamp;
     }
+
 
     public static void fillDatabase() {
         Build build = new Build();

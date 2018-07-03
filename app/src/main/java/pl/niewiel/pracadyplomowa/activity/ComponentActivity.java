@@ -167,7 +167,7 @@ public class ComponentActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            service.getById((int) SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")).getBsId());
+            service.getById((int) SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component")).getmId());
             Fragment fragment = new ComponentTypeListFragment();
             fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()

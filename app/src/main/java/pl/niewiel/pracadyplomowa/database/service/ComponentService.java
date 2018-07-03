@@ -137,7 +137,7 @@ public class ComponentService implements Service<Component> {
     }
 
     @Override
-    public boolean add(Component item) {
+    public boolean create(Component item) {
         Map<String, Object> params = new HashMap<>();
         List<TypesToComponent> ids = SugarRecord.find(TypesToComponent.class, "component_id=?", String.valueOf(item.getmId()));
         List<PhotoToComponent> photos = SugarRecord.find(PhotoToComponent.class, "component_id=?", String.valueOf(item.getmId()));
@@ -163,12 +163,12 @@ public class ComponentService implements Service<Component> {
                 JSONObject object = new JSONObject(response.getBody());
                 String status = object.getString("status");
                 message = object.getString("status");
-                Log.i("add", String.valueOf(object));
+                Log.i("create", String.valueOf(object));
                 if (status.equals("OK")) {
                     JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("ComponentType");
                     item.setBsId(reader.getInt("id"));
                     item.setSync(true);
-//                    item.setmId(SugarRecord.save(item));
+                    item.setmId(SugarRecord.save(item));
                     SugarRecord.save(item);
                 }
                 return true;
@@ -252,7 +252,7 @@ public class ComponentService implements Service<Component> {
             if (!toSynchronize.isEmpty()) {
                 for (Component c :
                         toSynchronize) {
-                    add(c);
+                    create(c);
                 }
             }
         }
