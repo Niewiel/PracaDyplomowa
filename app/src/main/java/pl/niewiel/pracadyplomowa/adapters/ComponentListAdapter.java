@@ -32,35 +32,34 @@ public class ComponentListAdapter extends ArrayAdapter<Component> {
         final Component component = getItem(position);
 
         if (convertView == null) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(R.layout.list_row, parent, false);
-            viewHolder = new ComponentListViewHolder();
-            viewHolder.mId = convertView.findViewById(R.id.row_bsId);
-            viewHolder.name = convertView.findViewById(R.id.row_name);
-            viewHolder.dateAdd = convertView.findViewById(R.id.row_date_add);
-            viewHolder.sync = convertView.findViewById(R.id.row_sync);
-            if (selectable) {
-                viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
-                viewHolder.checkBox.setVisibility(View.VISIBLE);
-            }
+            if (component.getmId() != 0) {
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                convertView = layoutInflater.inflate(R.layout.list_row, parent, false);
+                viewHolder = new ComponentListViewHolder();
+                viewHolder.mId = convertView.findViewById(R.id.row_bsId);
+                viewHolder.name = convertView.findViewById(R.id.row_name);
+                viewHolder.dateAdd = convertView.findViewById(R.id.row_date_add);
+                viewHolder.sync = convertView.findViewById(R.id.row_sync);
 
-
-            viewHolder.mId.setText(String.valueOf(component.getmId()));
-            viewHolder.name.setText((component.getName()));
-            viewHolder.dateAdd.setText(String.valueOf(component.getDateAdd()));
-            viewHolder.sync.setText(String.valueOf(component.isSync()));
-            if (viewHolder.sync.getText().toString().equals("true")) {
-                convertView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
+                viewHolder.mId.setText(String.valueOf(component.getmId()));
+                viewHolder.name.setText((component.getName()));
+                viewHolder.dateAdd.setText(String.valueOf(component.getDateAdd()));
+                viewHolder.sync.setText(String.valueOf(component.isSync()));
+                if (viewHolder.sync.getText().toString().equals("true")) {
+                    convertView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
+                }
+                convertView.setTag(viewHolder);
             }
-            convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ComponentListViewHolder) convertView.getTag();
-            viewHolder.mId.setText(String.valueOf(component.getmId()));
-            viewHolder.name.setText((component.getName()));
-            viewHolder.dateAdd.setText(String.valueOf(component.getDateAdd()));
-            viewHolder.sync.setText(String.valueOf(component.isSync()));
-            if (viewHolder.sync.getText().toString().equals("true")) {
-                convertView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
+            if (component.getmId() != 0) {
+                viewHolder = (ComponentListViewHolder) convertView.getTag();
+                viewHolder.mId.setText(String.valueOf(component.getmId()));
+                viewHolder.name.setText((component.getName()));
+                viewHolder.dateAdd.setText(String.valueOf(component.getDateAdd()));
+                viewHolder.sync.setText(String.valueOf(component.isSync()));
+                if (viewHolder.sync.getText().toString().equals("true")) {
+                    convertView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
+                }
             }
         }
         convertView.setOnClickListener(new View.OnClickListener() {

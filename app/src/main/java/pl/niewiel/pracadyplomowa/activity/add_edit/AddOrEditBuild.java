@@ -1,6 +1,5 @@
 package pl.niewiel.pracadyplomowa.activity.add_edit;
 
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -19,7 +18,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -49,7 +47,6 @@ import com.google.android.gms.tasks.Task;
 import com.orm.SugarRecord;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -58,12 +55,12 @@ import java.util.Set;
 import pl.niewiel.pracadyplomowa.R;
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.activity.MapsActivity;
+import pl.niewiel.pracadyplomowa.database.model.Build;
 import pl.niewiel.pracadyplomowa.database.model.Building;
-import pl.niewiel.pracadyplomowa.database.model.Component;
-import pl.niewiel.pracadyplomowa.database.model.ComponentToBuilding;
-import pl.niewiel.pracadyplomowa.database.service.BuildingService;
+import pl.niewiel.pracadyplomowa.database.model.BuildingToBuild;
+import pl.niewiel.pracadyplomowa.database.service.BuildService;
 
-public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCallback {
+public class AddOrEditBuild extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private static final int DEFAULT_ZOOM = 15;
@@ -77,18 +74,16 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
     // not granted.
     private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
     TextInputEditText name;
-    TextInputEditText dateStart;
-    TextInputEditText dateEnd;
     Button add;
-    Building building;
-    List<Component> components;
-    Set<Component> selected;
-    BuildingService buildingService;
+    Build build;
+    List<Building> buildings;
+    Set<Building> selected;
+    BuildService buildService;
     Spinner spinner;
     ListView componentList;
-    ArrayAdapter<Component> spinnerAdapter;
+    ArrayAdapter<Building> spinnerAdapter;
 
-    ArrayAdapter<Component> listAdapter;
+    ArrayAdapter<Building> listAdapter;
     Bundle bundle;
 
     private GoogleMap mMap;
@@ -111,20 +106,18 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_or_edit_building);
+        setContentView(R.layout.activity_add_or_edit_build);
         mapFeatures();
         name = findViewById(R.id.name);
-        dateStart = findViewById(R.id.date_start);
-        dateEnd = findViewById(R.id.date_end);
         add = findViewById(R.id.add_button);
         spinner = findViewById(R.id.spinner);
         componentList = findViewById(R.id.component_list);
-        components = SugarRecord.listAll(Component.class);
+        buildings = SugarRecord.listAll(Building.class);
         selected = new HashSet<>();
 
 
         spinnerAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.simple_spinner_item);
-        spinnerAdapter.addAll(components);
+        spinnerAdapter.addAll(buildings);
 
         listAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.simple_spinner_item);
 
@@ -158,70 +151,32 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
-        dateStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    final Calendar c = Calendar.getInstance();
-                    int year = c.get(Calendar.YEAR);
-                    int month = c.get(Calendar.MONTH);
-                    int day = c.get(Calendar.DAY_OF_MONTH);
-                    new DatePickerDialog(v.getContext(), R.style.Theme_AppCompat_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            dateStart.setText(dayOfMonth + "." + month + "." + year);
-                        }
-                    }, year, month, day).show();
-                }
-            }
-        });
-        dateEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    final Calendar c = Calendar.getInstance();
-                    int year = c.get(Calendar.YEAR);
-                    int month = c.get(Calendar.MONTH);
-                    int day = c.get(Calendar.DAY_OF_MONTH);
-                    new DatePickerDialog(v.getContext(), R.style.Theme_AppCompat_Light_Dialog, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                            dateEnd.setText(dayOfMonth + "." + month + "." + year);
-                        }
-                    }, year, month, day).show();
-                }
-            }
-        });
-        building = new Building();
-        buildingService = new BuildingService(getApplicationContext());
+        build = new Build();
+        buildService = new BuildService(getApplicationContext());
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (validate()) {
-                    building.setName(name.getText().toString());
-                    building.setDateAdd();
-                    building.setDateStart(dateStart.getText().toString());
-                    building.setDateEnd(dateEnd.getText().toString());
-                    System.out.println(dateEnd.getText().toString());
+                    build.setName(name.getText().toString());
                     if (marker != null) {
-                        building.setLatitude(String.valueOf(marker.getPosition().latitude));
-                        building.setLongitude(String.valueOf(marker.getPosition().longitude));
+                        build.setLatitude(String.valueOf(marker.getPosition().latitude));
+                        build.setLongitude(String.valueOf(marker.getPosition().longitude));
                     } else {
-                        building.setLatitude(String.valueOf(mLastKnownLocation.getLatitude()));
-                        building.setLatitude(String.valueOf(mLastKnownLocation.getLongitude()));
+                        build.setLatitude(String.valueOf(mLastKnownLocation.getLatitude()));
+                        build.setLatitude(String.valueOf(mLastKnownLocation.getLongitude()));
                     }
 
 
-                    for (Component c : selected)
-                        SugarRecord.save(new ComponentToBuilding(c, building));
+                    for (Building c : selected)
+                        SugarRecord.save(new BuildingToBuild(c, build));
                     System.out.println(selected);
                     if (Utils.IS_ONLINE) {
-                        buildingService.create(building);
+                        buildService.create(build);
                     } else {
                         Utils.IS_SYNCHRONIZED = false;
-                        building.setmId(SugarRecord.save(building));
-                        SugarRecord.save(building);
+                        build.setmId(SugarRecord.save(build));
+                        SugarRecord.save(build);
                     }
                     finish();
                 }
@@ -232,13 +187,6 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
     private boolean validate() {
         if (name.getText().length() == 0) {
             name.setError("this field is required");
-            return false;
-        } else if (dateStart.getText().length() == 0) {
-            dateStart.setError("this field is required");
-            return false;
-        }
-        if (dateEnd.getText().length() == 0) {
-            dateEnd.setError("this field is required");
             return false;
         }
         return true;
@@ -455,11 +403,17 @@ public class AddOrEditBuilding extends AppCompatActivity implements OnMapReadyCa
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = (Location) task.getResult();
+                            if (mLastKnownLocation != null)
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                        new LatLng(mLastKnownLocation.getLatitude(),
+                                                mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            else {
 
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(mLastKnownLocation.getLatitude(),
-                                            mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-
+                                Log.d(TAG, "Current location is null. Using defaults.");
+                                Log.e(TAG, "Exception: %s", task.getException());
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                            }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());

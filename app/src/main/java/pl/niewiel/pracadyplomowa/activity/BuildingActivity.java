@@ -177,4 +177,5 @@ public class BuildingActivity extends AppCompatActivity {
             return null;
         }
     }
+
 }

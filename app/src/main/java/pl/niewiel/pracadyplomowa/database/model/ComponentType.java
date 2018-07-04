@@ -37,12 +37,7 @@ public class ComponentType {
 
     @Override
     public String toString() {
-        return "ComponentType{" +
-                "mId=" + mId +
-                ", bsId=" + bsId +
-                ", name='" + name + '\'' +
-                ", sync=" + sync +
-                '}';
+        return name;
     }
 
     @Override

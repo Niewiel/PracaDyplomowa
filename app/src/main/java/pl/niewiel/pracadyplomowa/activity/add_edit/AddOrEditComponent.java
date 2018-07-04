@@ -7,11 +7,16 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 
 import com.orm.SugarRecord;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import pl.niewiel.pracadyplomowa.R;
@@ -22,13 +27,19 @@ import pl.niewiel.pracadyplomowa.database.model.ComponentType;
 import pl.niewiel.pracadyplomowa.database.model.TypesToComponent;
 import pl.niewiel.pracadyplomowa.database.service.ComponentService;
 import pl.niewiel.pracadyplomowa.database.service.Service;
-import pl.niewiel.pracadyplomowa.fragments.ComponentTypeListFragment;
 
 public class AddOrEditComponent extends AppCompatActivity {
     private static final int PICKFILE_REQUEST_CODE = 3;
     Service<Component> service;
     private Component component;
     private TextInputEditText name;
+
+    Spinner spinner;
+    ListView componentList;
+    ArrayAdapter<ComponentType> spinnerAdapter;
+    ArrayAdapter<ComponentType> listAdapter;
+    private List<ComponentType> types;
+    private List<ComponentType> selected;
 
 
     @Override
@@ -41,10 +52,55 @@ public class AddOrEditComponent extends AppCompatActivity {
         procentPicker.setMaxValue(100);
         procentPicker.computeScroll();
 
-        Bundle bundle = new Bundle();
         service = new ComponentService(getApplicationContext());
 
         name = findViewById(R.id.name);
+        spinner = findViewById(R.id.spinner);
+        componentList = findViewById(R.id.component_list);
+        types = SugarRecord.listAll(ComponentType.class);
+        selected = new LinkedList<>();
+
+
+        spinnerAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.simple_spinner_item);
+        spinnerAdapter.addAll(types);
+        listAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.simple_spinner_item);
+
+        componentList.setAdapter(listAdapter);
+        spinner.setAdapter(spinnerAdapter);
+        selected.clear();
+        if (getIntent().hasExtra("component")) {
+            fillList();
+            listAdapter.addAll(selected);
+        }
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!selected.contains(spinnerAdapter.getItem(position))) {
+                    selected.add(spinnerAdapter.getItem(position));
+                    listAdapter.add(spinnerAdapter.getItem(position));
+                    listAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        componentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selected.remove(listAdapter.getItem(position));
+                listAdapter.remove(listAdapter.getItem(position));
+                listAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+
         Button add_photo = findViewById(R.id.add_photo_button);
         Button add = findViewById(R.id.add_button);
         Button chose = findViewById(R.id.chose_file_button);
@@ -68,24 +124,18 @@ public class AddOrEditComponent extends AppCompatActivity {
                 getApplicationContext().startActivity(intent);
             }
         });
-        final ComponentTypeListFragment fragment = new ComponentTypeListFragment();
-        bundle.putBoolean("selectable", true);
-        if (getIntent().hasExtra("component"))
-            bundle.putLong("selected", getIntent().getExtras().getLong("component"));
-        fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.types, fragment).commit();
 
 
         if (getIntent().hasExtra("component")) {
             component = SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component"));
+
             Log.d("CompToUpd", component.toString());
             if (component != null) {
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.e("UPDATE", String.valueOf(Utils.IS_ONLINE));
-                        updateTypes(fragment, component);
+                        updateTypes(component);
                         component.setSync(false);
                         component.setName(name.getText().toString());
                         component.setDateEdit();
@@ -120,13 +170,12 @@ public class AddOrEditComponent extends AppCompatActivity {
                         component = new Component();
                         component.setName(name.getText().toString());
                         component.setStatus(procentPicker.getValue());
-
-                        saveTypes(fragment, component);
+                        component.setmId(SugarRecord.save(component));
+                        saveTypes(component);
                         if (Utils.IS_ONLINE)
                             service.create(component);
                         else {
                             Utils.IS_SYNCHRONIZED = false;
-                            component.setmId(SugarRecord.save(component));
                             SugarRecord.save(component);
                         }
                         finish();
@@ -136,16 +185,28 @@ public class AddOrEditComponent extends AppCompatActivity {
         }
     }
 
-    private void saveTypes(ComponentTypeListFragment fragment, Component component) {
-        List<ComponentType> types = fragment.getSelected();
+    private void saveTypes(Component component) {
         for (ComponentType t :
-                types) {
+                selected) {
             SugarRecord.save(new TypesToComponent(component, t));
         }
 
     }
 
-    private void updateTypes(ComponentTypeListFragment fragment, Component component) {
+    private void fillList() {
+        component = SugarRecord.findById(Component.class, getIntent().getExtras().getLong("component"));
+        List<TypesToComponent> typesToComponents = SugarRecord.find(TypesToComponent.class, "component_id=?", String.valueOf(component.getmId()));
+        for (TypesToComponent ttc :
+                typesToComponents) {
+            selected.add(SugarRecord.findById(ComponentType.class, ttc.getTypeId()));
+
+
+        }
+        listAdapter.notifyDataSetChanged();
+        System.out.println(selected.toString());
+    }
+
+    private void updateTypes(Component component) {
         List<TypesToComponent> toDelete = SugarRecord.find(TypesToComponent.class, "component_id=?", String.valueOf(component.getmId()));
         for (TypesToComponent ttc :
                 toDelete) {
@@ -155,9 +216,7 @@ public class AddOrEditComponent extends AppCompatActivity {
 
         }
 
-
-        List<ComponentType> typesToUpdate = fragment.getSelected();
-        for (ComponentType t : typesToUpdate) {
+        for (ComponentType t : selected) {
             SugarRecord.save(new TypesToComponent(component, t));
         }
     }

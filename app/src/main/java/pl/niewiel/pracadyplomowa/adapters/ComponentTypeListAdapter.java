@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 
 import java.util.HashSet;
 import java.util.List;
@@ -44,74 +43,45 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final ComponentTypeListViewHolder viewHolder;
         final ComponentType componentType = getItem(position);
-        Log.e("Contains", String.valueOf(selected.contains(componentType)) + " " + componentType.toString());
+//        Log.e("Contains", String.valueOf(selected.contains(componentType)) + " " + componentType.toString());
 
         if (convertView == null) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            convertView = layoutInflater.inflate(R.layout.list_row, parent, false);
-            viewHolder = new ComponentTypeListViewHolder();
-            viewHolder.mId = convertView.findViewById(R.id.row_bsId);
-            viewHolder.name = convertView.findViewById(R.id.row_name);
-            viewHolder.dateAdd = convertView.findViewById(R.id.row_date_add);
-            viewHolder.sync = convertView.findViewById(R.id.row_sync);
-            viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
-            if (selectable) {
-                viewHolder.checkBox.setVisibility(View.VISIBLE);
-                if (equals(componentType))
-                    viewHolder.checkBox.setChecked(true);
-            }
+            if (componentType.getmId() != 0) {
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                convertView = layoutInflater.inflate(R.layout.list_row, parent, false);
+                viewHolder = new ComponentTypeListViewHolder();
+                viewHolder.mId = convertView.findViewById(R.id.row_bsId);
+                viewHolder.name = convertView.findViewById(R.id.row_name);
+                viewHolder.dateAdd = convertView.findViewById(R.id.row_date_add);
+                viewHolder.sync = convertView.findViewById(R.id.row_sync);
+                viewHolder.checkBox = convertView.findViewById(R.id.checkBox);
 
-            viewHolder.mId.setText(String.valueOf(componentType.getmId()));
-            viewHolder.name.setText((componentType.getName()));
-            viewHolder.dateAdd.setText(String.valueOf(componentType.getDateAdd()));
-            viewHolder.sync.setText(String.valueOf(componentType.isSync()));
-            if (componentType.isSync()) {
-                convertView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
-            }
 
-            convertView.setTag(viewHolder);
+                viewHolder.mId.setText(String.valueOf(componentType.getmId()));
+                viewHolder.name.setText((componentType.getName()));
+                viewHolder.dateAdd.setText(String.valueOf(componentType.getDateAdd()));
+                viewHolder.sync.setText(String.valueOf(componentType.isSync()));
+                if (componentType.isSync()) {
+                    convertView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sync_true));
+                }
+
+                convertView.setTag(viewHolder);
+            }
         } else {
-            viewHolder = (ComponentTypeListViewHolder) convertView.getTag();
-            viewHolder.mId.setText(String.valueOf(componentType.getmId()));
-            viewHolder.name.setText((componentType.getName()));
-            viewHolder.dateAdd.setText(String.valueOf(componentType.getDateAdd()));
-            viewHolder.sync.setText(String.valueOf(componentType.isSync()));
-            if (selectable) {
-                if (equals(componentType))
-                    viewHolder.checkBox.setChecked(true);
+            if (componentType.getmId() != 0) {
+                viewHolder = (ComponentTypeListViewHolder) convertView.getTag();
+                viewHolder.mId.setText(String.valueOf(componentType.getmId()));
+                viewHolder.name.setText((componentType.getName()));
+                viewHolder.dateAdd.setText(String.valueOf(componentType.getDateAdd()));
+                viewHolder.sync.setText(String.valueOf(componentType.isSync()));
+                if (selectable) {
+                    if (equals(componentType))
+                        viewHolder.checkBox.setChecked(true);
+                }
             }
+
 
         }
-        if (selectable) {
-            viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        selected.add(componentType);
-                    } else {
-                        selected.remove(componentType);
-                        boolean eq = false;
-                        for (ComponentType c :
-                                selected) {
-                            eq = c.equals(componentType);
-                            if (eq)
-                                selected.remove(c);
-                        }
-
-                        System.err.println(eq + selected.toString());
-                    }
-                }
-            });
-            convertView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e("Click", "");
-                    viewHolder.checkBox.setChecked(!viewHolder.checkBox.isChecked());
-
-                }
-            });
-//        }
-        } else
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -122,6 +92,7 @@ public class ComponentTypeListAdapter extends ArrayAdapter<ComponentType> {
             });
 
         Log.i("List", selected.toString());
+
         return convertView;
     }
 

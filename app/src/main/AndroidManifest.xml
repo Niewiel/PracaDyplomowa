@@ -131,6 +131,7 @@
             android:name=".activity.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".activity.add_edit.AddOrEditBuilding" />
+        <activity android:name=".activity.add_edit.AddOrEditBuild" />
     </application>
 
 </manifest>

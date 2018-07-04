@@ -168,7 +168,6 @@ public class ComponentService implements Service<Component> {
                     JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("ComponentType");
                     item.setBsId(reader.getInt("id"));
                     item.setSync(true);
-                    item.setmId(SugarRecord.save(item));
                     SugarRecord.save(item);
                 }
                 return true;
@@ -209,7 +208,7 @@ public class ComponentService implements Service<Component> {
         //types
         Set<Integer> list = new HashSet<>();
         for (TypesToComponent t : ids) {
-            list.add((int) SugarRecord.findById(ComponentType.class, t.getTypeId()).getBsId());
+            list.add((int) SugarRecord.findById(ComponentType.class, t.getTypeId()).getmId());
         }
 //        files
         Set<File> files = new HashSet<>();

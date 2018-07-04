@@ -2,6 +2,7 @@ package pl.niewiel.pracadyplomowa.database.service;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.orm.SugarRecord;
@@ -11,8 +12,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import pl.niewiel.pracadyplomowa.Utils;
 import pl.niewiel.pracadyplomowa.apiClients.ApiClient;
@@ -23,10 +26,12 @@ import pl.niewiel.pracadyplomowa.database.model.BuildingToBuild;
 public class BuildService implements Service<Build> {
     private static ApiClient apiClient;
     private BuildingService buildingService;
+    private Context context;
 
     public BuildService(Context context) {
         buildingService = new BuildingService(context);
         apiClient = new ApiClient();
+        this.context = context;
     }
 
     public ArrayList<Build> getAll() {
@@ -113,12 +118,62 @@ public class BuildService implements Service<Build> {
 
     @Override
     public boolean create(Build item) {
-        return false;
+        List<BuildingToBuild> buildsIDs = SugarRecord.find(BuildingToBuild.class, "build_id=?", String.valueOf(item.getmId()));
+        List<Integer> builds = new ArrayList<>();
+
+
+        for (BuildingToBuild btb : buildsIDs)
+            builds.add((int) SugarRecord.findById(Build.class, btb.getBuildId()).getBsId());
+
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("Name", item.getName());
+        params.put("Latitude", item.getLatitude());
+        params.put("Longitude", item.getLongitude());
+        params.put("Builds", builds.toArray());
+        String message = "no message";
+        if (Utils.IS_ONLINE) {
+            try {
+                HttpResponse<String> response = apiClient.post("build", params);
+                JSONObject object = new JSONObject(response.getBody());
+                String status = object.getString("status");
+                message = object.getString("status");
+                Log.e("create", String.valueOf(object));
+                if (status.equals("OK")) {
+                    JSONObject reader = object.optJSONObject("result").getJSONObject("content").getJSONObject("Buildings");
+                    item.setBsId(reader.getInt("id"));
+                    item.setSync(true);
+                    SugarRecord.save(item);
+                }
+                return true;
+            } catch (JSONException e) {
+                Log.e("BuildingService", message);
+                return false;
+            }
+        } else
+            return false;
+
     }
 
     @Override
     public boolean delete(Build item) {
-        return false;
+        if (Utils.IS_ONLINE) {
+            try {
+                HttpResponse<String> response = apiClient.delete("build/" + item.getBsId());
+                JSONObject object = new JSONObject(response.getBody());
+                String status = object.getString("status");
+                if (status.equals("OK")) {
+                    JSONObject reader = object.optJSONObject("result").getJSONObject("content");
+                    Toast.makeText(context, reader.getString("message"), Toast.LENGTH_LONG).show();
+                    SugarRecord.delete(item);
+                }
+                return true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else
+            return false;
     }
 
     @Override
